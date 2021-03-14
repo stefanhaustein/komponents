@@ -5,7 +5,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android-extensions")
     `maven-publish`
-//    id("com.github.dcendents.android-maven")
+//    id ("com.github.dcendents.android-maven")
 }
 
 
