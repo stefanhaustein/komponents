@@ -4,7 +4,10 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("kotlin-android-extensions")
+    `maven-publish`
+//    id("com.github.dcendents.android-maven")
 }
+
 
 group = "org.kobjects.komponents"
 version = "1.0-SNAPSHOT"
@@ -54,6 +57,7 @@ android {
         implementation("com.caverock:androidsvg-aar:1.4")
     }
 }
+
 
 val packForXcode by tasks.creating(Sync::class) {
     group = "build"
