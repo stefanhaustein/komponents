@@ -5,8 +5,7 @@ plugins {
     `maven-publish`
 }
 
-group = "org.kobjects.komponents"
-version = "1.0-SNAPSHOT"
+group = "com.github.stefanhaustein.komponents"
 
 dependencies {
     implementation(project(":shared"))
@@ -30,3 +29,4 @@ android {
         }
     }
 }
+
