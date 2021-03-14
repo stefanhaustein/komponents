@@ -9,14 +9,8 @@ plugins {
 
 group = "org.kobjects.komponents"
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = "com.github.stefanhaustein.komponents"
-            artifactId = "shared"
-        }
-    }
-}
+
+
 
 
 kotlin {
@@ -83,3 +77,15 @@ val packForXcode by tasks.creating(Sync::class) {
 tasks.getByName("build").dependsOn(packForXcode)
 
 
+
+afterEvaluate {
+    publishing {
+        publications {
+            val release by publications.registering(MavenPublication::class) {
+                from(components["release"])
+                artifactId = "shared"
+                groupId = "com.github.stefanhaustein.komponents"
+            }
+        }
+    }
+}
