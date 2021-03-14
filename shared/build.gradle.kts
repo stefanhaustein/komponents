@@ -7,8 +7,12 @@ plugins {
     `maven-publish`
 }
 
+group = "org.kobjects.komponents"
 
-group = "com.github.stefanhaustein.komponents"
+publishing {
+    group = "com.github.stefanhaustein.komponents"
+}
+
 
 kotlin {
     android()
@@ -72,3 +76,5 @@ val packForXcode by tasks.creating(Sync::class) {
 }
 
 tasks.getByName("build").dependsOn(packForXcode)
+
+

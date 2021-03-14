@@ -5,7 +5,11 @@ plugins {
     `maven-publish`
 }
 
-group = "com.github.stefanhaustein.komponents"
+group = "org.kobjects.komponents"
+
+publishing {
+    group = "com.github.stefanhaustein.komponents"
+}
 
 dependencies {
     implementation(project(":shared"))
