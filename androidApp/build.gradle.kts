@@ -7,9 +7,16 @@ plugins {
 
 group = "org.kobjects.komponents"
 
+
 publishing {
-    group = "com.github.stefanhaustein.komponents"
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.github.stefanhaustein.komponents"
+            artifactId = "androidApp"
+        }
+    }
 }
+
 
 dependencies {
     implementation(project(":shared"))
@@ -33,4 +40,3 @@ android {
         }
     }
 }
-
