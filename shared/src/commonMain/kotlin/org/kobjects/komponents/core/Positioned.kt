@@ -1,7 +1,7 @@
 package org.kobjects.komponents.core
 
 class Positioned(
-    val component: Komponent,
+    val component: KView,
     var column: Int = 0,
     var row: Int = 0,
     var columnSpan: Int = 1,

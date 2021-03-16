@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class Container(kontext: Kontext) : Komponent {
+expect class Container(kontext: Kontext) : KView {
 
     var columnGap: Double
     var rowGap: Double

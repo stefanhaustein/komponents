@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class SvgKomponent(kontext: Kontext) : Komponent {
+expect class KImageView(kontext: Kontext) : KView {
 
     fun setContent(svg: String)
 }

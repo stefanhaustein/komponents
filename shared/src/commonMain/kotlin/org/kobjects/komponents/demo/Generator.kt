@@ -13,7 +13,7 @@ fun alignDemo(kontext: Kontext): Container {
 
     for (vAlign in Align.values()) {
         for (hAlign in Align.values()) {
-            var tc = TextKomponent(kontext)
+            var tc = KTextView(kontext)
             tc.setText("v: $vAlign\nh: $hAlign")
             tc.setBackgroundColor(0xffeeeeeeU)
 

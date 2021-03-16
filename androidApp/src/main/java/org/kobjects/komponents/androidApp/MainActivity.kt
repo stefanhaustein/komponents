@@ -12,10 +12,10 @@ class MainActivity : AppCompatActivity() {
 
         val context = Kontext(this)
 
-        val textComponent = TextKomponent(context)
+        val textComponent = KTextView(context)
         textComponent.setText("Hello World")
 
-        val svgKomponent = SvgKomponent(context)
+        val svgKomponent = KImageView(context)
         svgKomponent.setContent("""<svg viewBox='0 0 100 100'>
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin())

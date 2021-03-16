@@ -1,10 +1,9 @@
 package org.kobjects.komponents.core
 
 import android.view.View
-import android.widget.LinearLayout
 import org.kobjects.komponents.mobile.ChildLayout
 
-actual class Container actual constructor(kontext: Kontext) : Komponent() {
+actual class Container actual constructor(kontext: Kontext) : KView() {
 
     actual var columnGap = 0.0
     actual var rowGap = 0.0

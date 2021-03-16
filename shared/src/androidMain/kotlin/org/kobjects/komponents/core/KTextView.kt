@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import android.view.View
 import android.widget.TextView
 
-actual class TextKomponent actual constructor(kontext: Kontext) : Komponent() {
+actual class KTextView actual constructor(kontext: Kontext) : KView() {
 
     val textView = TextView(kontext.context)
 

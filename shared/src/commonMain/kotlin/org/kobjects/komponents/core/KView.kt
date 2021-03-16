@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect abstract class Komponent {
+expect abstract class KView {
 
     fun setBackgroundColor(color: UInt)
 

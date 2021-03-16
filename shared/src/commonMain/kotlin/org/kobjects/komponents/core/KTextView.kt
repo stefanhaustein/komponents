@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class TextKomponent(kontext: Kontext) : Komponent {
+expect class KTextView(kontext: Kontext) : KView {
 
     fun setText(text: String)
 

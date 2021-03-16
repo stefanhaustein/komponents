@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import android.view.View
 
 
-actual abstract class Komponent {
+actual abstract class KView {
 
    abstract fun getView(): View
 
