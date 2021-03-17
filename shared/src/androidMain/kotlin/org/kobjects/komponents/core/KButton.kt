@@ -1,0 +1,23 @@
+package org.kobjects.komponents.core
+
+import android.view.View
+import android.widget.Button
+
+actual class KButton actual constructor(kontext: Kontext) : KView() {
+
+    private val button = Button(kontext.context)
+    private var image: KImage? = null
+
+    override fun getView(): View {
+        return button;
+    }
+
+    actual fun setImage(image: KImage) {
+        this.image = image
+        button.setCompoundDrawablesWithIntrinsicBounds(image.createDrawable(), null, null, null)
+    }
+
+    actual fun setText(text: String) {
+        button.text = text
+    }
+}

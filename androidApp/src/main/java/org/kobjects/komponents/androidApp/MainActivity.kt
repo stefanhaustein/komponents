@@ -16,9 +16,9 @@ class MainActivity : AppCompatActivity() {
         textComponent.setText("Hello World")
 
         val svgKomponent = KImageView(context)
-        svgKomponent.setContent("""<svg viewBox='0 0 100 100'>
+        svgKomponent.setImage(KImage.createSvg("""<svg viewBox='0 0 100 100'>
             | <circle cx="50" cy="50" r="40" fill="red" /> 
-            |</svg>""".trimMargin())
+            |</svg>""".trimMargin()))
 
         val container = alignDemo(context)
 
