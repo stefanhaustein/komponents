@@ -8,6 +8,14 @@ expect class Container(kontext: Kontext) : KView {
     var defaultColumnWidth: Size
     var defaultRowHeight: Size
 
+    var paddingLeft: Double
+    var paddingTop: Double
+    var paddingRight: Double
+    var paddingBottom: Double
+
+    var verticalAlign: Align
+    var horizontalAlign: Align
+
     fun setColumnWidth(index: Int, width: Size?, repeat: Int = 1)
     fun setRowHeight(index: Int, height: Size?, repeat: Int = 1)
 

@@ -1,4 +1,4 @@
-package org.kobjects.komponents.mobile
+package org.kobjects.komponents.core.mobile
 
 import org.kobjects.komponents.core.Align
 import org.kobjects.komponents.core.Container
@@ -17,8 +17,6 @@ interface ChildLayout {
     fun measure(widthMode: MeasurementMode, width: Double, heightMode: MeasurementMode, height: Double): Pair<Double, Double>
 
     fun setPosition(x: Double, y: Double)
-
-
 
 }
 
@@ -121,33 +119,45 @@ fun applyGridLayout(
         totalHeight += heights[i]
     }
 
+
+
    // System.out.println("### total Width: $totalWidth height: $totalHeight")
 
     // Distribute extra size
 
-    if (widthMode == MeasurementMode.EXACTLY && totalHorizontalFr > 0) {
-        val available = inputWidth - totalWidth
+    var remainingWidth = 0.0
+    if (widthMode == MeasurementMode.EXACTLY) {
+        val available = inputWidth - totalWidth - container.paddingLeft - container.paddingRight
         // System.out.println("### total Width: $totalWidth - measrued: ${MeasureSpec.getSize(widthMeasureSpec)} = available: $available")
         if (available > 0) {
-            for (i in 0 until columnCount) {
-                val columnWidth = container.getColumnWidth(i)
-                if (columnWidth.unit == Size.Unit.FR) {
-                    widths[i] = available * columnWidth.value / totalHorizontalFr
-                    totalWidth += widths[i]
+            if (totalHorizontalFr == 0.0) {
+                remainingWidth = available
+            } else {
+                for (i in 0 until columnCount) {
+                    val columnWidth = container.getColumnWidth(i)
+                    if (columnWidth.unit == Size.Unit.FR) {
+                        widths[i] = available * columnWidth.value / totalHorizontalFr
+                        totalWidth += widths[i]
+                    }
                 }
             }
         }
     }
 
-    if (heightMode == MeasurementMode.EXACTLY && totalVerticalFr > 0) {
-        val available = inputHeight - totalHeight
-        // System.out.println("### total height: $totalHeight - measrued: ${MeasureSpec.getSize(heightMeasureSpec)} = available: $available")
-        if (available > 0) {
-            for (i in 0 until rowCount) {
-                val rowHeight = container.getRowHeight(i)
-                if (rowHeight.unit == Size.Unit.FR) {
-                    heights[i] = available * rowHeight.value / totalHorizontalFr
-                    totalHeight += heights[i]
+    var remainingHeight = 0.0
+    if (heightMode == MeasurementMode.EXACTLY) {
+        val available = inputHeight - totalHeight - container.paddingTop - container.paddingBottom
+        if (totalVerticalFr == 0.0) {
+            remainingHeight = available
+        } else {
+            // System.out.println("### total height: $totalHeight - measrued: ${MeasureSpec.getSize(heightMeasureSpec)} = available: $available")
+            if (available > 0) {
+                for (i in 0 until rowCount) {
+                    val rowHeight = container.getRowHeight(i)
+                    if (rowHeight.unit == Size.Unit.FR) {
+                        heights[i] = available * rowHeight.value / totalHorizontalFr
+                        totalHeight += heights[i]
+                    }
                 }
             }
         }
@@ -155,8 +165,18 @@ fun applyGridLayout(
 
     val xPositions = DoubleArray(columnCount + 1) {0.0}
     val yPositions = DoubleArray(rowCount + 1) {0.0}
+    xPositions[0] = container.paddingLeft + when (container.horizontalAlign) {
+        Align.END -> remainingWidth
+        Align.CENTER -> remainingWidth / 2
+        else -> 0.0
+    }
     for (i in widths.indices) {
         xPositions[i + 1] = xPositions[i] + widths[i] + container.columnGap
+    }
+    yPositions[0] = container.paddingTop + when (container.verticalAlign) {
+        Align.END -> remainingHeight
+        Align.CENTER -> remainingHeight / 2
+        else -> 0.0
     }
     for (i in heights.indices) {
         yPositions[i + 1] = yPositions[i] + heights[i] + container.rowGap
