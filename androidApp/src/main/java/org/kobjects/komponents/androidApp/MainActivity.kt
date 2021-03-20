@@ -3,7 +3,7 @@ package org.kobjects.komponents.androidApp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.kobjects.komponents.core.*
-import org.kobjects.komponents.demo.alignDemo
+import org.kobjects.komponents.demo.Demo
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin()))
 
-        val container = alignDemo(context)
+        val container = Demo().alignDemo(context)
 
         setContentView(container.getView())
 
