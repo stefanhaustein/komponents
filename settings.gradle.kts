@@ -1,3 +1,5 @@
+
+
 pluginManagement {
     repositories {
         google()
@@ -5,11 +7,10 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-    
 }
 rootProject.name = "komponents"
 
 
 include(":androidApp")
 include(":shared")
-
+include(":jsApp")

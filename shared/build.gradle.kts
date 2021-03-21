@@ -10,9 +10,6 @@ plugins {
 group = "org.kobjects.komponents"
 
 
-
-
-
 kotlin {
     android()
     ios {
@@ -21,6 +18,25 @@ kotlin {
                 baseName = "shared"
             }
         }
+    }
+    js {
+        browser {
+            webpackTask {
+                cssSupport.enabled = true
+            }
+
+            runTask {
+                cssSupport.enabled = true
+            }
+
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                    webpackConfig.cssSupport.enabled = true
+                }
+            }
+        }
+        binaries.executable()
     }
     sourceSets {
         val commonMain by getting
@@ -43,6 +59,7 @@ kotlin {
         }
         val iosMain by getting
         val iosTest by getting
+        val jsMain by getting
     }
 }
 
