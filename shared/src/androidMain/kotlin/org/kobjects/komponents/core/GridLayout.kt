@@ -8,7 +8,7 @@ import org.kobjects.komponents.core.mobile.applyGridLayout
 import kotlin.math.ceil
 
 
-class GridLayout(context: Context, val container: KGrid) : ViewGroup(context) {
+class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(context) {
 
     var columnGap = 0.0
     var rowGap = 0.0
@@ -58,7 +58,7 @@ class GridLayout(context: Context, val container: KGrid) : ViewGroup(context) {
         }
     }
 
-    inner class LayoutParams(override val positioned: Positioned) : ViewGroup.LayoutParams(0, 0), ChildLayout {
+    inner class LayoutParams(override val positioned: GridArea) : ViewGroup.LayoutParams(0, 0), ChildLayout {
         var x = 0.0
         var y = 0.0
 
@@ -68,7 +68,7 @@ class GridLayout(context: Context, val container: KGrid) : ViewGroup(context) {
             heightMode: MeasurementMode,
             height: Double
         ): Pair<Double, Double> {
-            val childView = positioned.component.getView()
+            val childView = positioned.view.getView()
             childView.measure(modeAndSizeToAndroid(widthMode, width), modeAndSizeToAndroid(heightMode, height))
             return Pair(pxToPt(childView.measuredWidth), pxToPt(childView.measuredHeight));
         }

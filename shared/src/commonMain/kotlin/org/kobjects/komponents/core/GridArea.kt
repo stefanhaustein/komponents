@@ -1,7 +1,7 @@
 package org.kobjects.komponents.core
 
-expect class Positioned (
-    component: KView,
+expect class GridArea (
+    view: KView,
     column: Int = 0,
     row: Int = 0,
     columnSpan: Int = 1,
@@ -11,7 +11,7 @@ expect class Positioned (
     verticalAlign: Align = Align.STRETCH,
     horizontalAlign: Align = Align.STRETCH) {
 
-    val component: KView
+    val view: KView
     var column: Int
     var columnSpan: Int
     var row: Int
@@ -20,6 +20,4 @@ expect class Positioned (
     var height: Double?
     var verticalAlign: Align
     var horizontalAlign: Align
-
-
 }

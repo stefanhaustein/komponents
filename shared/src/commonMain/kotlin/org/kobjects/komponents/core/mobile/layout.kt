@@ -1,8 +1,8 @@
 package org.kobjects.komponents.core.mobile
 
 import org.kobjects.komponents.core.Align
-import org.kobjects.komponents.core.KGrid
-import org.kobjects.komponents.core.Positioned
+import org.kobjects.komponents.core.KGridLayout
+import org.kobjects.komponents.core.GridArea
 import org.kobjects.komponents.core.Size
 
 
@@ -12,7 +12,7 @@ enum class MeasurementMode {
 
 
 interface ChildLayout {
-    val positioned: Positioned
+    val positioned: GridArea
 
     fun measure(widthMode: MeasurementMode, width: Double, heightMode: MeasurementMode, height: Double): Pair<Double, Double>
 
@@ -24,7 +24,7 @@ interface ChildLayout {
 
 
 fun applyGridLayout(
-    container: KGrid,
+    container: KGridLayout,
     children: List<ChildLayout>,
     widthMode: MeasurementMode,
     inputWidth: Double,

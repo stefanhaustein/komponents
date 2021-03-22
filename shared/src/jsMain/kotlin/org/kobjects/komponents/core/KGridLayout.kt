@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
-actual class KGrid  actual constructor(kontext: Kontext) : KView() {
+actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
 
     actual var columnGap = 0.0
         set(value) {
@@ -49,7 +49,7 @@ actual class KGrid  actual constructor(kontext: Kontext) : KView() {
     private val columnWidths = mutableListOf<Size?>()
     private val rowHeights = mutableListOf<Size?>()
 
-    val children = mutableListOf<Positioned>()
+    val children = mutableListOf<GridArea>()
 
     private val div = kontext.document.createElement("div") as HTMLDivElement
 
@@ -61,9 +61,9 @@ actual class KGrid  actual constructor(kontext: Kontext) : KView() {
        return div
     }
 
-    actual fun add(positioned: Positioned) {
+    actual fun add(positioned: GridArea) {
         children.add(positioned)
-        val element = positioned.component.getElement()
+        val element = positioned.view.getElement()
         div.appendChild(element)
     }
 

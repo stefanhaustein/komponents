@@ -1,18 +1,15 @@
 package org.kobjects.komponents.core
 
-import kotlinx.cinterop.CValue
 import kotlinx.cinterop.useContents
 import org.kobjects.komponents.core.mobile.ChildLayout
 import org.kobjects.komponents.core.mobile.MeasurementMode
-import platform.CoreGraphics.CGPoint
-import platform.CoreGraphics.CGPointMake
 import platform.CoreGraphics.CGRectMake
 import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.intrinsicContentSize
 import platform.UIKit.setFrame
 import platform.UIKit.sizeThatFits
 
-class UIChildLayout(override val positioned: Positioned) : ChildLayout {
+class UIChildLayout(override val positioned: GridArea) : ChildLayout {
 
     var measuredWidth: Double = 0.0
     var measuredHeight: Double = 0.0
@@ -23,7 +20,7 @@ class UIChildLayout(override val positioned: Positioned) : ChildLayout {
         heightMode: MeasurementMode,
         height: Double
     ): Pair<Double, Double> {
-        val uiView = positioned.component.getView()
+        val uiView = positioned.view.getView()
         if (widthMode != MeasurementMode.EXACTLY
             || heightMode != MeasurementMode.EXACTLY) {
             if (widthMode != MeasurementMode.UNSPECIFIED
@@ -50,6 +47,6 @@ class UIChildLayout(override val positioned: Positioned) : ChildLayout {
     }
 
     override fun setPosition(x: Double, y: Double) {
-        positioned.component.getView().setFrame(CGRectMake(x, y, measuredWidth, measuredHeight))
+        positioned.view.getView().setFrame(CGRectMake(x, y, measuredWidth, measuredHeight))
     }
 }

@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class KGrid(kontext: Kontext) : KView {
+expect class KGridLayout(kontext: Kontext) : KView {
 
     var columnGap: Double
     var rowGap: Double
@@ -22,7 +22,7 @@ expect class KGrid(kontext: Kontext) : KView {
     fun getColumnWidth(index: Int): Size
     fun getRowHeight(index: Int): Size
 
-    fun add(positioned: Positioned)
+    fun add(positioned: GridArea)
 
 
 

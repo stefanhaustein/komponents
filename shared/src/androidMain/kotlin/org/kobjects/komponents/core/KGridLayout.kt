@@ -1,26 +1,39 @@
 package org.kobjects.komponents.core
 
-import platform.UIKit.UIView
-import platform.UIKit.addSubview
+import android.view.View
+import org.kobjects.komponents.core.mobile.ChildLayout
 
-actual class KGrid actual constructor(kontext: Kontext) : KView() {
-    actual var columnGap: Double = 0.0
-    actual var rowGap: Double = 0.0
-    actual var defaultColumnWidth: Size = Size.AUTO
-    actual var defaultRowHeight: Size = Size.AUTO
-    actual var paddingLeft: Double = 0.0
-    actual var paddingTop: Double = 0.0
-    actual var paddingRight: Double = 0.0
-    actual var paddingBottom: Double = 0.0
-    actual var verticalAlign: Align = Align.START
-    actual var horizontalAlign: Align = Align.START
+actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
 
+    actual var columnGap = 0.0
+    actual var rowGap = 0.0
+    actual var paddingLeft = 0.0
+    actual var paddingTop = 0.0
+    actual var paddingBottom = 0.0
+    actual var paddingRight = 0.0
+    actual var horizontalAlign = Align.START
+    actual var verticalAlign = Align.START
+
+    private val layout = GridLayout(kontext.context, this)
     private val columnWidths = mutableListOf<Size?>()
     private val rowHeights = mutableListOf<Size?>()
-    private val uiGridView = UIGridView(this)
 
-    val children = mutableListOf<UIChildLayout>()
+    val children = mutableListOf<ChildLayout>()
 
+
+    override fun getView(): View {
+       return layout
+    }
+
+    actual fun add(positioned: GridArea) {
+        val childLayout = layout.LayoutParams(positioned);
+        children.add(childLayout)
+        layout.addView(positioned.view.getView(), childLayout)
+    }
+
+    actual var defaultColumnWidth: Size = Size.AUTO
+
+    actual var defaultRowHeight: Size = Size.AUTO
 
     actual fun setColumnWidth(index: Int, width: Size?, repeat: Int) {
         while (columnWidths.size < index + repeat) {
@@ -49,12 +62,5 @@ actual class KGrid actual constructor(kontext: Kontext) : KView() {
     }
 
 
-    actual fun add(positioned: Positioned) {
-        children.add(UIChildLayout(positioned))
-        uiGridView.addSubview(positioned.component.getView())
-    }
 
-    override fun getView(): UIView {
-        return uiGridView
-    }
 }

@@ -1,7 +1,7 @@
 package org.kobjects.komponents.core
 
-actual class Positioned actual constructor(
-    component: KView,
+actual class GridArea actual constructor(
+    view: KView,
     column: Int,
     row: Int,
     columnSpan: Int,
@@ -11,7 +11,7 @@ actual class Positioned actual constructor(
     verticalAlign: Align,
     horizontalAlign: Align
 ) {
-    actual val component: KView = component
+    actual val view: KView = view
     actual var column: Int = column
     actual var row: Int = row
     actual var columnSpan: Int = columnSpan
