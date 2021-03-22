@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
-actual class Container  actual constructor(kontext: Kontext) : KView() {
+actual class KGrid  actual constructor(kontext: Kontext) : KView() {
 
     actual var columnGap = 0.0
         set(value) {

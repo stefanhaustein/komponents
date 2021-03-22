@@ -7,7 +7,7 @@ import org.kobjects.komponents.core.mobile.applyGridLayout
 import platform.CoreGraphics.CGRectMake
 import platform.UIKit.UIView
 
-class UIGridView(val container: Container) : UIView(CGRectMake(0.0, 0.0, 100.0, 100.0)) {
+class UIGridView(val container: KGrid) : UIView(CGRectMake(0.0, 0.0, 100.0, 100.0)) {
 
     @ObjCAction
     fun layoutSubviews() {

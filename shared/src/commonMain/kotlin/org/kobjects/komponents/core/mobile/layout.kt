@@ -1,7 +1,7 @@
 package org.kobjects.komponents.core.mobile
 
 import org.kobjects.komponents.core.Align
-import org.kobjects.komponents.core.Container
+import org.kobjects.komponents.core.KGrid
 import org.kobjects.komponents.core.Positioned
 import org.kobjects.komponents.core.Size
 
@@ -24,7 +24,7 @@ interface ChildLayout {
 
 
 fun applyGridLayout(
-    container: Container,
+    container: KGrid,
     children: List<ChildLayout>,
     widthMode: MeasurementMode,
     inputWidth: Double,

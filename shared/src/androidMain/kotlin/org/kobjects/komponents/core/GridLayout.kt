@@ -8,7 +8,7 @@ import org.kobjects.komponents.core.mobile.applyGridLayout
 import kotlin.math.ceil
 
 
-class GridLayout(context: Context, val container: Container) : ViewGroup(context) {
+class GridLayout(context: Context, val container: KGrid) : ViewGroup(context) {
 
     var columnGap = 0.0
     var rowGap = 0.0

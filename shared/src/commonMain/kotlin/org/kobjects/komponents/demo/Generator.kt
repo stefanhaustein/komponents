@@ -4,8 +4,8 @@ import org.kobjects.komponents.core.*
 
 class Demo() {
 
-    fun alignDemo(kontext: Kontext): Container {
-        val container = Container(kontext)
+    fun alignDemo(kontext: Kontext): KGrid {
+        val container = KGrid(kontext)
 
         container.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
         container.setRowHeight(0, Size.fr(1.0), repeat = Align.values().size)
