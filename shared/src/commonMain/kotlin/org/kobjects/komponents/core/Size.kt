@@ -22,5 +22,8 @@ data class Size(val unit: Unit, val value: Double) {
         }
     }
 
+    override fun toString(): String {
+        return if (unit == Unit.AUTO) "auto" else "${value}${unit.toString().toLowerCase()}"
+    }
 
 }
