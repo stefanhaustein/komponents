@@ -21,7 +21,7 @@ kotlin {
     }
     js {
         browser {
-            webpackTask {
+          /*  webpackTask {
                 cssSupport.enabled = true
             }
 
@@ -34,9 +34,9 @@ kotlin {
                     useChromeHeadless()
                     webpackConfig.cssSupport.enabled = true
                 }
-            }
+            }*/
         }
-        binaries.executable()
+    //    binaries.executable()
     }
     sourceSets {
         val commonMain by getting
