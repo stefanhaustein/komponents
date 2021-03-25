@@ -5,4 +5,6 @@ expect class KButton(kontext: Kontext) : KView {
     fun setImage(image: KImage)
 
     fun setText(text: String)
+
+    fun addClickListener(listener: (KButton) -> Unit)
 }

@@ -20,4 +20,8 @@ actual class KButton actual constructor(kontext: Kontext) : KView() {
     actual fun setText(text: String) {
         button.text = text
     }
+
+    actual fun addClickListener(listener: (KButton) -> Unit) {
+        button.setOnClickListener{listener(this)}
+    }
 }

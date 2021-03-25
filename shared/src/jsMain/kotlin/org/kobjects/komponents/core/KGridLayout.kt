@@ -55,6 +55,8 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
 
     init {
         div.style.display = "grid"
+        horizontalAlign = Align.START // Html default seems to be stretch...
+        verticalAlign = Align.START
     }
 
     override fun getElement(): HTMLElement {

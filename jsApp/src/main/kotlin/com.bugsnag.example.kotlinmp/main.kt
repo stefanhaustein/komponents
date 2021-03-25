@@ -7,8 +7,11 @@ import org.kobjects.komponents.demo.Demo
 
 fun main() {
     document.addEventListener("DOMContentLoaded", {
-        val gridElement = Demo().alignDemo(Kontext(document)).getElement()
-        gridElement.style.height = "100%"
-        document.body!!.appendChild(gridElement)
+        Demo(Kontext(document)) {
+            val element = it.getElement()
+            element.style.height = "100%"
+            document.body!!.innerHTML = ""
+            document.body!!.appendChild(element)
+        }.showMainMenu()
     })
 }

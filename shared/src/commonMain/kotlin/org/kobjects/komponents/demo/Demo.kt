@@ -2,9 +2,23 @@ package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
 
-class Demo() {
+class Demo(
+    val kontext: Kontext,
+    val display: (KView) -> Unit) {
 
-    fun alignDemo(kontext: Kontext): KGridLayout {
+    fun showMainMenu() {
+        val layout = KGridLayout(kontext)
+
+        val button = KButton(kontext)
+        button.setText("Grid Cell Alignment")
+        button.addClickListener{ showGridCellAlignment() }
+
+        layout.add(GridArea(button))
+
+        display(layout)
+    }
+
+    fun showGridCellAlignment() {
         val grid = KGridLayout(kontext)
 
         grid.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
@@ -30,6 +44,6 @@ class Demo() {
                 )
             }
         }
-        return grid
+        display(grid)
     }
 }

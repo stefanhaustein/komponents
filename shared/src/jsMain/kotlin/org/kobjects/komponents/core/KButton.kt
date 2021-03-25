@@ -17,6 +17,10 @@ actual class KButton actual constructor(kontext: Kontext) : KView() {
     }
 
     actual fun setText(text: String) {
-        throw RuntimeException("NYI")
+        button.textContent = text
+    }
+
+    actual fun addClickListener(listener: (KButton) -> Unit) {
+        button.addEventListener("click", {listener(this)})
     }
 }

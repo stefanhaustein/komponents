@@ -20,9 +20,8 @@ class MainActivity : AppCompatActivity() {
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin()))
 
-        val container = Demo().alignDemo(context)
-
-        setContentView(container.getView())
-
+        Demo(context) {
+            setContentView(it.getView())
+        }.showMainMenu()
     }
 }
