@@ -9,21 +9,24 @@ struct DemoView: UIViewRepresentable {
 
     init() {
         let c = self.container
-       // c.backgroundColor = UIColor.gray
+        // c.backgroundColor = UIColor.blue
+
         demo = Demo(kontext: Kontext(), display: { kView in
+            for view in c.subviews {
+                view.removeFromSuperview()
+            }
             let uiView = kView.getView()
             c.addSubview(uiView)
-           // uiView.backgroundColor = UIColor.blue
-         //   uiView.translatesAutoresizingMaskIntoConstraints = false
+            uiView.frame = c.bounds
             uiView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            uiView.setNeedsLayout()
+            // uiView.backgroundColor = UIColor.red
+            // uiView.translatesAutoresizingMaskIntoConstraints = false
+            // uiView.setNeedsLayout()
         })
         demo.showMainMenu()
     }
 
     func makeUIView(context: Context) -> UIView {
-  //      container.backgroundColor = UIColor.red
-        container.layoutSubviews()
         return container
     }
 

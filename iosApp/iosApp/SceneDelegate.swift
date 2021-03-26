@@ -3,6 +3,7 @@ import SwiftUI
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
+
     var window: UIWindow?
 
 
@@ -17,7 +18,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: contentView)
+    //        window.rootViewController =  UIHostingController(rootView: contentView)
+            window.rootViewController = ViewController()
             self.window = window
             window.makeKeyAndVisible()
         }

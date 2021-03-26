@@ -10,10 +10,6 @@ import kotlin.math.ceil
 
 class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(context) {
 
-    var columnGap = 0.0
-    var rowGap = 0.0
-
-
     fun pxToPt(px: Int): Double {
         return px.toDouble() / context.resources.displayMetrics.density
     }

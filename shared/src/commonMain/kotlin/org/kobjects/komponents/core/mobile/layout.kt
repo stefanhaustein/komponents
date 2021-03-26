@@ -97,29 +97,27 @@ fun applyGridLayout(
   //  System.out.println("### widths: " + Arrays.toString(widths))
   //  System.out.println("### heights: " + Arrays.toString(heights))
 
-    var totalWidth = maxOf(columnCount - 1, 0) * container.columnGap
+    var consumedWidth = container.paddingLeft + maxOf(columnCount - 1, 0) * container.columnGap + container.paddingRight
     var totalHorizontalFr = 0.0
     for (i in 0 until columnCount) {
-        var columnWith = container.getColumnWidth(i)
+        val columnWith = container.getColumnWidth(i)
         when (columnWith.unit) {
             Size.Unit.PX -> widths[i] = columnWith.value
             Size.Unit.FR -> totalHorizontalFr += columnWith.value
         }
-        totalWidth += widths[i]
+        consumedWidth += widths[i]
     }
 
-    var totalHeight = maxOf(rowCount - 1, 0) * container.rowGap
+    var consumedHeight = container.paddingTop + maxOf(rowCount - 1, 0) * container.rowGap + container.paddingBottom
     var totalVerticalFr = 0.0
     for (i in 0 until rowCount) {
-        var rowHeight = container.getRowHeight(i)
+        val rowHeight = container.getRowHeight(i)
         when (rowHeight.unit) {
             Size.Unit.PX -> widths[i] = rowHeight.value
             Size.Unit.FR -> totalVerticalFr += rowHeight.value
         }
-        totalHeight += heights[i]
+        consumedHeight += heights[i]
     }
-
-
 
    // System.out.println("### total Width: $totalWidth height: $totalHeight")
 
@@ -127,7 +125,7 @@ fun applyGridLayout(
 
     var remainingWidth = 0.0
     if (widthMode == MeasurementMode.EXACTLY) {
-        val available = inputWidth - totalWidth - container.paddingLeft - container.paddingRight
+        val available = inputWidth - consumedWidth
         // System.out.println("### total Width: $totalWidth - measrued: ${MeasureSpec.getSize(widthMeasureSpec)} = available: $available")
         if (available > 0) {
             if (totalHorizontalFr == 0.0) {
@@ -137,7 +135,7 @@ fun applyGridLayout(
                     val columnWidth = container.getColumnWidth(i)
                     if (columnWidth.unit == Size.Unit.FR) {
                         widths[i] = available * columnWidth.value / totalHorizontalFr
-                        totalWidth += widths[i]
+                        consumedWidth += widths[i]
                     }
                 }
             }
@@ -146,7 +144,7 @@ fun applyGridLayout(
 
     var remainingHeight = 0.0
     if (heightMode == MeasurementMode.EXACTLY) {
-        val available = inputHeight - totalHeight - container.paddingTop - container.paddingBottom
+        val available = inputHeight - consumedHeight
         if (totalVerticalFr == 0.0) {
             remainingHeight = available
         } else {
@@ -155,8 +153,8 @@ fun applyGridLayout(
                 for (i in 0 until rowCount) {
                     val rowHeight = container.getRowHeight(i)
                     if (rowHeight.unit == Size.Unit.FR) {
-                        heights[i] = available * rowHeight.value / totalHorizontalFr
-                        totalHeight += heights[i]
+                        heights[i] = available * rowHeight.value / totalVerticalFr
+                        consumedHeight += heights[i]
                     }
                 }
             }
@@ -164,7 +162,6 @@ fun applyGridLayout(
     }
 
     val xPositions = DoubleArray(columnCount + 1) {0.0}
-    val yPositions = DoubleArray(rowCount + 1) {0.0}
     xPositions[0] = container.paddingLeft + when (container.horizontalAlign) {
         Align.END -> remainingWidth
         Align.CENTER -> remainingWidth / 2
@@ -173,6 +170,7 @@ fun applyGridLayout(
     for (i in widths.indices) {
         xPositions[i + 1] = xPositions[i] + widths[i] + container.columnGap
     }
+    val yPositions = DoubleArray(rowCount + 1) {0.0}
     yPositions[0] = container.paddingTop + when (container.verticalAlign) {
         Align.END -> remainingHeight
         Align.CENTER -> remainingHeight / 2
@@ -216,5 +214,5 @@ fun applyGridLayout(
 
     // System.err.println("**************************** Measured dimensions: " + totalWidth + " x " + totalHeight)
 
-    return Pair(totalWidth, totalHeight)
+    return Pair(consumedWidth + remainingWidth, consumedHeight + remainingHeight)
 }

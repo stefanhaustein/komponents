@@ -7,6 +7,8 @@ import org.kobjects.komponents.demo.Demo
 
 
 class MainActivity : AppCompatActivity() {
+    lateinit var demo: Demo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -20,8 +22,16 @@ class MainActivity : AppCompatActivity() {
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin()))
 
-        Demo(context) {
+        demo = Demo(context) {
             setContentView(it.getView())
-        }.showMainMenu()
+        }
+        demo.showMainMenu()
     }
+
+    override fun onBackPressed() {
+        if (!demo.handleBack()) {
+            super.onBackPressed()
+        }
+    }
+
 }

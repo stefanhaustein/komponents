@@ -6,19 +6,43 @@ class Demo(
     val kontext: Kontext,
     val display: (KView) -> Unit) {
 
+    var inMainMenu = false
+
+    /** Returns true if the back signal was consumed */
+    fun handleBack(): Boolean {
+        if (inMainMenu) {
+            return false
+        }
+        showMainMenu()
+        return true
+    }
+
     fun showMainMenu() {
+        inMainMenu = true
         val layout = KGridLayout(kontext)
 
         val button = KButton(kontext)
         button.setText("Grid Cell Alignment")
         button.addClickListener{ showGridCellAlignment() }
+    //    button.setBackgroundColor(0xffffff00u)
+
+        layout.defaultColumnWidth = Size.fr(1.0)
 
         layout.add(GridArea(button))
+        layout.horizontalAlign = Align.CENTER
+        //   layout.setBackgroundColor(0xffff0000u)
+
+        layout.paddingBottom = 24.0
+        layout.paddingTop = 24.0
+
+        layout.paddingRight = 12.0
+        layout.paddingLeft = 12.0
 
         display(layout)
     }
 
     fun showGridCellAlignment() {
+        inMainMenu = false
         val grid = KGridLayout(kontext)
 
         grid.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
