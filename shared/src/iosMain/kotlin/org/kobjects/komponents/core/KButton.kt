@@ -8,16 +8,10 @@ actual class KButton actual constructor(kontext: Kontext) : KView() {
 
     val uiButton = UIButton.buttonWithType(
         UIButtonTypeSystem
-        //UIButtonTypeRoundedRect
     )
 
-    private var listener: (KButton) -> Unit = {}
+    private var listeners: MutableList<(KButton) -> Unit>? = null
 
-
-    init {
-
-
-    }
 
     actual fun setImage(image: KImage) {
         // tbd
@@ -32,19 +26,22 @@ actual class KButton actual constructor(kontext: Kontext) : KView() {
     }
 
     @ObjCAction
-    fun clicked(whatever: Any?) {
-        listener(this)
+    fun clicked() {
+        val listeners = this.listeners;
+        if (listeners != null) {
+            for (listener in listeners) {
+                listener(this)
+            }
+        }
     }
 
     actual fun addClickListener(listener: (KButton) -> Unit) {
-        this.listener = listener
-         uiButton.addTarget(this, sel_registerName("clicked"), UIControlEventTouchUpInside)
-
-        uiButton.targetForAction(sel_registerName("clicked"), uiButton)
+        val listeners = this.listeners;
+        if (listeners == null) {
+            this.listeners = mutableListOf(listener)
+            uiButton.addTarget(this, sel_registerName("clicked"), UIControlEventTouchUpInside)
+        } else {
+            listeners.add(listener)
+        }
     }
-
-    fun tappedButton(sender: UIButton) {
-
-    }
-
 }
