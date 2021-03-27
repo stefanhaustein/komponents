@@ -1,24 +1,46 @@
 import UIKit
 import shared
 
+
 class ViewController: UIViewController {
 
-    var headerView: UIView!
-    var titleLabel: UILabel!
-
+    var navigationBar: UINavigationBar!
     var contentView: UIView? = nil
+    var demo: Demo!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupHeaderAndTitleLabel()
+
+ navigationBar = MyNavigationBar()
+        self.view.addSubview(navigationBar)
+
+        navigationBar.backgroundColor = UIColor.green
+        //navigationBar.frame = CGRect(x:0, y:0, width:self.view.frame.size.width, height:44)
+
+        navigationBar.delegate = self
+
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+        navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
         self.view.backgroundColor = UIColor.white
 
-        let demo = Demo(kontext: Kontext(), display: { kView in
+        demo = Demo(kontext: Kontext(), select: { selector, kView in
+            let navItem = UINavigationItem(title: selector.title)
+            self.navigationBar.pushItem(navItem, animated: false)
             self.setContentView(view: kView.getView())
         })
 
-        demo.showMainMenu()
+        showMenu()
     }
+
+    func showMenu() {
+        let navItem = UINavigationItem(title: "Komponents Demo")
+        navItem.backButtonTitle = "Menu"
+        navigationBar.items = [navItem]
+        setContentView(view: demo.renderMenu().getView())
+    }
+
 
     func setContentView(view: UIView) {
         if (self.contentView != nil) {
@@ -31,32 +53,21 @@ class ViewController: UIViewController {
         view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         view.bottomAnchor.constraint(equalTo: self.view.layoutMarginsGuide.bottomAnchor).isActive = true
-        view.topAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
+        view.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 1).isActive = true
     }
 
+}
 
-    func setupHeaderAndTitleLabel() {
-        headerView = UIView()
-        headerView.backgroundColor = .red
-        self.view.addSubview(headerView)
+extension ViewController:UINavigationBarDelegate{
+    func navigationBar(_ navigationBar: UINavigationBar, didPop: UINavigationItem) {
+         showMenu()
+    }
+}
 
-        titleLabel = UILabel()
-        titleLabel.text = "Komponents Demo"
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont(name: titleLabel.font.fontName, size: 20)
-        headerView.addSubview(titleLabel)
 
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        headerView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        headerView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        headerView.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
-        headerView.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.1).isActive = true
-
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.centerXAnchor.constraint(equalTo: headerView.centerXAnchor).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: headerView.bottomAnchor).isActive = true
-        titleLabel.widthAnchor.constraint(equalTo: headerView.widthAnchor, multiplier: 0.4).isActive = true
-        titleLabel.heightAnchor.constraint(equalTo: headerView.heightAnchor, multiplier: 0.5).isActive = true
+class MyNavigationBar : UINavigationBar {
+    override func popItem(animated: Bool) -> UINavigationItem? {
+        return super.popItem(animated: false)
     }
 
 }

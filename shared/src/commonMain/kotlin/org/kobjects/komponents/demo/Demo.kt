@@ -4,26 +4,15 @@ import org.kobjects.komponents.core.*
 
 class Demo(
     val kontext: Kontext,
-    val display: (KView) -> Unit) {
+    val select: (Selector, KGridLayout) -> Unit) {
 
-    var inMainMenu = false
 
-    /** Returns true if the back signal was consumed */
-    fun handleBack(): Boolean {
-        if (inMainMenu) {
-            return false
-        }
-        showMainMenu()
-        return true
-    }
-
-    fun showMainMenu() {
-        inMainMenu = true
+    fun renderMenu(): KGridLayout {
         val layout = KGridLayout(kontext)
 
         val button = KButton(kontext)
         button.setText("Grid Cell Alignment")
-        button.addClickListener{ showGridCellAlignment() }
+        button.addClickListener{ select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT)) }
     //    button.setBackgroundColor(0xffffff00u)
 
         layout.defaultColumnWidth = Size.fr(1.0)
@@ -38,11 +27,16 @@ class Demo(
         layout.paddingRight = 12.0
         layout.paddingLeft = 12.0
 
-        display(layout)
+        return layout
     }
 
-    fun showGridCellAlignment() {
-        inMainMenu = false
+    fun renderDemo(selector: Selector): KGridLayout {
+        return when(selector) {
+            Selector.GRID_CELL_ALIGNMENT -> renderGridCellAlignment()
+        }
+    }
+
+    fun renderGridCellAlignment(): KGridLayout {
         val grid = KGridLayout(kontext)
 
         grid.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
@@ -68,6 +62,12 @@ class Demo(
                 )
             }
         }
-        display(grid)
+        return grid
     }
+
+
+    enum class Selector(val title: String) {
+        GRID_CELL_ALIGNMENT("Grid Cell Alignment")
+    }
+
 }

@@ -8,6 +8,7 @@ import org.kobjects.komponents.demo.Demo
 
 class MainActivity : AppCompatActivity() {
     lateinit var demo: Demo
+    var isRoot = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,15 +23,25 @@ class MainActivity : AppCompatActivity() {
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin()))
 
-        demo = Demo(context) {
-            setContentView(it.getView())
+        demo = Demo(context) { selector, kView ->
+            setTitle(selector.title)
+            setContentView(kView.getView())
+            isRoot = false
         }
-        demo.showMainMenu()
+        showMenu()
+    }
+
+    fun showMenu() {
+        setTitle("Komponents Demo")
+        setContentView(demo.renderMenu().getView())
+        isRoot = true
     }
 
     override fun onBackPressed() {
-        if (!demo.handleBack()) {
+        if (isRoot) {
             super.onBackPressed()
+        } else {
+            showMenu()
         }
     }
 
