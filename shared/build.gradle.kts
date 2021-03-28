@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
+    kotlin("native.cocoapods")
     id("com.android.library")
     id("kotlin-android-extensions")
     `maven-publish`
@@ -9,16 +10,17 @@ plugins {
 
 group = "org.kobjects.komponents"
 
+version = "0.1.0"
 
 kotlin {
     android()
-    ios {
+    ios() /* {
         binaries {
             framework {
                 baseName = "shared"
             }
         }
-    }
+    }*/
     js {
         browser {
           /*  webpackTask {
@@ -38,6 +40,23 @@ kotlin {
         }
     //    binaries.executable()
     }
+    cocoapods() {
+        summary = "Komponents Kotlin native UI library"
+        homepage = "https://github.com/stefanhaustein/komponents"
+        ios.deploymentTarget = "13.5"
+
+        pod ("SwiftSVG") {
+            version = "~> 2.0"
+        }
+/*
+        pod ("CocoaLumberjack")
+        pod("SVGKit") {
+            source = git("https://github.com/SVGKit/SVGKit.git") {
+                branch = "3.x"
+            }
+        }*/
+    }
+
     sourceSets {
         val commonMain by getting
         val commonTest by getting {

@@ -1,13 +1,20 @@
 package org.kobjects.komponents.core
 
-import platform.UIKit.UIImageView
+import cocoapods.SwiftSVG.*
+// import cocoapods.SVGKit.*
 
-actual class KImage() {
+actual class KImage(
+ //   val svgkImage: SVGKImage
+) {
 
 
     actual companion object {
         actual fun createSvg(code: String): KImage {
-            throw RuntimeException("NYI")
+            //val source = SVGKSourceString.sourceFromContentsOfString(code)
+            //val img = SVGKImage.imageWithSource(source)
+            return KImage(
+            //    img!!
+            )
         }
     }
 
