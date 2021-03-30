@@ -5,11 +5,11 @@ import platform.UIKit.UIView
 
 actual class KImageView actual constructor(val kontext: Kontext) : KView() {
 
-    val uiImageView = UIView()
+    val uiImageView = UISvgView(kontext.svgHelper)
 
 
     actual fun setImage(image: KImage) {
-        kontext.svgHandler(image.svg, uiImageView)
+        kontext.svgHelper.createLayer(image.svg) {uiImageView.setSvgLayer(it)}
     }
 
     override fun getView(): UIView {

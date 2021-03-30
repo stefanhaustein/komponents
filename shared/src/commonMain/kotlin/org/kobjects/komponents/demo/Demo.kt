@@ -13,9 +13,10 @@ class Demo(
         val image = KImageView(kontext)
         image.setBackgroundColor(0x88888888u)
         image.setImage(KImage.createSvg("""
-            <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="30" height="30" 
-                 viewBox="0 0 30 30">
-              <rect x="10" y="10" width="10" height="10" fill="#ff0000"/>
+            <svg viewBox="0 0 30 30">
+              <rect x="0" y="0" width="10" height="10" fill="#ff0000"/>
+              <rect x="10" y="10" width="10" height="10" fill="#00ff00"/>
+              <rect x="20" y="20" width="10" height="10" fill="#0000ff"/>
             </svg>
         """.trimIndent()))
         layout.add(GridArea(image, width = 100.0, height = 100.0, horizontalAlign = Align.CENTER))

@@ -2,6 +2,23 @@ import UIKit
 import shared
 import SwiftSVG
 
+class SvgHelperImpl: SvgHelper {
+
+    func resizeToFit(svgLayer: SVGLayer, width: Double, height: Double) {
+        let rect = CGRect(x: 0, y: 0, width: width, height: height)
+        svgLayer.resizeToFit(rect)
+    }
+
+    func createLayer(xml: String, callback: @escaping (SVGLayer) -> Void) {
+        let svgData = Data(xml.utf8)
+        CALayer(SVGData: svgData, parser: nil) { (svgLayer) in
+            // DispatchQueue.main.safeAsync {
+            callback(svgLayer)
+            // }
+        }
+    }
+}
+
 class ViewController: UIViewController {
 
     var navigationBar: UINavigationBar!
@@ -25,16 +42,7 @@ class ViewController: UIViewController {
         navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
         self.view.backgroundColor = UIColor.white
 
-        let kontext = Kontext() {
-            svgString, uiView in
-            let svgData = Data(svgString.utf8)
-            CALayer(SVGData: svgData, parser: nil) { [weak self] (svgLayer) in
-                    //    DispatchQueue.main.safeAsync {
-                            uiView.layer.addSublayer(svgLayer)
-                      //  }
-                      //  completion?(svgLayer)
-                    }
-        }
+        let kontext = Kontext(svgHelper: SvgHelperImpl())
 
         demo = Demo(kontext: kontext, select: { selector, kView in
             let navItem = UINavigationItem(title: selector.title)
