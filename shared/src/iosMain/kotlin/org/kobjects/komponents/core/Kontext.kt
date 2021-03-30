@@ -1,4 +1,6 @@
 package org.kobjects.komponents.core
 
-actual class Kontext {
+import platform.UIKit.UIView
+
+actual class Kontext(val svgHander: (String, UIView) -> Unit) {
 }

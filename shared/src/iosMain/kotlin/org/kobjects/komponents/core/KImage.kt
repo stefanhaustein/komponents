@@ -1,10 +1,13 @@
 package org.kobjects.komponents.core
 
 import cocoapods.SwiftSVG.*
+import platform.Foundation.NSData
+import platform.UIKit.UIView
+
 // import cocoapods.SVGKit.*
 
 actual class KImage(
- //   val svgkImage: SVGKImage
+    val svg: String
 ) {
 
 
@@ -12,9 +15,7 @@ actual class KImage(
         actual fun createSvg(code: String): KImage {
             //val source = SVGKSourceString.sourceFromContentsOfString(code)
             //val img = SVGKImage.imageWithSource(source)
-            return KImage(
-            //    img!!
-            )
+            return KImage(code)
         }
     }
 
