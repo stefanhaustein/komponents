@@ -48,9 +48,12 @@ kotlin {
         pod ("SwiftSVG") {
             version = "~> 2.0"
         }
-/*
-        pod ("CocoaLumberjack")
-        pod("SVGKit") {
+
+//        pod ("CocoaLumberjack")
+   /*     pod("SVGKit") {
+       //     version = "~> 2.1.1"
+        }
+
             source = git("https://github.com/SVGKit/SVGKit.git") {
                 branch = "3.x"
             }

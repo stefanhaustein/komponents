@@ -1,6 +1,6 @@
 import UIKit
 import shared
-
+import SwiftSVG
 
 class ViewController: UIViewController {
 
@@ -25,7 +25,18 @@ class ViewController: UIViewController {
         navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
         self.view.backgroundColor = UIColor.white
 
-        demo = Demo(kontext: Kontext(), select: { selector, kView in
+        let kontext = Kontext() {
+            svgString, uiView in
+            let svgData = Data(svgString.utf8)
+            CALayer(SVGData: svgData, parser: nil) { [weak self] (svgLayer) in
+                    //    DispatchQueue.main.safeAsync {
+                            uiView.layer.addSublayer(svgLayer)
+                      //  }
+                      //  completion?(svgLayer)
+                    }
+        }
+
+        demo = Demo(kontext: kontext, select: { selector, kView in
             let navItem = UINavigationItem(title: selector.title)
             self.navigationBar.pushItem(navItem, animated: false)
             self.setContentView(view: kView.getView())

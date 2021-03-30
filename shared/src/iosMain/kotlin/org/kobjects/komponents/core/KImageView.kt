@@ -3,12 +3,13 @@ package org.kobjects.komponents.core
 import platform.UIKit.UIImageView
 import platform.UIKit.UIView
 
-actual class KImageView actual constructor(kontext: Kontext) : KView() {
+actual class KImageView actual constructor(val kontext: Kontext) : KView() {
 
-    val uiImageView = UIImageView()
+    val uiImageView = UIView()
+
 
     actual fun setImage(image: KImage) {
-        throw RuntimeException("NYI")
+        kontext.svgHandler(image.svg, uiImageView)
     }
 
     override fun getView(): UIView {

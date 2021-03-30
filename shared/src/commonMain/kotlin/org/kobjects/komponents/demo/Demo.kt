@@ -10,6 +10,17 @@ class Demo(
     fun renderMenu(): KGridLayout {
         val layout = KGridLayout(kontext)
 
+        val image = KImageView(kontext)
+        image.setBackgroundColor(0x88888888u)
+        image.setImage(KImage.createSvg("""
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.2" baseProfile="tiny" width="30" height="30" 
+                 viewBox="0 0 30 30">
+              <rect x="10" y="10" width="10" height="10" fill="#ff0000"/>
+            </svg>
+        """.trimIndent()))
+        layout.add(GridArea(image, width = 100.0, height = 100.0, horizontalAlign = Align.CENTER))
+
+
         val button = KButton(kontext)
         button.setText("Grid Cell Alignment")
         button.addClickListener{ select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT)) }
@@ -17,7 +28,7 @@ class Demo(
 
         layout.defaultColumnWidth = Size.fr(1.0)
 
-        layout.add(GridArea(button))
+        layout.add(GridArea(button, row=1))
         layout.horizontalAlign = Align.CENTER
         //   layout.setBackgroundColor(0xffff0000u)
 
