@@ -8,7 +8,7 @@ actual class KImageView actual constructor(kontext: Kontext) : KView() {
     val uiImageView = UIImageView()
 
     actual fun setImage(image: KImage) {
-        throw RuntimeException("NYI")
+        //   throw RuntimeException("NYI")
     }
 
     override fun getView(): UIView {
