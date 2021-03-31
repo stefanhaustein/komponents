@@ -29,7 +29,7 @@ class Demo(
 
         layout.defaultColumnWidth = Size.fr(1.0)
 
-        layout.add(GridArea(button, row=1))
+        layout.add(GridArea(button))
         layout.horizontalAlign = Align.CENTER
         //   layout.setBackgroundColor(0xffff0000u)
 

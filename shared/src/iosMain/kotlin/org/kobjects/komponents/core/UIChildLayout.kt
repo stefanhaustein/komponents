@@ -10,7 +10,8 @@ import platform.UIKit.setFrame
 import platform.UIKit.sizeThatFits
 
 class UIChildLayout(override val positioned: GridArea) : ChildLayout {
-
+    override var column: Int = 0
+    override var row: Int = 0
     var measuredWidth: Double = 0.0
     var measuredHeight: Double = 0.0
 
@@ -19,7 +20,7 @@ class UIChildLayout(override val positioned: GridArea) : ChildLayout {
         width: Double,
         heightMode: MeasurementMode,
         height: Double
-    ): Pair<Double, Double> {
+    ) {
         val uiView = positioned.view.getView()
         if (widthMode != MeasurementMode.EXACTLY
             || heightMode != MeasurementMode.EXACTLY) {
@@ -43,7 +44,14 @@ class UIChildLayout(override val positioned: GridArea) : ChildLayout {
         if (heightMode == MeasurementMode.EXACTLY) {
             measuredHeight = height;
         }
-        return Pair(measuredWidth, measuredHeight)
+    }
+
+    override fun measuredWidth(): Double {
+        return measuredWidth
+    }
+
+    override fun measuredHeight(): Double {
+        return measuredHeight
     }
 
     override fun setPosition(x: Double, y: Double) {

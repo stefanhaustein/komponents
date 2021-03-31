@@ -57,16 +57,25 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
     inner class LayoutParams(override val positioned: GridArea) : ViewGroup.LayoutParams(0, 0), ChildLayout {
         var x = 0.0
         var y = 0.0
+        override var column = 0
+        override var row = 0
 
         override fun measure(
             widthMode: MeasurementMode,
             width: Double,
             heightMode: MeasurementMode,
             height: Double
-        ): Pair<Double, Double> {
+        ) {
             val childView = positioned.view.getView()
             childView.measure(modeAndSizeToAndroid(widthMode, width), modeAndSizeToAndroid(heightMode, height))
-            return Pair(pxToPt(childView.measuredWidth), pxToPt(childView.measuredHeight));
+        }
+
+        override fun measuredHeight(): Double {
+            return pxToPt(positioned.view.getView().measuredHeight)
+        }
+
+        override fun measuredWidth(): Double {
+            return pxToPt(positioned.view.getView().measuredWidth)
         }
 
         override fun setPosition(x: Double, y: Double) {
