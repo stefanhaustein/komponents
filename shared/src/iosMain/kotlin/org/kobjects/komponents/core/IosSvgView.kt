@@ -7,7 +7,7 @@ import platform.UIKit.UIView
 import cocoapods.SwiftSVG.*
 import kotlinx.cinterop.useContents
 
-class UISvgView(
+class IosSvgView(
     val svgHelper: SvgHelper
     ) : UIView(CGRectMake(0.0, 0.0, 50.0, 50.0)) {
 

@@ -27,6 +27,10 @@ class Demo(
         button.addClickListener{ select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT)) }
     //    button.setBackgroundColor(0xffffff00u)
 
+        val picker = KChoice(kontext)
+        picker.setData(listOf("foo", "bar", "baz", "foobar"))
+        layout.add(GridArea(picker))
+
         layout.defaultColumnWidth = Size.fr(1.0)
 
         layout.add(GridArea(button))

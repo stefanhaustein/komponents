@@ -17,9 +17,9 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
 
     private val columnWidths = mutableListOf<Size?>()
     private val rowHeights = mutableListOf<Size?>()
-    private val uiGridView = UIGridView(this)
+    private val uiGridView = IosGridView(this)
 
-    val children = mutableListOf<UIChildLayout>()
+    val children = mutableListOf<IosChildLayout>()
 
 
     actual fun setColumnWidth(index: Int, width: Size?, repeat: Int) {
@@ -50,7 +50,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
 
 
     actual fun add(positioned: GridArea) {
-        children.add(UIChildLayout(positioned))
+        children.add(IosChildLayout(positioned))
         uiGridView.addSubview(positioned.view.getView())
     }
 
