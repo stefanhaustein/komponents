@@ -1,5 +1,6 @@
 package org.kobjects.komponents.core
 
+import kotlinx.browser.window
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
@@ -11,7 +12,8 @@ actual class KChoice actual constructor(val kontext: Kontext) :
     var listeners = mutableListOf<(KChoice, Int, String) -> Unit>()
 
     init {
-        selectElement.addEventListener("select", {
+        selectElement.addEventListener("change", {
+            console.log("Event received!")
             val selectedIndex = selectElement.selectedIndex
             val selectedText = selectElement.get(selectedIndex)?.textContent ?: ""
             for (listener in listeners) {
@@ -35,6 +37,10 @@ actual class KChoice actual constructor(val kontext: Kontext) :
 
     override fun getElement(): HTMLElement {
         return selectElement
+    }
+
+    actual fun setSelectedIndex(index: Int) {
+        selectElement.selectedIndex = index
     }
 
 }

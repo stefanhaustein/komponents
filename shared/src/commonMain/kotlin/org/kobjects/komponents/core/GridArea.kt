@@ -1,23 +1,63 @@
 package org.kobjects.komponents.core
 
-expect class GridArea (
-    view: KView,
+class GridArea (
+    val view: KView,
     column: Int? = null,
     row: Int? = null,
     columnSpan: Int = 1,
     rowSpan: Int = 1,
     width: Double? = null,
     height: Double? = null,
-    verticalAlign: Align = Align.STRETCH,
-    horizontalAlign: Align = Align.STRETCH) {
+    verticalAlign: Align? = null,
+    horizontalAlign: Align? = null) {
 
-    val view: KView
-    var column: Int?
-    var columnSpan: Int
-    var row: Int?
-    var rowSpan: Int
-    var width: Double?
-    var height: Double?
-    var verticalAlign: Align
-    var horizontalAlign: Align
+    var column = column
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var columnSpan = columnSpan
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var row = row
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+    var rowSpan = rowSpan
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+    var width = width
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+    var height = height
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+    var verticalAlign = verticalAlign
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+    var horizontalAlign = horizontalAlign
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var gridLayout: KGridLayout? = null
+
+    fun notifyChanged() {
+        gridLayout?.notifyAreaChanged(this)
+    }
+
 }

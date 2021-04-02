@@ -44,4 +44,8 @@ actual class KChoice actual constructor(kontext: Kontext) :
         return spinner
     }
 
+    actual fun setSelectedIndex(index: Int) {
+        spinner.setSelection(index)
+    }
+
 }

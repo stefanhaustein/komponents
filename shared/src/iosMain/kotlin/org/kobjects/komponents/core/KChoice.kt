@@ -1,21 +1,25 @@
 package org.kobjects.komponents.core
 
-import platform.Foundation.NSString
 import platform.UIKit.*
-import platform.darwin.NSInteger
 
 actual class KChoice actual constructor(kontext: Kontext) :
     KView() {
 
     val button = UIButton.buttonWithType(UIButtonTypeSystem)
     val listeners = mutableListOf<(KChoice, Int, String) -> Unit>()
+    var data = listOf<String>()
+    var selectedIndex = 0
 
     actual fun setData(data: List<String>) {
-        button.setTitle((if (data.isEmpty()) "" else data[0]) + " \u25bc", UIControlStateNormal)
+        this.data = data
+        setSelectedIndex(0)
 
         val children = data.mapIndexed {index, value ->
             UIAction.actionWithTitle(title = value, identifier = null, image= null, handler = {
-                button.setTitle(data[index], UIControlStateNormal)
+                setSelectedIndex(index)
+                for (listener in listeners) {
+                    listener(this@KChoice, index, value)
+                }
             })
         }
 
@@ -29,6 +33,11 @@ actual class KChoice actual constructor(kontext: Kontext) :
 
     override fun getView(): UIView {
         return button
+    }
+
+    actual fun setSelectedIndex(index: Int) {
+        button.setTitle((if (data.isEmpty()) "" else data[index]) + " \u25bc", UIControlStateNormal)
+        this.selectedIndex = index
     }
 
 }

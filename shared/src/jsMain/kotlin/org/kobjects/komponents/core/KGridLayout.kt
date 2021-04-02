@@ -35,12 +35,12 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
             field = value
             div.style.paddingRight = "${value}px"
         }
-    actual var horizontalAlign = Align.START
+    actual var justifyContent = Align.START
         set(value) {
             field = value
             div.style.justifyContent = value.toString().toLowerCase()
         }
-    actual var verticalAlign = Align.START
+    actual var alignContent = Align.START
         set(value) {
             field = value
             div.style.alignContent = value.toString().toLowerCase()
@@ -55,8 +55,8 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
 
     init {
         div.style.display = "grid"
-        horizontalAlign = Align.START // Html default seems to be stretch...
-        verticalAlign = Align.START
+        justifyContent = Align.START // Html default seems to be stretch...
+        alignContent = Align.START
     }
 
     override fun getElement(): HTMLElement {
@@ -64,14 +64,33 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
     }
 
     actual fun add(positioned: GridArea) {
+        positioned.gridLayout = this
         children.add(positioned)
-        val element = positioned.view.getElement()
-        div.appendChild(element)
+        div.appendChild(positioned.view.getElement())
+        notifyAreaChanged(positioned)
     }
 
-    actual var defaultColumnWidth: Size = Size.AUTO
+    actual var autoColumns: Size = Size.AUTO
+        set(value) {
+            field = value
+            div.style.setProperty("auto-columns", value.toString())}
 
-    actual var defaultRowHeight: Size = Size.AUTO
+    actual var autoRows: Size = Size.AUTO
+        set(value) {
+            field = value
+            div.style.setProperty("auto-rows", value.toString())
+        }
+    actual var alignItems: Align = Align.STRETCH
+        set(value) {
+            field = value
+            div.style.setProperty("align-items", value.toString())
+        }
+    actual var justifyItems: Align = Align.STRETCH
+        set(value) {
+            field = value
+            div.style.setProperty("justify-items", value.toString())
+        }
+
 
     fun setSizes(propertyName: String, list: MutableList<Size?>, index: Int, width: Size?, repeat: Int) {
         while (list.size < index + repeat) {
@@ -103,13 +122,51 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
     }
 
     actual fun getColumnWidth(index: Int): Size {
-        return if (index >= columnWidths.size) defaultColumnWidth else columnWidths[index] ?: defaultColumnWidth
+        return if (index >= columnWidths.size) autoColumns else columnWidths[index] ?: autoColumns
     }
 
     actual fun getRowHeight(index: Int): Size {
-        return if (index >= rowHeights.size) defaultRowHeight else rowHeights[index] ?: defaultRowHeight
+        return if (index >= rowHeights.size) autoRows else rowHeights[index] ?: autoRows
+    }
+
+    actual fun notifyAreaChanged(area: GridArea) {
+        val style = area.view.getElement().style
+        val column = area.column
+        val row = area.row
+        val width = area.width
+        val height = area.height
+        style.setProperty(
+            "grid-column-start",
+            if (column != null) "${column + 1}" else "")
+        style.setProperty(
+            "grid-column-end",
+            "span ${area.columnSpan}")
+        style.setProperty(
+            "grid-row-start",
+            if (row != null) "${row + 1}" else "")
+        style.setProperty(
+            "grid-row-end",
+            "span ${area.rowSpan}" )
+        style.width = if (width != null) "${width}px" else ""
+        style.height = if (height != null) "${width}px" else ""
+        style.setProperty(
+            "align-self",
+            area.verticalAlign?.name?.toLowerCase() ?: ""
+        )
+        style.setProperty(
+            "justify-self",
+            area.horizontalAlign?.name?.toLowerCase() ?: ""
+        )
+
+        // ${(area.horizontalAlign.name.toLowerCase()}"
     }
 
 
+    actual fun templateColumnCount(): Int {
+        return columnWidths.size
+    }
 
+    actual fun templateRowCount(): Int {
+        return rowHeights.size
+    }
 }

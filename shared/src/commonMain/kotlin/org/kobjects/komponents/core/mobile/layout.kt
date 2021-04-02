@@ -2,31 +2,19 @@ package org.kobjects.komponents.core.mobile
 
 import org.kobjects.komponents.core.Align
 import org.kobjects.komponents.core.KGridLayout
-import org.kobjects.komponents.core.GridArea
 import org.kobjects.komponents.core.Size
 
 enum class MeasurementMode {
     UNSPECIFIED, AT_MOST, EXACTLY
 }
 
-
-interface ChildLayout {
-    val positioned: GridArea
-    var column: Int
-    var row: Int
-
-
-    fun measure(widthMode: MeasurementMode, width: Double, heightMode: MeasurementMode, height: Double)
-
-    fun measuredWidth(): Double
-    fun measuredHeight(): Double
-
-    fun setPosition(x: Double, y: Double)
-
+fun sum(doubles: DoubleArray, start: Int, count: Int): Double {
+    var sum = 0.0
+    for (i in 0 until count) {
+        sum += doubles[start + i]
+    }
+    return sum
 }
-
-
-
 
 fun applyGridLayout(
     container: KGridLayout,
@@ -37,12 +25,8 @@ fun applyGridLayout(
     inputHeight: Double,
 ): Pair<Double, Double> {
 
-
-//    System.err.println("************** onMeaseure ${MeasureSpec.getMode(widthMeasureSpec)}/${MeasureSpec.getSize(widthMeasureSpec)} / ${MeasureSpec.getMode(heightMeasureSpec)}/${MeasureSpec.getSize(heightMeasureSpec)}")
-
-    // Todo: Use template
-    var rowCount = 0
-    var columnCount = 0
+    var rowCount = container.templateRowCount()
+    var columnCount = container.templateColumnCount()
 
     // Determine size
 
@@ -87,6 +71,7 @@ fun applyGridLayout(
                 col++
             } else {
                 row++
+                col = 0
             }
         }
         // Found a suitable child pos at row/col
@@ -191,7 +176,7 @@ fun applyGridLayout(
             }
         }
     }
-
+    
     var remainingHeight = 0.0
     if (heightMode == MeasurementMode.EXACTLY) {
         val available = inputHeight - consumedHeight
@@ -212,7 +197,7 @@ fun applyGridLayout(
     }
 
     val xPositions = DoubleArray(columnCount + 1) {0.0}
-    xPositions[0] = container.paddingLeft + when (container.horizontalAlign) {
+    xPositions[0] = container.paddingLeft + when (container.justifyContent) {
         Align.END -> remainingWidth
         Align.CENTER -> remainingWidth / 2
         else -> 0.0
@@ -221,7 +206,7 @@ fun applyGridLayout(
         xPositions[i + 1] = xPositions[i] + widths[i] + container.columnGap
     }
     val yPositions = DoubleArray(rowCount + 1) {0.0}
-    yPositions[0] = container.paddingTop + when (container.verticalAlign) {
+    yPositions[0] = container.paddingTop + when (container.alignContent) {
         Align.END -> remainingHeight
         Align.CENTER -> remainingHeight / 2
         else -> 0.0
@@ -232,24 +217,26 @@ fun applyGridLayout(
 
     for (child in children) {
         val positioned = child.positioned
+        val alignChild = positioned.verticalAlign ?: container.alignItems
+        val justifyChild = positioned.horizontalAlign ?: container.justifyItems
 
-        val childWidthMode = if (positioned.width != null || positioned.horizontalAlign == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
-        val childHeightMode = if (positioned.height != null || positioned.verticalAlign == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
+        val childWidthMode = if (positioned.width != null || justifyChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
+        val childHeightMode = if (positioned.height != null || alignChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
 
-        var childWidth = if (positioned.width != null) (positioned.width ?: 0.0) else widths[child.column]
-        var childHeight = if (positioned.height != null) (positioned.height ?: 0.0) else heights[child.row]
+        var childWidth = if (positioned.width != null) (positioned.width ?: 0.0) else sum(widths, child.column, positioned.columnSpan)
+        var childHeight = if (positioned.height != null) (positioned.height ?: 0.0) else sum(heights, child.row, positioned.rowSpan)
 
         child.measure(childWidthMode, childWidth, childHeightMode, childHeight)
         childWidth = child.measuredWidth()
         childHeight = child.measuredHeight()
 
         var xPos = xPositions[child.column]
-        when (positioned.horizontalAlign) {
+        when (positioned.horizontalAlign ?: container.justifyItems) {
             Align.CENTER -> xPos += (widths[child.column] - childWidth) / 2
             Align.END -> xPos += widths[child.column] - childWidth
         }
         var yPos = yPositions[child.row]
-        when (positioned.verticalAlign) {
+        when (positioned.verticalAlign ?: container.alignItems) {
             Align.CENTER -> yPos += (heights[child.row] - childHeight) / 2
             Align.END -> yPos += heights[child.row] - childHeight
         }

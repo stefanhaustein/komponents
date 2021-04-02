@@ -31,10 +31,10 @@ class Demo(
         picker.setData(listOf("foo", "bar", "baz", "foobar"))
         layout.add(GridArea(picker))
 
-        layout.defaultColumnWidth = Size.fr(1.0)
+        layout.autoColumns = Size.fr(1.0)
 
         layout.add(GridArea(button))
-        layout.horizontalAlign = Align.CENTER
+        layout.justifyContent = Align.CENTER
         //   layout.setBackgroundColor(0xffff0000u)
 
         layout.paddingBottom = 24.0
@@ -52,8 +52,36 @@ class Demo(
         }
     }
 
+    private fun addLabeledChoice(
+        container: KGridLayout,
+        label: String,
+        values: Array<Align>,
+        action: (Align) -> Unit
+    ) {
+        val labelView = KTextView(kontext)
+        labelView.setText(label)
+        container.add(GridArea(labelView))
+
+        val choice = KChoice(kontext)
+        choice.setData(values.map{it.toString()})
+        choice.addSelectionListener { kChoice, i, s ->
+            action(values[i])
+        }
+        container.add(GridArea(choice))
+    }
+
     fun renderGridCellAlignment(): KGridLayout {
+        val outer = KGridLayout(kontext)
+        outer.setColumnWidth(0, Size.auto())
+        outer.setColumnWidth(1, Size.fr(1.0))
+        outer.alignContent = Align.STRETCH
+        outer.setRowHeight(2, Size.fr(1.0))
+
         val grid = KGridLayout(kontext)
+
+        addLabeledChoice(outer, "justify items", Align.values()) { grid.justifyItems = it }
+        addLabeledChoice(outer, "align items", Align.values()) { grid.alignItems = it }
+
 
         grid.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
         grid.setRowHeight(0, Size.fr(1.0), repeat = Align.values().size)
@@ -72,14 +100,18 @@ class Demo(
                         tc,
                         row = hAlign.ordinal,
                         column = vAlign.ordinal,
-                        horizontalAlign = hAlign,
-                        verticalAlign = vAlign
+                        width = 50.0,
+                        height = 50.0
+       //                 horizontalAlign = hAlign,
+       //                 verticalAlign = vAlign
                     )
                 )
             }
         }
-        return grid
+        outer.add(GridArea(grid, columnSpan = 2))
+        return outer
     }
+
 
 
     enum class Selector(val title: String) {
