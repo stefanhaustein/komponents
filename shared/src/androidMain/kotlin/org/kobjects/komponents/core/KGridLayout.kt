@@ -25,10 +25,12 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
         set(value) { field = value; layout.requestLayout() }
     actual var alignItems = Align.STRETCH
         set(value) { field = value; layout.requestLayout() }
+    actual var columnTemplate = listOf<Size>()
+        set(value) { field = value; layout.requestLayout() }
+    actual var rowTemplate = listOf<Size>()
+        set(value) { field = value; layout.requestLayout() }
 
     private val layout = GridLayout(kontext.context, this)
-    private val columnWidths = mutableListOf<Size?>()
-    private val rowHeights = mutableListOf<Size?>()
 
     val children = mutableListOf<ChildLayout>()
 
@@ -48,43 +50,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
 
     actual var autoRows: Size = Size.AUTO
 
-    actual fun setColumnWidth(index: Int, width: Size?, repeat: Int) {
-        while (columnWidths.size < index + repeat) {
-            columnWidths.add(null)
-        }
-        for (i in index until index + repeat) {
-            columnWidths[i] = width
-        }
-    }
-
-    actual fun setRowHeight(index: Int, height: Size?, repeat: Int) {
-        while (rowHeights.size < index + repeat) {
-            rowHeights.add(null)
-        }
-        for (i in index until index + repeat) {
-            rowHeights[i] = height
-        }
-    }
-
-    actual fun getColumnWidth(index: Int): Size {
-        return if (index >= columnWidths.size) autoColumns else columnWidths[index] ?: autoColumns
-    }
-
-    actual fun getRowHeight(index: Int): Size {
-        return if (index >= rowHeights.size) autoRows else rowHeights[index] ?: autoRows
-    }
-
     actual fun notifyAreaChanged(area: GridArea) {
         layout.requestLayout()
     }
-
-    actual fun templateColumnCount(): Int {
-        return columnWidths.size
-    }
-
-    actual fun templateRowCount(): Int {
-        return rowHeights.size
-    }
-
-
 }

@@ -19,14 +19,8 @@ expect class KGridLayout(kontext: Kontext) : KView {
     var alignItems: Align
     var justifyItems: Align
 
-    fun setColumnWidth(index: Int, width: Size?, repeat: Int = 1)
-    fun setRowHeight(index: Int, height: Size?, repeat: Int = 1)
-
-    fun templateColumnCount(): Int
-    fun templateRowCount(): Int
-
-    fun getColumnWidth(index: Int): Size
-    fun getRowHeight(index: Int): Size
+    var columnTemplate: List<Size>
+    var rowTemplate: List<Size>
 
     fun add(positioned: GridArea)
 

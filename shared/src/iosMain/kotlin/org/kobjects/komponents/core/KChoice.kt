@@ -36,7 +36,7 @@ actual class KChoice actual constructor(kontext: Kontext) :
     }
 
     actual fun setSelectedIndex(index: Int) {
-        button.setTitle((if (data.isEmpty()) "" else data[index]) + " \u25bc", UIControlStateNormal)
+        button.setTitle((if (data.isEmpty()) "" else data[index]), UIControlStateNormal)
         this.selectedIndex = index
     }
 

@@ -3,9 +3,11 @@ package org.kobjects.komponents.core
 
 import org.w3c.dom.HTMLElement
 
-actual class KTextView actual constructor(kontext: Kontext) : KView() {
+actual class KTextView actual constructor(kontext: Kontext, text: String) : KView() {
 
-    val div = kontext.document.createElement("div") as HTMLElement
+    val div = (kontext.document.createElement("div") as HTMLElement).also {
+        it.innerHTML = htmlify(text)
+    }
 
     override fun getElement(): HTMLElement {
         return div

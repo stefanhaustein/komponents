@@ -35,7 +35,8 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
                 MeasurementMode.EXACTLY,
                 pxToPt(MeasureSpec.getSize(widthMeasureSpec)),
                 MeasurementMode.EXACTLY,
-                pxToPt(MeasureSpec.getSize(heightMeasureSpec)));
+                pxToPt(MeasureSpec.getSize(heightMeasureSpec)),
+            /* measureOnly= */ false);
 
             setMeasuredDimension(ptToPx(result.first), ptToPx(result.second));
     }
@@ -60,11 +61,12 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
         override var column = 0
         override var row = 0
 
-        override fun measure(
+        override fun layout(
             widthMode: MeasurementMode,
             width: Double,
             heightMode: MeasurementMode,
-            height: Double
+            height: Double,
+            measureOnly: Boolean
         ) {
             val childView = positioned.view.getView()
             childView.measure(modeAndSizeToAndroid(widthMode, width), modeAndSizeToAndroid(heightMode, height))

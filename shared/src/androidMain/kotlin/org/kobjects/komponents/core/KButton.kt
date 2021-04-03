@@ -3,9 +3,9 @@ package org.kobjects.komponents.core
 import android.view.View
 import android.widget.Button
 
-actual class KButton actual constructor(kontext: Kontext) : KView() {
+actual class KButton actual constructor(kontext: Kontext, label: String) : KView() {
 
-    private val button = Button(kontext.context)
+    private val button = Button(kontext.context).also { it.text = label }
     private var image: KImage? = null
 
     override fun getView(): View {

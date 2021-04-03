@@ -8,8 +8,8 @@ class GridArea (
     rowSpan: Int = 1,
     width: Double? = null,
     height: Double? = null,
-    verticalAlign: Align? = null,
-    horizontalAlign: Align? = null) {
+    align: Align? = null,
+    justify: Align? = null) {
 
     var column = column
         set(value) {
@@ -43,12 +43,12 @@ class GridArea (
             field = value
             notifyChanged()
         }
-    var verticalAlign = verticalAlign
+    var verticalAlign = align
         set(value) {
             field = value
             notifyChanged()
         }
-    var horizontalAlign = horizontalAlign
+    var horizontalAlign = justify
         set(value) {
             field = value
             notifyChanged()

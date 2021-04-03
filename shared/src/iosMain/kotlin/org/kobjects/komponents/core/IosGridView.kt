@@ -18,8 +18,9 @@ class IosGridView(val container: KGridLayout) : UIView(CGRectMake(0.0, 0.0, 100.
                 MeasurementMode.EXACTLY,
                 this.size.width,
                 MeasurementMode.EXACTLY,
-                this.size.height);
+                this.size.height,
+                /* measureOnly= */ false);
         }
-
     }
+
 }

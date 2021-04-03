@@ -1,11 +1,18 @@
 package org.kobjects.komponents.core
 
+import kotlinx.cinterop.useContents
+import org.kobjects.komponents.core.mobile.MeasurementMode
+import platform.CoreGraphics.CGFLOAT_MAX
+import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.UIColor
 import platform.UIKit.UIView
 import platform.UIKit.backgroundColor
+import platform.UIKit.sizeThatFits
 
 abstract actual class KView {
     abstract fun getView(): UIView
+
+
 
     actual fun setBackgroundColor(color: UInt) {
         getView().backgroundColor = UIColor(
@@ -13,5 +20,32 @@ abstract actual class KView {
             green = ((color shr 8) and 255u).toDouble() / 255.0,
             blue = (color and 255u).toDouble() / 255.0,
             alpha = ((color shr 24) and 255u).toDouble() / 255.0)
+    }
+
+    open fun layout(
+        availableWidth: Double,
+        widthMode: MeasurementMode,
+        availableHeight: Double,
+        heightMode: MeasurementMode,
+        measureOnly: Boolean) : Pair<Double,Double> {
+
+        var measuredHeight = 0.0
+        var measuredWidth = 0.0
+        if (widthMode != MeasurementMode.EXACTLY ||
+            heightMode != MeasurementMode.EXACTLY) {
+            getView().sizeThatFits(CGSizeMake(
+                if (widthMode == MeasurementMode.UNSPECIFIED) CGFLOAT_MAX else availableWidth,
+                if (heightMode == MeasurementMode.UNSPECIFIED) CGFLOAT_MAX else availableHeight)).useContents {
+                measuredWidth = this.width
+                measuredHeight = this.height
+            }
+        }
+        if (widthMode == MeasurementMode.EXACTLY) {
+            measuredWidth = availableWidth
+        }
+        if (heightMode == MeasurementMode.EXACTLY) {
+            measuredHeight = availableHeight
+        }
+        return Pair(measuredWidth, measuredHeight)
     }
 }

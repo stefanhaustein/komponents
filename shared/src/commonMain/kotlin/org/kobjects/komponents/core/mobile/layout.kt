@@ -16,6 +16,14 @@ fun sum(doubles: DoubleArray, start: Int, count: Int): Double {
     return sum
 }
 
+private fun getColumnWidth(grid: KGridLayout, column: Int) =
+    grid.columnTemplate.getOrElse(column) { grid.autoColumns }
+
+
+private fun getRowHeight(grid: KGridLayout, row: Int) =
+    grid.rowTemplate.getOrElse(row) { grid.autoRows }
+
+
 fun applyGridLayout(
     container: KGridLayout,
     children: List<ChildLayout>,
@@ -23,10 +31,11 @@ fun applyGridLayout(
     inputWidth: Double,
     heightMode: MeasurementMode,
     inputHeight: Double,
+    measureOnly: Boolean
 ): Pair<Double, Double> {
 
-    var rowCount = container.templateRowCount()
-    var columnCount = container.templateColumnCount()
+    var rowCount = container.rowTemplate.size
+    var columnCount = container.columnTemplate.size
 
     // Determine size
 
@@ -98,7 +107,7 @@ fun applyGridLayout(
         var updateWidth = false
         var updateHeight = false
 
-        if (container.getColumnWidth(child.column) == Size.AUTO && positioned.columnSpan == 1) {
+        if (positioned.columnSpan == 1 && getColumnWidth(container, child.column) == Size.AUTO) {
             updateWidth = true
             if (positioned.width != null) {
                 childWidth = positioned.width ?: 0.0
@@ -107,7 +116,7 @@ fun applyGridLayout(
                 measurementRequired = true;
             }
         }
-        if (container.getRowHeight(child.row) == Size.AUTO && positioned.rowSpan == 1) {
+        if (positioned.rowSpan == 1 && getRowHeight(container, child.row) == Size.AUTO) {
             updateHeight = true
             if (positioned.height != null) {
                 childHeight = positioned.height ?: 0.0
@@ -117,7 +126,7 @@ fun applyGridLayout(
             }
         }
         if (measurementRequired) {
-            child.measure(childWidthMode, childWidth, childHeightMode, childHeight)
+            child.layout(childWidthMode, childWidth, childHeightMode, childHeight, true)
             childWidth = child.measuredWidth()
             childHeight = child.measuredHeight()
         }
@@ -135,7 +144,7 @@ fun applyGridLayout(
     var consumedWidth = container.paddingLeft + maxOf(columnCount - 1, 0) * container.columnGap + container.paddingRight
     var totalHorizontalFr = 0.0
     for (i in 0 until columnCount) {
-        val columnWith = container.getColumnWidth(i)
+        val columnWith = getColumnWidth(container, i)
         when (columnWith.unit) {
             Size.Unit.PX -> widths[i] = columnWith.value
             Size.Unit.FR -> totalHorizontalFr += columnWith.value
@@ -146,9 +155,9 @@ fun applyGridLayout(
     var consumedHeight = container.paddingTop + maxOf(rowCount - 1, 0) * container.rowGap + container.paddingBottom
     var totalVerticalFr = 0.0
     for (i in 0 until rowCount) {
-        val rowHeight = container.getRowHeight(i)
+        val rowHeight = getRowHeight(container, i)
         when (rowHeight.unit) {
-            Size.Unit.PX -> widths[i] = rowHeight.value
+            Size.Unit.PX -> heights[i] = rowHeight.value
             Size.Unit.FR -> totalVerticalFr += rowHeight.value
         }
         consumedHeight += heights[i]
@@ -167,7 +176,7 @@ fun applyGridLayout(
                 remainingWidth = available
             } else {
                 for (i in 0 until columnCount) {
-                    val columnWidth = container.getColumnWidth(i)
+                    val columnWidth = getColumnWidth(container, i)
                     if (columnWidth.unit == Size.Unit.FR) {
                         widths[i] = available * columnWidth.value / totalHorizontalFr
                         consumedWidth += widths[i]
@@ -186,7 +195,7 @@ fun applyGridLayout(
             // System.out.println("### total height: $totalHeight - measrued: ${MeasureSpec.getSize(heightMeasureSpec)} = available: $available")
             if (available > 0) {
                 for (i in 0 until rowCount) {
-                    val rowHeight = container.getRowHeight(i)
+                    val rowHeight = getRowHeight(container, i)
                     if (rowHeight.unit == Size.Unit.FR) {
                         heights[i] = available * rowHeight.value / totalVerticalFr
                         consumedHeight += heights[i]
@@ -195,6 +204,11 @@ fun applyGridLayout(
             }
         }
     }
+
+    if (measureOnly) {
+        return Pair(consumedWidth + remainingWidth, consumedHeight + remainingHeight)
+    }
+
 
     val xPositions = DoubleArray(columnCount + 1) {0.0}
     xPositions[0] = container.paddingLeft + when (container.justifyContent) {
@@ -226,7 +240,7 @@ fun applyGridLayout(
         var childWidth = if (positioned.width != null) (positioned.width ?: 0.0) else sum(widths, child.column, positioned.columnSpan)
         var childHeight = if (positioned.height != null) (positioned.height ?: 0.0) else sum(heights, child.row, positioned.rowSpan)
 
-        child.measure(childWidthMode, childWidth, childHeightMode, childHeight)
+        child.layout(childWidthMode, childWidth, childHeightMode, childHeight, false)
         childWidth = child.measuredWidth()
         childHeight = child.measuredHeight()
 

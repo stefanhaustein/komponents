@@ -6,7 +6,6 @@ class Demo(
     val kontext: Kontext,
     val select: (Selector, KGridLayout) -> Unit) {
 
-
     fun renderMenu(): KGridLayout {
         val layout = KGridLayout(kontext)
 
@@ -19,17 +18,14 @@ class Demo(
               <rect x="20" y="20" width="10" height="10" fill="#0000ff"/>
             </svg>
         """.trimIndent()))
-        layout.add(GridArea(image, width = 100.0, height = 100.0, horizontalAlign = Align.CENTER))
+        layout.add(GridArea(image, width = 100.0, height = 100.0, justify = Align.CENTER))
 
 
         val button = KButton(kontext)
         button.setText("Grid Cell Alignment")
-        button.addClickListener{ select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT)) }
-    //    button.setBackgroundColor(0xffffff00u)
-
-        val picker = KChoice(kontext)
-        picker.setData(listOf("foo", "bar", "baz", "foobar"))
-        layout.add(GridArea(picker))
+        button.addClickListener{
+            select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT))
+        }
 
         layout.autoColumns = Size.fr(1.0)
 
@@ -52,63 +48,81 @@ class Demo(
         }
     }
 
-    private fun addLabeledChoice(
+    private fun <T> addChoice(
         container: KGridLayout,
         label: String,
-        values: Array<Align>,
-        action: (Align) -> Unit
+        values: Array<T>,
+        action1: (T) -> Unit,
+        action2: (T) -> Unit
     ) {
         val labelView = KTextView(kontext)
         labelView.setText(label)
-        container.add(GridArea(labelView))
+        container.add(GridArea(labelView, align = Align.CENTER))
 
-        val choice = KChoice(kontext)
-        choice.setData(values.map{it.toString()})
-        choice.addSelectionListener { kChoice, i, s ->
-            action(values[i])
+        val choice1 = KChoice(kontext)
+        choice1.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString()})
+        choice1.addSelectionListener { choice1, index, label ->
+            action1(values[index])
         }
-        container.add(GridArea(choice))
+        container.add(GridArea(choice1))
+
+        val choice2 = KChoice(kontext)
+        choice2.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString()})
+        choice2.addSelectionListener { choice2, index, label ->
+            action2(values[index])
+        }
+        container.add(GridArea(choice2))
+
+        action1(values[0])
+        action2(values[0])
     }
 
     fun renderGridCellAlignment(): KGridLayout {
         val outer = KGridLayout(kontext)
-        outer.setColumnWidth(0, Size.auto())
-        outer.setColumnWidth(1, Size.fr(1.0))
+
+        outer.columnTemplate = listOf(Size.auto(), Size.fr(1.0), Size.fr(1.0))
+        outer.rowTemplate = listOf(Size.auto(), Size.auto(), Size.auto(),Size.auto(), Size.fr(1.0))
         outer.alignContent = Align.STRETCH
-        outer.setRowHeight(2, Size.fr(1.0))
 
         val grid = KGridLayout(kontext)
 
-        addLabeledChoice(outer, "justify items", Align.values()) { grid.justifyItems = it }
-        addLabeledChoice(outer, "align items", Align.values()) { grid.alignItems = it }
+        val templates = arrayOf(
+            listOf(Size.px(80.0), Size.px(80.0), Size.px(80.0)),
+            listOf(Size.px(100.0), Size.px(100.0), Size.px(100.0)),
+            listOf(Size.fr(1.0), Size.fr(1.0), Size.fr(1.0)),
+            listOf(Size.auto(), Size.fr(2.0), Size.fr(3.0)))
 
+        outer.add(GridArea(KTextView(kontext)))
+        outer.add(GridArea(KTextView(kontext, "columns"), justify = Align.CENTER))
+        outer.add(GridArea(KTextView(kontext, "rows"), justify = Align.CENTER))
 
-        grid.setColumnWidth(0, Size.fr(1.0), repeat = Align.values().size)
-        grid.setRowHeight(0, Size.fr(1.0), repeat = Align.values().size)
+        addChoice(outer, "content pos.", Align.values(),
+            { grid.justifyContent = it },
+            { grid.alignContent = it })
+        addChoice(outer, "item pos.", Align.values(),
+            { grid.justifyItems = it },
+            { grid.alignItems = it })
+        addChoice(outer, "template", templates,
+            { grid.columnTemplate = it },
+            { grid.rowTemplate = it })
 
-        grid.rowGap = 4.0
-        grid.columnGap = 4.0
+        grid.rowGap = 1.0
+        grid.columnGap = 1.0
 
-        for (vAlign in Align.values()) {
-            for (hAlign in Align.values()) {
-                var tc = KTextView(kontext)
-                tc.setText("v: $vAlign\nh: $hAlign")
-                tc.setBackgroundColor(0xffeeeeeeU)
-
-                grid.add(
-                    GridArea(
-                        tc,
-                        row = hAlign.ordinal,
-                        column = vAlign.ordinal,
-                        width = 50.0,
-                        height = 50.0
-       //                 horizontalAlign = hAlign,
-       //                 verticalAlign = vAlign
-                    )
-                )
-            }
+        for (i in 1..9) {
+           var textView = KTextView(kontext)
+           textView.setText("$i")
+           textView.setBackgroundColor(0xffeeeeeeU)
+           grid.add(GridArea(
+               textView,
+               width = 80.0,
+               height = 80.0))
         }
-        outer.add(GridArea(grid, columnSpan = 2))
+
+        outer.add(GridArea(grid,
+            columnSpan = 3,
+            align = Align.STRETCH,
+            justify = Align.STRETCH))
         return outer
     }
 

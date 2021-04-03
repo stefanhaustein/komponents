@@ -46,8 +46,36 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
             div.style.alignContent = value.toString().toLowerCase()
         }
 
-    private val columnWidths = mutableListOf<Size?>()
-    private val rowHeights = mutableListOf<Size?>()
+    actual var autoColumns = Size.AUTO
+        set(value) {
+            field = value
+            div.style.setProperty("auto-columns", value.toString())}
+
+    actual var autoRows = Size.AUTO
+        set(value) {
+            field = value
+            div.style.setProperty("auto-rows", value.toString())
+        }
+    actual var alignItems = Align.STRETCH
+        set(value) {
+            field = value
+            div.style.setProperty("align-items", value.toString())
+        }
+    actual var justifyItems = Align.STRETCH
+        set(value) {
+            field = value
+            div.style.setProperty("justify-items", value.toString())
+        }
+    actual var columnTemplate = listOf<Size>()
+        set(value) {
+            field = value
+            div.style.setProperty("grid-template-columns", value.joinToString(" "))
+        }
+    actual var rowTemplate = listOf<Size>()
+        set(value) {
+            field = value
+            div.style.setProperty("grid-template-rows", value.joinToString(" "))
+        }
 
     val children = mutableListOf<GridArea>()
 
@@ -68,65 +96,6 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
         children.add(positioned)
         div.appendChild(positioned.view.getElement())
         notifyAreaChanged(positioned)
-    }
-
-    actual var autoColumns: Size = Size.AUTO
-        set(value) {
-            field = value
-            div.style.setProperty("auto-columns", value.toString())}
-
-    actual var autoRows: Size = Size.AUTO
-        set(value) {
-            field = value
-            div.style.setProperty("auto-rows", value.toString())
-        }
-    actual var alignItems: Align = Align.STRETCH
-        set(value) {
-            field = value
-            div.style.setProperty("align-items", value.toString())
-        }
-    actual var justifyItems: Align = Align.STRETCH
-        set(value) {
-            field = value
-            div.style.setProperty("justify-items", value.toString())
-        }
-
-
-    fun setSizes(propertyName: String, list: MutableList<Size?>, index: Int, width: Size?, repeat: Int) {
-        while (list.size < index + repeat) {
-            list.add(null)
-        }
-        for (i in index until index + repeat) {
-            list[i] = width
-        }
-        val sb = StringBuilder()
-        for (size in list) {
-           if (sb.isNotEmpty()) {
-               sb.append(' ')
-           }
-            if (size == null) {
-                sb.append("auto")
-            } else {
-                sb.append(size)
-            }
-        }
-        div.style.setProperty(propertyName, sb.toString())
-    }
-
-    actual fun setColumnWidth(index: Int, width: Size?, repeat: Int) {
-        setSizes("grid-template-columns", columnWidths, index, width, repeat)
-    }
-
-    actual fun setRowHeight(index: Int, height: Size?, repeat: Int) {
-        setSizes("grid-template-rows", rowHeights, index, height, repeat)
-    }
-
-    actual fun getColumnWidth(index: Int): Size {
-        return if (index >= columnWidths.size) autoColumns else columnWidths[index] ?: autoColumns
-    }
-
-    actual fun getRowHeight(index: Int): Size {
-        return if (index >= rowHeights.size) autoRows else rowHeights[index] ?: autoRows
     }
 
     actual fun notifyAreaChanged(area: GridArea) {
@@ -161,12 +130,4 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
         // ${(area.horizontalAlign.name.toLowerCase()}"
     }
 
-
-    actual fun templateColumnCount(): Int {
-        return columnWidths.size
-    }
-
-    actual fun templateRowCount(): Int {
-        return rowHeights.size
-    }
 }

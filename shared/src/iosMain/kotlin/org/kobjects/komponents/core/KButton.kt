@@ -4,11 +4,11 @@ import kotlinx.cinterop.ObjCAction
 import platform.UIKit.*
 import platform.objc.sel_registerName
 
-actual class KButton actual constructor(kontext: Kontext) : KView() {
+actual class KButton actual constructor(kontext: Kontext, label: String) : KView() {
 
-    val uiButton = UIButton.buttonWithType(
-        UIButtonTypeSystem
-    )
+    val uiButton = UIButton.buttonWithType(UIButtonTypeSystem).also {
+        it.setTitle(label, UIControlStateNormal)
+    }
 
     private var listeners: MutableList<(KButton) -> Unit>? = null
 

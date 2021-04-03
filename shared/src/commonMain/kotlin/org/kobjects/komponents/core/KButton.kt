@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class KButton(kontext: Kontext) : KView {
+expect class KButton(kontext: Kontext, label: String = "") : KView {
 
     fun setImage(image: KImage)
 
