@@ -10,7 +10,7 @@ import platform.UIKit.addSubview
 import platform.UIKit.setNeedsLayout
 import platform.UIKit.sizeThatFits
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
     actual var columnGap = 0.0
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowGap = 0.0
@@ -39,6 +39,9 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowTemplate: List<Size> = listOf()
         set(value) { field = value; uiGridView.setNeedsLayout() }
+    actual val size: Int
+        get() = children.size
+    actual fun get(index: Int) = children[index].positioned
 
     private val uiGridView = IosGridView(this)
 
@@ -75,5 +78,8 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
             availableHeight,
             measureOnly)
     }
+
+    override fun iterator(): Iterator<GridArea> = children.map{ it.positioned }.iterator()
+
 
 }

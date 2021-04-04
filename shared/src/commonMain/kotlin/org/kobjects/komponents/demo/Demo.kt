@@ -60,14 +60,14 @@ class Demo(
         container.add(GridArea(labelView, align = Align.CENTER))
 
         val choice1 = KChoice(kontext)
-        choice1.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString()})
+        choice1.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()})
         choice1.addSelectionListener { choice1, index, label ->
             action1(values[index])
         }
         container.add(GridArea(choice1))
 
         val choice2 = KChoice(kontext)
-        choice2.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString()})
+        choice2.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()})
         choice2.addSelectionListener { choice2, index, label ->
             action2(values[index])
         }
@@ -81,7 +81,7 @@ class Demo(
         val outer = KGridLayout(kontext)
 
         outer.columnTemplate = listOf(Size.auto(), Size.fr(1.0), Size.fr(1.0))
-        outer.rowTemplate = listOf(Size.auto(), Size.auto(), Size.auto(),Size.auto(), Size.fr(1.0))
+        outer.rowTemplate = listOf(Size.auto(), Size.auto(), Size.auto(),Size.auto(), Size.auto(),Size.fr(1.0))
         outer.alignContent = Align.STRETCH
 
         val grid = KGridLayout(kontext)
@@ -96,15 +96,18 @@ class Demo(
         outer.add(GridArea(KTextView(kontext, "columns"), justify = Align.CENTER))
         outer.add(GridArea(KTextView(kontext, "rows"), justify = Align.CENTER))
 
-        addChoice(outer, "content pos.", Align.values(),
+        addChoice(outer, "content pos.", arrayOf(Align.CENTER, Align.START, Align.END),
             { grid.justifyContent = it },
             { grid.alignContent = it })
-        addChoice(outer, "item pos.", Align.values(),
+        addChoice(outer, "item pos.", arrayOf(Align.CENTER, Align.START, Align.END, Align.STRETCH),
             { grid.justifyItems = it },
             { grid.alignItems = it })
         addChoice(outer, "template", templates,
             { grid.columnTemplate = it },
             { grid.rowTemplate = it })
+        addChoice(outer, "box size", arrayOf("80", "implicit"),
+            { grid.forEach{el -> el.width = if (it == "implicit") null else 80.0 } },
+            { grid.forEach{el -> el.height = if (it == "implicit") null else 80.0 } })
 
         grid.rowGap = 1.0
         grid.columnGap = 1.0

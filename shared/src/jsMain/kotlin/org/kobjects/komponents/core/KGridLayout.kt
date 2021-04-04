@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
-actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
+actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
 
     actual var columnGap = 0.0
         set(value) {
@@ -77,6 +77,9 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
             div.style.setProperty("grid-template-rows", value.joinToString(" "))
         }
 
+    actual val size: Int
+        get() = children.size
+
     val children = mutableListOf<GridArea>()
 
     private val div = kontext.document.createElement("div") as HTMLDivElement
@@ -128,6 +131,13 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView() {
         )
 
         // ${(area.horizontalAlign.name.toLowerCase()}"
+    }
+
+
+    actual fun get(index: Int): GridArea = children[index]
+
+    override fun iterator(): Iterator<GridArea> {
+        return children.iterator()
     }
 
 }

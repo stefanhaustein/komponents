@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import android.view.View
 import org.kobjects.komponents.core.mobile.ChildLayout
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
 
     actual var columnGap = 0.0
         set(value) { field = value; layout.requestLayout() }
@@ -29,6 +29,8 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
         set(value) { field = value; layout.requestLayout() }
     actual var rowTemplate = listOf<Size>()
         set(value) { field = value; layout.requestLayout() }
+    actual val size: Int
+        get() = children.size
 
     private val layout = GridLayout(kontext.context, this)
 
@@ -53,4 +55,13 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView() {
     actual fun notifyAreaChanged(area: GridArea) {
         layout.requestLayout()
     }
+
+    actual fun get(index: Int): GridArea {
+        return children[index].positioned
+    }
+
+    override fun iterator(): Iterator<GridArea> {
+        return children.map{it.positioned}.iterator()
+    }
+
 }
