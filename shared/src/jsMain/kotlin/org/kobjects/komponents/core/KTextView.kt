@@ -9,13 +9,21 @@ actual class KTextView actual constructor(kontext: Kontext, text: String) : KVie
         it.innerHTML = htmlify(text)
     }
 
+    actual var text: String
+        get() = div.textContent ?: ""
+        set(value) {
+            div.innerHTML = htmlify(value)
+        }
+
+    init {
+        this.text = text
+    }
+
+
     override fun getElement(): HTMLElement {
         return div
     }
 
-    actual fun setText(text: String) {
-        div.innerHTML = htmlify(text)
-    }
 
     companion object {
         fun htmlify(text: String): String {

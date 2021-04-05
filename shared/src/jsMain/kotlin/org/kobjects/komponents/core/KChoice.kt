@@ -5,42 +5,54 @@ import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLSelectElement
 import org.w3c.dom.get
 
-actual class KChoice actual constructor(val kontext: Kontext) :
-    KView() {
+actual class KChoice actual constructor(
+    val kontext: Kontext,
+    options: List<String>,
+    selectionListener: ((KChoice) -> Unit)?
+) : KView() {
 
-    var selectElement = kontext.document.createElement("select") as HTMLSelectElement
-    var listeners = mutableListOf<(KChoice, Int, String) -> Unit>()
+    private var selectElement = kontext.document.createElement("select") as HTMLSelectElement
+    private var listeners = mutableListOf<(KChoice) -> Unit>()
+
+    actual var options: List<String> = listOf<String>()
+        set(value) {
+            field = value
+            selectElement.innerHTML = ""
+            for (item in options) {
+                val optionElement = kontext.document.createElement("option")
+                optionElement.textContent = item
+                selectElement.appendChild(optionElement)
+            }
+        }
+
+    actual var selectedIndex: Int
+        get() = selectElement.selectedIndex
+        set(value) {
+            selectElement.selectedIndex = value
+        }
 
     init {
-        selectElement.addEventListener("change", {
-            console.log("Event received!")
-            val selectedIndex = selectElement.selectedIndex
-            val selectedText = selectElement.get(selectedIndex)?.textContent ?: ""
-            for (listener in listeners) {
-                listener(this@KChoice, selectedIndex, selectedText)
-            }
-        })
-    }
-
-    actual fun setData(data: List<String>) {
-        selectElement.innerHTML = ""
-        for (item in data) {
-            val optionElement = kontext.document.createElement("option")
-            optionElement.textContent = item
-            selectElement.appendChild(optionElement)
+        if (options != null) {
+            this.options = options
+        }
+        selectElement.addEventListener(
+            "change",
+            { listeners.forEach{ it(this@KChoice) } })
+        if (selectionListener != null) {
+            addSelectionListener(selectionListener)
         }
     }
 
-    actual fun addSelectionListener(listener: (KChoice, Int, String) -> Unit) {
-        listeners.add(listener)
+    actual fun addSelectionListener(selectionListener: (KChoice) -> Unit) {
+        listeners.add(selectionListener)
     }
 
     override fun getElement(): HTMLElement {
         return selectElement
     }
 
-    actual fun setSelectedIndex(index: Int) {
-        selectElement.selectedIndex = index
+    actual fun removeSelectionListener(selectionListener: (KChoice) -> Unit) {
+        listeners.remove(selectionListener)
     }
 
 }

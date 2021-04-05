@@ -11,25 +11,28 @@ class Demo(
 
         val image = KImageView(kontext)
         image.setBackgroundColor(0x88888888u)
-        image.setImage(KImage.createSvg("""
+        image.image = KImage.createSvg("""
             <svg viewBox="0 0 30 30">
               <rect x="0" y="0" width="10" height="10" fill="#ff0000"/>
               <rect x="10" y="10" width="10" height="10" fill="#00ff00"/>
               <rect x="20" y="20" width="10" height="10" fill="#0000ff"/>
             </svg>
-        """.trimIndent()))
+        """.trimIndent())
         layout.add(GridArea(image, width = 100.0, height = 100.0, justify = Align.CENTER))
 
 
-        val button = KButton(kontext)
-        button.setText("Grid Cell Alignment")
-        button.addClickListener{
-            select(Selector.GRID_CELL_ALIGNMENT, renderDemo(Selector.GRID_CELL_ALIGNMENT))
+
+        for (demo in Selector.values()) {
+            val button = KButton(kontext, demo.title)
+            button.addClickListener {
+                select(demo, demo.render(this))
+            }
+            layout.add(GridArea(button))
         }
+
 
         layout.autoColumns = Size.fr(1.0)
 
-        layout.add(GridArea(button))
         layout.justifyContent = Align.CENTER
         //   layout.setBackgroundColor(0xffff0000u)
 
@@ -43,9 +46,7 @@ class Demo(
     }
 
     fun renderDemo(selector: Selector): KGridLayout {
-        return when(selector) {
-            Selector.GRID_CELL_ALIGNMENT -> renderGridCellAlignment()
-        }
+        return selector.render(this)
     }
 
     private fun <T> addChoice(
@@ -55,23 +56,19 @@ class Demo(
         action1: (T) -> Unit,
         action2: (T) -> Unit
     ) {
-        val labelView = KTextView(kontext)
-        labelView.setText(label)
-        container.add(GridArea(labelView, align = Align.CENTER))
+        container.add(GridArea(KTextView(kontext, label), align = Align.CENTER))
 
-        val choice1 = KChoice(kontext)
-        choice1.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()})
-        choice1.addSelectionListener { choice1, index, label ->
-            action1(values[index])
-        }
-        container.add(GridArea(choice1))
+        container.add(GridArea(KChoice(
+            kontext,
+            values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
+                action1(values[it.selectedIndex])
+        }))
 
-        val choice2 = KChoice(kontext)
-        choice2.setData(values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()})
-        choice2.addSelectionListener { choice2, index, label ->
-            action2(values[index])
-        }
-        container.add(GridArea(choice2))
+        container.add(GridArea(KChoice(
+            kontext,
+            values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
+                action2(values[it.selectedIndex])
+        }))
 
         action1(values[0])
         action2(values[0])
@@ -113,8 +110,7 @@ class Demo(
         grid.columnGap = 1.0
 
         for (i in 1..9) {
-           var textView = KTextView(kontext)
-           textView.setText("$i")
+           var textView = KTextView(kontext, "$i")
            textView.setBackgroundColor(0xffeeeeeeU)
            grid.add(GridArea(
                textView,
@@ -129,10 +125,19 @@ class Demo(
         return outer
     }
 
+    fun renderWidgetGallery(): KGridLayout {
+        val grid = KGridLayout(kontext)
+        grid.columnTemplate = listOf(Size.fr(1.0))
+        grid.add(GridArea(KChoice(kontext, listOf("KChoice", "Alternative"))))
+        grid.add(GridArea(KButton(kontext, "KButton")))
+        grid.add(GridArea(KTextView(kontext, "KTextView")))
+        return grid
+    }
 
 
-    enum class Selector(val title: String) {
-        GRID_CELL_ALIGNMENT("Grid Cell Alignment")
+    enum class Selector(val title: String, val render: (Demo) -> KGridLayout) {
+        GRID_CELL_ALIGNMENT("Grid Cell Alignment", { it.renderGridCellAlignment() }),
+        WIDGET_GALLERY("Widget Gallery", { it.renderWidgetGallery() })
     }
 
 }

@@ -5,20 +5,28 @@ import platform.UIKit.UIView
 import cocoapods.SwiftSVG.*
 import platform.Foundation.*
 
-actual class KImageView actual constructor(val kontext: Kontext) : KView() {
+actual class KImageView actual constructor(
+    val kontext: Kontext,
+    image: KImage?
+) : KView() {
 
-    val uiImageView = IosSvgView(kontext.svgHelper)
+    private val uiImageView = IosSvgView(kontext.svgHelper)
 
-
-    actual fun setImage(image: KImage) {
-        /*
-        val str = image.svg as NSString
-        val data = str.dataUsingEncoding(NSUTF8StringEncoding)
-        CALayer.Companion.create(SVGData = data, parser = null) {
+    actual var image: KImage? = null
+        set(value) {
+            field = value
+            /*
+            val str = image.svg as NSString
+            val data = str.dataUsingEncoding(NSUTF8StringEncoding)
+            CALayer.Companion.create(SVGData = data, parser = null) {
+            }
+            */
+            if (value != null) {
+                kontext.svgHelper.createLayer(value.svg) {
+                    uiImageView.setSvgLayer(it)
+                }
+            }
         }
-        */
-        kontext.svgHelper.createLayer(image.svg) {uiImageView.setSvgLayer(it)}
-    }
 
     override fun getView(): UIView {
         return uiImageView

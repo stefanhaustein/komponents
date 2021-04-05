@@ -5,16 +5,19 @@ import android.widget.TextView
 
 actual class KTextView actual constructor(kontext: Kontext, text: String) : KView() {
 
-    val textView = TextView(kontext.context).also {
-        it.text = text
-    }
+    private val textView = TextView(kontext.context)
+
+    actual var text: String
+        get() = textView.text.toString()
+        set(value) {
+            textView.text = value
+        }
 
     override fun getView(): View {
         return textView
     }
 
-    actual fun setText(text: String) {
-        textView.text = text
+    init {
+        this.text = text
     }
-
 }

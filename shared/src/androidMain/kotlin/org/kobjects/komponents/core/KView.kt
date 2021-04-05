@@ -10,4 +10,8 @@ actual abstract class KView {
    actual fun setBackgroundColor(color: UInt) {
       getView().setBackgroundColor(color.toInt())
    }
+
+   actual fun setRotation(deg: Double) {
+      getView().rotation = deg.toFloat()
+   }
 }

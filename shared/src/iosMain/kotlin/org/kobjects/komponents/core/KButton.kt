@@ -4,22 +4,34 @@ import kotlinx.cinterop.ObjCAction
 import platform.UIKit.*
 import platform.objc.sel_registerName
 
-actual class KButton actual constructor(kontext: Kontext, label: String) : KView() {
+actual class KButton actual constructor(
+    kontext: Kontext,
+    label: String,
+    listener: ((KButton) -> Unit)?
+) : KView() {
 
-    val uiButton = UIButton.buttonWithType(UIButtonTypeSystem).also {
-        it.setTitle(label, UIControlStateNormal)
+    private val uiButton = UIButton.buttonWithType(UIButtonTypeSystem)
+    private var listeners: MutableList<(KButton) -> Unit> = mutableListOf()
+
+    actual var label: String = ""
+        set(value) {
+            field = value
+            uiButton.setTitle(label, UIControlStateNormal)
+        }
+    actual var image: KImage? = null
+        set(value) {
+            field = value
+        }
+
+    init {
+        this.label = label
+        uiButton.addTarget(
+            this,
+            platform.objc.sel_registerName("clicked"),
+            platform.UIKit.UIControlEventTouchUpInside
+        )
     }
 
-    private var listeners: MutableList<(KButton) -> Unit>? = null
-
-
-    actual fun setImage(image: KImage) {
-        // tbd
-    }
-
-    actual fun setText(text: String) {
-        uiButton.setTitle(text, UIControlStateNormal)
-    }
 
     override fun getView(): UIView {
        return uiButton
@@ -27,21 +39,14 @@ actual class KButton actual constructor(kontext: Kontext, label: String) : KView
 
     @ObjCAction
     fun clicked() {
-        val listeners = this.listeners;
-        if (listeners != null) {
-            for (listener in listeners) {
-                listener(this)
-            }
-        }
+        listeners.forEach { it(this) }
     }
 
     actual fun addClickListener(listener: (KButton) -> Unit) {
-        val listeners = this.listeners;
-        if (listeners == null) {
-            this.listeners = mutableListOf(listener)
-            uiButton.addTarget(this, sel_registerName("clicked"), UIControlEventTouchUpInside)
-        } else {
-            listeners.add(listener)
-        }
+        listeners.add(listener)
+    }
+
+    actual fun removeClickListener(listener: (KButton) -> Unit) {
+        listeners.remove(listener)
     }
 }

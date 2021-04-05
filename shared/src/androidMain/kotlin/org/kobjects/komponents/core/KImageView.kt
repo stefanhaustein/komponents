@@ -5,17 +5,23 @@ import android.widget.ImageView
 import com.caverock.androidsvg.SVG
 import com.caverock.androidsvg.SVGImageView
 
-actual class KImageView actual constructor(kontext: Kontext) : KView() {
-
+actual class KImageView actual constructor(
+    kontext: Kontext,
+    image: KImage?
+) : KView() {
     private val imageView = ImageView(kontext.context)
-    private var image: KImage? = null
+
+    actual var image: KImage? = null
+        set(value) {
+            field = value
+            imageView.setImageDrawable(value?.createDrawable())
+        }
+
+    init {
+        this.image = image
+    }
 
     override fun getView(): View {
         return imageView
-    }
-
-    actual fun setImage(image: KImage) {
-        this.image = image
-        imageView.setImageDrawable(image.createDrawable())
     }
 }
