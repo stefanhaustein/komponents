@@ -4,7 +4,8 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import org.kobjects.komponents.core.KView
 import org.kobjects.komponents.core.Kontext
-import org.kobjects.komponents.demo.Demo
+import org.kobjects.komponents.demo.DemoEnum
+import org.kobjects.komponents.demo.DemoMenu
 
 
 fun main() {
@@ -16,13 +17,13 @@ fun main() {
         document.body!!.appendChild(element)
     }
 
-    val demo = Demo(Kontext(document)) { selected, kView ->
+    val demo = DemoMenu(Kontext(document)) { selected, kView ->
         window.location.hash = "#" + selected.name
         show(selected.title, kView)
     }
 
     fun showMenu() {
-        show("Komponents Demo", demo.renderMenu())
+        show("Komponents Demo", demo.view)
     }
 
     fun resolveHash() {
@@ -30,7 +31,7 @@ fun main() {
             showMenu()
         } else {
             try {
-                val selector = Demo.Selector.valueOf(window.location.hash.substring(1))
+                val selector = DemoEnum.valueOf(window.location.hash.substring(1))
                 show(selector.title, demo.renderDemo(selector))
             } catch (e: Exception) {
                 showMenu()

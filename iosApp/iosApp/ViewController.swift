@@ -23,7 +23,7 @@ class ViewController: UIViewController {
 
     var navigationBar: UINavigationBar!
     var contentView: UIView? = nil
-    var demo: Demo!
+    var demo: DemoMenu!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +44,7 @@ class ViewController: UIViewController {
 
         let kontext = Kontext(svgHelper: SvgHelperImpl())
 
-        demo = Demo(kontext: kontext, select: { selector, kView in
+        demo = DemoMenu(kontext: kontext, select: { selector, kView in
             let navItem = UINavigationItem(title: selector.title)
             self.navigationBar.pushItem(navItem, animated: false)
             self.setContentView(view: kView.getView())
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
         let navItem = UINavigationItem(title: "Komponents Demo")
         navItem.backButtonTitle = "Menu"
         navigationBar.items = [navItem]
-        setContentView(view: demo.renderMenu().getView())
+        setContentView(view: demo.view.getView())
     }
 
 

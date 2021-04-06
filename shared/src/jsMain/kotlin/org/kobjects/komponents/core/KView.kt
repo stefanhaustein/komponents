@@ -14,4 +14,32 @@ actual abstract class KView {
       val blue = color and 255u
       getElement().style.backgroundColor = "rgba($red,$green,$blue,$alpha)"
    }
+
+   actual val transformation: Transformation by lazy {
+      TransformationImpl()
+   }
+
+   // TODO: Implement
+   inner class TransformationImpl : Transformation {
+      override var rotation: Double = 0.0
+         set(value) {
+            field = value
+            update()
+         }
+      override var x: Double = 0.0
+         set(value) {
+            field = value
+            update()
+         }
+      override var y: Double = 0.0
+         set(value) {
+            field = value
+            update()
+         }
+
+      fun update() {
+         getElement().style.transform = "rotate(${rotation}deg)"
+      }
+   }
+
 }

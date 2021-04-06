@@ -3,11 +3,11 @@ package org.kobjects.komponents.androidApp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.kobjects.komponents.core.*
-import org.kobjects.komponents.demo.Demo
+import org.kobjects.komponents.demo.DemoMenu
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var demo: Demo
+    lateinit var menu: DemoMenu
     var isRoot = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             | <circle cx="50" cy="50" r="40" fill="red" /> 
             |</svg>""".trimMargin()))
 
-        demo = Demo(context) { selector, kView ->
+        menu = DemoMenu(context) { selector, kView ->
             setTitle(selector.title)
             setContentView(kView.getView())
             isRoot = false
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showMenu() {
         setTitle("Komponents Demo")
-        setContentView(demo.renderMenu().getView())
+        setContentView(menu.view.getView())
         isRoot = true
     }
 
