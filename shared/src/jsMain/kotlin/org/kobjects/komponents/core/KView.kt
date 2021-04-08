@@ -1,5 +1,6 @@
 package org.kobjects.komponents.core
 
+import org.kobjects.komponents.core.recognizer.GestureRecognizer
 import org.w3c.dom.HTMLElement
 
 
@@ -38,8 +39,12 @@ actual abstract class KView {
          }
 
       fun update() {
-         getElement().style.transform = "rotate(${rotation}deg)"
+         getElement().style.transform = "translate(${x}px,${y}px) rotate(${rotation}deg)"
       }
+   }
+
+   actual fun addGestureRecognizer(gestureRecognizer: GestureRecognizer) {
+      gestureRecognizer.attach(this)
    }
 
 }

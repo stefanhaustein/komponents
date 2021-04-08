@@ -10,16 +10,9 @@ import kotlin.math.ceil
 
 class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(context) {
 
-    fun pxToPt(px: Int): Double {
-        return px.toDouble() / context.resources.displayMetrics.density
-    }
-
-    fun ptToPx(pt: Double): Int {
-        return ceil(pt * context.resources.displayMetrics.density).toInt()
-    }
 
     fun modeAndSizeToAndroid(mode: MeasurementMode, size: Double): Int {
-        return ptToPx(size) or
+        return context.ptToPx(size) or
             when(mode) {
              MeasurementMode.UNSPECIFIED -> MeasureSpec.UNSPECIFIED
              MeasurementMode.AT_MOST -> MeasureSpec.AT_MOST
@@ -33,12 +26,12 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
                 container,
                 container.children,
                 MeasurementMode.EXACTLY,
-                pxToPt(MeasureSpec.getSize(widthMeasureSpec)),
+                context.pxToPt(MeasureSpec.getSize(widthMeasureSpec)),
                 MeasurementMode.EXACTLY,
-                pxToPt(MeasureSpec.getSize(heightMeasureSpec)),
+                context.pxToPt(MeasureSpec.getSize(heightMeasureSpec)),
             /* measureOnly= */ false);
 
-            setMeasuredDimension(ptToPx(result.first), ptToPx(result.second));
+            setMeasuredDimension(context.ptToPx(result.first), context.ptToPx(result.second));
     }
 
 
@@ -48,8 +41,8 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
             val child = getChildAt(i)
             val layoutParams = child.layoutParams as LayoutParams
 
-            val xPos = ptToPx(layoutParams.x)
-            val yPos = ptToPx(layoutParams.y)
+            val xPos = context.ptToPx(layoutParams.x)
+            val yPos = context.ptToPx(layoutParams.y)
 
             child.layout(xPos, yPos, xPos + child.measuredWidth, yPos + child.measuredHeight)
         }
@@ -73,11 +66,11 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
         }
 
         override fun measuredHeight(): Double {
-            return pxToPt(positioned.view.getView().measuredHeight)
+            return context.pxToPt(positioned.view.getView().measuredHeight)
         }
 
         override fun measuredWidth(): Double {
-            return pxToPt(positioned.view.getView().measuredWidth)
+            return context.pxToPt(positioned.view.getView().measuredWidth)
         }
 
         override fun setPosition(x: Double, y: Double) {

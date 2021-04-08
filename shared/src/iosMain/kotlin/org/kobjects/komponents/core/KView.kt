@@ -2,19 +2,16 @@ package org.kobjects.komponents.core
 
 import kotlinx.cinterop.useContents
 import org.kobjects.komponents.core.mobile.MeasurementMode
-import platform.CoreGraphics.CGAffineTransform
-import platform.CoreGraphics.CGAffineTransformMakeRotation
-import platform.CoreGraphics.CGFLOAT_MAX
-import platform.CoreGraphics.CGSizeMake
-import platform.UIKit.UIColor
-import platform.UIKit.UIView
-import platform.UIKit.backgroundColor
-import platform.UIKit.sizeThatFits
+import org.kobjects.komponents.core.recognizer.DragRecognizer
+import org.kobjects.komponents.core.recognizer.GestureRecognizer
+import platform.CoreGraphics.*
+import platform.UIKit.*
 import kotlin.math.PI
 
 abstract actual class KView {
     abstract fun getView(): UIView
 
+    var recognizers = mutableListOf<GestureRecognizer>()
 
     actual fun setBackgroundColor(color: UInt) {
         getView().backgroundColor = UIColor(
@@ -61,7 +58,6 @@ abstract actual class KView {
         TransformationImpl()
     }
 
-    // TODO: Implement
     inner class TransformationImpl : Transformation {
         override var rotation: Double = 0.0
             set(value) {
@@ -80,7 +76,16 @@ abstract actual class KView {
             }
 
         fun update() {
-            getView().transform = CGAffineTransformMakeRotation(rotation * PI / 180.0)
+            val transform = CGAffineTransformMakeTranslation(x, y)
+            if (rotation != 0.0) {
+                CGAffineTransformRotate(transform, rotation * PI / 180)
+            }
+            getView().transform = transform
         }
+    }
+
+    actual fun addGestureRecognizer(gestureRecognizer: GestureRecognizer) {
+        recognizers.add(gestureRecognizer)
+        gestureRecognizer.attach(this)
     }
 }
