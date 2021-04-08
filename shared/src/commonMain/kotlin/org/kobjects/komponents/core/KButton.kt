@@ -7,6 +7,7 @@ expect class KButton(
 
     var label: String
     var image: KImage?
+    var textAlignment: TextAlignment
 
     fun addClickListener(listener: (KButton) -> Unit)
 

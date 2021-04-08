@@ -1,11 +1,11 @@
 package org.kobjects.komponents.core
 
 import android.view.View
-import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 
 actual class KTextView actual constructor(kontext: Kontext, text: String) : KView() {
 
-    private val textView = TextView(kontext.context)
+    private val textView = AppCompatTextView(kontext.context)
 
     actual var text: String
         get() = textView.text.toString()
@@ -18,6 +18,7 @@ actual class KTextView actual constructor(kontext: Kontext, text: String) : KVie
     }
 
     init {
-        this.text = text
+        textView.text = text
+
     }
 }

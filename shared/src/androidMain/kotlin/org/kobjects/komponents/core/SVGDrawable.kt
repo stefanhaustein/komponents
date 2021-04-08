@@ -1,5 +1,6 @@
 package org.kobjects.komponents.core
 
+import android.content.Context
 import android.graphics.Canvas
 import com.caverock.androidsvg.SVG
 import android.graphics.drawable.PictureDrawable
@@ -11,7 +12,10 @@ import com.caverock.androidsvg.RenderOptions
 /**
  * Workaround for PictureDrawable scaling issues.
  */
-class SVGDrawable(private val svg: SVG) : Drawable() {
+class SVGDrawable(
+    private val svg: SVG,
+    private val context: Context
+    ) : Drawable() {
     private var wrapped_: PictureDrawable? = null
     private var alpha_ = 0
     private var colorFilter_: ColorFilter? = null
@@ -46,11 +50,13 @@ class SVGDrawable(private val svg: SVG) : Drawable() {
     }
 
     override fun getIntrinsicWidth(): Int {
-        return svg.documentWidth.toInt()
+        return context.ptToPx(svg.documentViewBox.width().toDouble())
+        // return svg.documentWidth.toInt()
     }
 
     override fun getIntrinsicHeight(): Int {
-        return svg.documentHeight.toInt()
+        return context.ptToPx(svg.documentViewBox.height().toDouble())
+        // return svg.documentHeight.toInt()
     }
 
     override fun setColorFilter(colorFilter: ColorFilter?) {

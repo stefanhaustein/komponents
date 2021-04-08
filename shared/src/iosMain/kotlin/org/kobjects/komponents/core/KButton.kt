@@ -13,12 +13,16 @@ actual class KButton actual constructor(
     private val uiButton = UIButton.buttonWithType(UIButtonTypeSystem)
     private var listeners: MutableList<(KButton) -> Unit> = mutableListOf()
 
-    actual var label: String = ""
+    actual var label = ""
         set(value) {
             field = value
             uiButton.setTitle(label, UIControlStateNormal)
         }
     actual var image: KImage? = null
+        set(value) {
+            field = value
+        }
+    actual var textAlignment = TextAlignment.CENTER
         set(value) {
             field = value
         }
@@ -49,4 +53,6 @@ actual class KButton actual constructor(
     actual fun removeClickListener(listener: (KButton) -> Unit) {
         listeners.remove(listener)
     }
+
+
 }

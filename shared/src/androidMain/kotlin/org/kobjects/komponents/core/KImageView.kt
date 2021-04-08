@@ -14,7 +14,7 @@ actual class KImageView actual constructor(
     actual var image: KImage? = null
         set(value) {
             field = value
-            imageView.setImageDrawable(value?.createDrawable())
+            imageView.setImageDrawable(value?.createDrawable(imageView.getContext()))
         }
 
     init {
