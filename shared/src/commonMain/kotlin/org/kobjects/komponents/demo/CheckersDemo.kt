@@ -36,8 +36,8 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
             }
         }
 
-        val black = KImage.createSvg(TwemojiSvg.BLACK_CIRCLE)
-        val white = KImage.createSvg(TwemojiSvg.WHITE_CIRCLE)
+        val black = KImage.createSvg(kontext, TwemojiSvg.BLACK_CIRCLE)
+        val white = KImage.createSvg(kontext, TwemojiSvg.WHITE_CIRCLE)
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {

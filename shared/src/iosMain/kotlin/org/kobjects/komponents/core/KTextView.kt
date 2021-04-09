@@ -1,6 +1,8 @@
 package org.kobjects.komponents.core
 
-import platform.UIKit.UITextView
+import platform.UIKit.NSLineBreakByWordWrapping
+import platform.UIKit.UILabel
+import platform.UIKit.UILineBreakModeWordWrap
 import platform.UIKit.UIView
 
 
@@ -8,16 +10,20 @@ actual class KTextView actual constructor(
     kontext: Kontext,
     text: String
 ) : KView() {
-    private val uiTextView = UITextView().also { it.text = text }
+    private val uiLabel = UILabel().also {
+        it.numberOfLines = 0
+        it.lineBreakMode = UILineBreakModeWordWrap
+        it.text = text
+    }
 
     actual var text: String
-        get() = uiTextView.text.toString()
+        get() = uiLabel.text.toString()
         set(value) {
-            uiTextView.text = value
+            uiLabel.text = value
         }
 
     override fun getView(): UIView {
-        return uiTextView
+        return uiLabel
     }
 
 }

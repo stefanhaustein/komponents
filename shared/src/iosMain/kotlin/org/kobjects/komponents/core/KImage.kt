@@ -1,22 +1,19 @@
 package org.kobjects.komponents.core
 
+import platform.darwin.NSObject
+
 
 actual class KImage(
-    val svg: String
+    val source: String,
+    val svgImage: NSObject
 ) {
     actual companion object {
-        actual fun createSvg(code: String): KImage {
-            //val source = SVGKSourceString.sourceFromContentsOfString(code)
-            //val img = SVGKImage.imageWithSource(source)
-            return KImage(code)
-            //return KImage(
-            //    img!!
-            //)
-         //   val data = NSData(code)
-/*            val nsString = code as NSString
-            val data = nsString.dataUsingEncoding(NSUTF8StringEncoding)
-            return KImage(UIView.create(svgData = data, parser = null, completion = null))
-*/
+        actual fun createSvg(kontext: Kontext, code: String): KImage {
+            try {
+                return KImage(code, kontext.svgHelper.createSvgImage(code)!!)
+            } catch (e: NullPointerException) {
+                throw IllegalArgumentException("Failed to parse svg $code", e)
+            }
         }
     }
 

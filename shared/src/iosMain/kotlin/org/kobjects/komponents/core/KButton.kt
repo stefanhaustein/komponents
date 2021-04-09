@@ -5,7 +5,7 @@ import platform.UIKit.*
 import platform.objc.sel_registerName
 
 actual class KButton actual constructor(
-    kontext: Kontext,
+    val kontext: Kontext,
     label: String,
     listener: ((KButton) -> Unit)?
 ) : KView() {
@@ -21,6 +21,8 @@ actual class KButton actual constructor(
     actual var image: KImage? = null
         set(value) {
             field = value
+            val uiImage = if (value == null) null else kontext.svgHelper.getUIImage(value.svgImage)
+            uiButton.setImage(uiImage, UIControlStateNormal)
         }
     actual var textAlignment = TextAlignment.CENTER
         set(value) {

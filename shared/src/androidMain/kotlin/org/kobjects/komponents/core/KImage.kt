@@ -7,7 +7,7 @@ import com.caverock.androidsvg.SVG
 actual class KImage(val svg: SVG) {
 
     actual companion object {
-        actual fun createSvg(code: String): KImage {
+        actual fun createSvg(kontext: Kontext, code: String): KImage {
             return KImage(SVG.getFromString(code))
         }
     }

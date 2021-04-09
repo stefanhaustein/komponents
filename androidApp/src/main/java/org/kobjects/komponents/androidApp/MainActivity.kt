@@ -15,12 +15,6 @@ class MainActivity : AppCompatActivity() {
 
         val context = Kontext(this)
 
-        val svgKomponent = KImageView(
-            context,
-            KImage.createSvg("""<svg viewBox='0 0 100 100'>
-            | <circle cx="50" cy="50" r="40" fill="red" /> 
-            |</svg>""".trimMargin()))
-
         menu = DemoMenu(context) { selector, kView ->
             setTitle(selector.title)
             setContentView(kView.getView())

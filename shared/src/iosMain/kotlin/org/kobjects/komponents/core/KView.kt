@@ -5,6 +5,7 @@ import org.kobjects.komponents.core.mobile.MeasurementMode
 import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
 import platform.CoreGraphics.*
+import platform.Foundation.NSLog
 import platform.UIKit.*
 import kotlin.math.PI
 
@@ -30,6 +31,10 @@ abstract actual class KView {
         measureOnly: Boolean
     ): Pair<Double, Double> {
 
+        val msg = "Measuring $widthMode:$availableWidth $heightMode:$availableHeight measureOnly:$measureOnly for $this"
+
+        NSLog( msg);
+
         var measuredHeight = 0.0
         var measuredWidth = 0.0
         if (widthMode != MeasurementMode.EXACTLY ||
@@ -51,6 +56,9 @@ abstract actual class KView {
         if (heightMode == MeasurementMode.EXACTLY) {
             measuredHeight = availableHeight
         }
+
+  //      NSLog("Measured size %f %f %@", measuredWidth, measuredHeight, this.getView())
+
         return Pair(measuredWidth, measuredHeight)
     }
 

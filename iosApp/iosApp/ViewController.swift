@@ -3,19 +3,26 @@ import shared
 
 class SvgHelperImpl: SvgHelper {
 
-    func createView(xml: String) -> UIView {
-        let source = SVGKSourceString.source(fromContentsOf: xml)
-        let img = SVGKImage(source: source)
-        let view = SVGKFastImageView(svgkImage: img)
+    func createView(svgImage: NSObject) -> UIView {
+        let view = SVGKFastImageView(svgkImage: (svgImage as! SVGKImage))
         return view!
     }
 
-    func updateView(view: UIView, xml: String) {
-        let source = SVGKSourceString.source(fromContentsOf: xml)
-        let image = SVGKImage(source: source)
-        let svgView = view as! SVGKFastImageView
-        svgView.image = image
+    func updateView(view: UIView, svgImage: NSObject) {
+        let svgView = (view as! SVGKFastImageView)
+        svgView.image = (svgImage as! SVGKImage)
     }
+
+     func createSvgImage(xml: String) -> NSObject? {
+         let source = SVGKSourceString.source(fromContentsOf: xml)
+         let svgkImage = SVGKImage(source: source)
+         return svgkImage
+     }
+
+     func getUIImage(svgImage: NSObject) -> UIImage {
+        let svgkImage = (svgImage as! SVGKImage)
+        return svgkImage.uiImage
+     }
 }
 
 class ViewController: UIViewController {
