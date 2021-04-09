@@ -43,6 +43,9 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         buttonWithImage.textAlignment = TextAlignment.LEFT
         grid.add(GridArea(buttonWithImage))
 
+        grid.add(GridArea(KSlider(kontext)))
+        grid.add(GridArea(KCheckBox(kontext)))
+
 
         grid.add(GridArea(KTextView(kontext, """
             Lorem ipsum dolor sit amet, consectetur adipisici elit, 
