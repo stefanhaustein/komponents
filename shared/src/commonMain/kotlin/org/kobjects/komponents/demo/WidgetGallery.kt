@@ -7,7 +7,7 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
     override val view: KView
 
     val svg = KImage.createSvg("""
-            <svg viewBox="0 0 30 30">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
               <rect x="0" y="0" width="10" height="10" fill="#ff0000"/>
               <rect x="10" y="10" width="10" height="10" fill="#00ff00"/>
               <rect x="20" y="20" width="10" height="10" fill="#0000ff"/>

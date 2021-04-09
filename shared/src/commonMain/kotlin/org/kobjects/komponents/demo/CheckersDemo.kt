@@ -43,7 +43,7 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
             for (x in 0 until 8) {
                 if ((y < 3 || y > 4) && (x + y) and 1 == 1) {
                     val imageView = KImageView(kontext, if (y < 3) black else white)
-                    imageView.setBackgroundColor(0xffff8888u)
+                    // imageView.setBackgroundColor(0xffff8888u)
                     val gridArea = GridArea(
                         imageView,
                         column = x,

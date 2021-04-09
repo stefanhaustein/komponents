@@ -1,14 +1,5 @@
 package org.kobjects.komponents.core
 
-import cocoapods.SwiftSVG.*
-
-import platform.UIKit.UIView
-import platform.Foundation.NSData
-import platform.Foundation.NSString
-import platform.Foundation.NSUTF8StringEncoding
-import platform.Foundation.dataUsingEncoding
-
-// import cocoapods.SVGKit.*
 
 actual class KImage(
     val svg: String

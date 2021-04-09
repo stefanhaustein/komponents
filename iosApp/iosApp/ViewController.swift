@@ -1,21 +1,20 @@
 import UIKit
 import shared
-import SwiftSVG
 
 class SvgHelperImpl: SvgHelper {
 
-    func resizeToFit(svgLayer: SVGLayer, width: Double, height: Double) {
-        let rect = CGRect(x: 0, y: 0, width: width, height: height)
-        svgLayer.resizeToFit(rect)
+    func createView(xml: String) -> UIView {
+        let source = SVGKSourceString.source(fromContentsOf: xml)
+        let img = SVGKImage(source: source)
+        let view = SVGKFastImageView(svgkImage: img)
+        return view!
     }
 
-    func createLayer(xml: String, callback: @escaping (SVGLayer) -> Void) {
-        let svgData = Data(xml.utf8)
-        CALayer(SVGData: svgData, parser: nil) { (svgLayer) in
-            // DispatchQueue.main.safeAsync {
-            callback(svgLayer)
-            // }
-        }
+    func updateView(view: UIView, xml: String) {
+        let source = SVGKSourceString.source(fromContentsOf: xml)
+        let image = SVGKImage(source: source)
+        let svgView = view as! SVGKFastImageView
+        svgView.image = image
     }
 }
 

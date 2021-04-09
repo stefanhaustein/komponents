@@ -45,19 +45,14 @@ kotlin {
         homepage = "https://github.com/stefanhaustein/komponents"
         ios.deploymentTarget = "13.5"
 
-        pod ("SwiftSVG") {
-            version = "~> 2.0"
-        }
+    //  pod ("SwiftSVG") {
+    //      version = "~> 2.0"
+    //  }
 
-//        pod ("CocoaLumberjack")
-   /*     pod("SVGKit") {
-       //     version = "~> 2.1.1"
-        }
-
-            source = git("https://github.com/SVGKit/SVGKit.git") {
-                branch = "3.x"
-            }
-        }*/
+    //  pod ("CocoaLumberjack")
+    //      pod("SVGKit") {
+    //      version = "~> 2.1.1"
+    //  }
     }
 
     sourceSets {

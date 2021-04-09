@@ -2,7 +2,6 @@ package org.kobjects.komponents.core
 
 import platform.QuartzCore.CALayer
 import platform.UIKit.UIView
-import cocoapods.SwiftSVG.*
 import kotlinx.cinterop.ObjCAction
 import platform.Foundation.NSRunLoop
 import platform.Foundation.NSRunLoopCommonModes

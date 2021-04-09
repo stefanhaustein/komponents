@@ -1,12 +1,8 @@
 package org.kobjects.komponents.core
 
-import platform.QuartzCore.CALayer
-import cocoapods.SwiftSVG.*
-import platform.CoreGraphics.CGRect
+import platform.UIKit.UIView
 
 interface SvgHelper {
-
-    fun resizeToFit(svgLayer: SVGLayer, width: Double, height: Double)
-    fun createLayer(xml: String, callback: (SVGLayer) -> Unit)
-
+    fun createView(xml: String): UIView
+    fun updateView(view: UIView, xml: String)
 }

@@ -9,11 +9,8 @@ target 'iosApp' do
   # Pods for iosApp
 
   pod 'shared', :path => '../shared'
-  pod 'SwiftSVG', '~> 2.0'
- # pod 'SVGKit'
-
- # pod 'SVGKit', :path => '../shared/build/cocoapods/externalSources/git/SVGKit'
- # pod 'CocoaLumberjack'
+  pod 'SVGKit'
+  # pod 'SwiftSVG', '~> 2.0'
 
   target 'iosAppTests' do
     inherit! :search_paths
