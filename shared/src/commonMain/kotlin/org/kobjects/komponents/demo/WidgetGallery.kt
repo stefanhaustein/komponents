@@ -43,11 +43,7 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         buttonWithImage.textAlignment = TextAlignment.LEFT
         grid.add(GridArea(buttonWithImage))
 
-        grid.add(GridArea(KSlider(kontext)))
-        grid.add(GridArea(KCheckBox(kontext)))
-
-
-        grid.add(GridArea(KTextView(kontext, """
+        val textView = KTextView(kontext, """
             Lorem ipsum dolor sit amet, consectetur adipisici elit, 
             sed eiusmod tempor incidunt ut labore et dolore magna aliqua. 
             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris 
@@ -55,7 +51,14 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
             in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
             Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui 
             officia deserunt mollit anim id est laborum.
-        """.trimIndent().replace("\n", " "))))
+        """.trimIndent().replace("\n", " "))
+
+        grid.add(GridArea(KSlider(kontext)))
+        grid.add(GridArea(KCheckBox(kontext) {
+            textView.text = "checked: ${it.value}"
+        }))
+
+        grid.add(GridArea(textView))
         view = grid;
     }
 }

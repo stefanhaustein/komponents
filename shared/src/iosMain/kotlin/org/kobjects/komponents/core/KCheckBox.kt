@@ -1,13 +1,19 @@
 package org.kobjects.komponents.core
 
+import platform.UIKit.UIAction
+import platform.UIKit.UIControlEventValueChanged
 import platform.UIKit.UISwitch
 
 
-actual class KCheckBox actual constructor(kontext: Kontext, value: Boolean) : KView() {
+actual class KCheckBox actual constructor(
+    kontext: Kontext,
+    value: Boolean,
+    changeListener: ((KCheckBox) -> Unit)?
+) : AbstractInputView<Boolean, KCheckBox>(changeListener) {
 
     var uiSwitch = UISwitch()
 
-    actual var value: Boolean
+    override var value: Boolean
         get() {
             return uiSwitch.on
         }
@@ -17,6 +23,9 @@ actual class KCheckBox actual constructor(kontext: Kontext, value: Boolean) : KV
 
     init {
         this.value = value
+        uiSwitch.addAction(UIAction.actionWithHandler { notifyChangeListeners() },
+            forControlEvents = UIControlEventValueChanged)
+
     }
 
     override fun getView() = uiSwitch
