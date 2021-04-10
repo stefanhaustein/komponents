@@ -2,52 +2,53 @@ package org.kobjects.komponents.core
 
 import platform.UIKit.*
 
-actual class KChoice actual constructor(
+actual class KChoice<T> actual constructor(
     kontext: Kontext,
-    options: List<String>,
-    selectionListener: ((KChoice) -> Unit)?
-) : KView() {
+    options: List<T>,
+    var stringify: (T) -> String,
+    changeListener: ((KChoice<T>) -> Unit)?
+) : AbstractInputView<T, KChoice<T>>(changeListener) {
+
     private val button = UIButton.buttonWithType(UIButtonTypeSystem)
-    private val selectionListeners = mutableListOf<(KChoice) -> Unit>()
+
+    override var value: T
+        get() {
+            return options[selectedIndex]
+        }
+        set(value) {
+            selectedIndex = options.indexOf(value)
+        }
 
     actual var selectedIndex: Int = 0
         set(value) {
             field = value
-            button.setTitle((if (options.isEmpty()) "" else options[value]), UIControlStateNormal)
+            button.setTitle((if (options.isEmpty()) "" else stringify(options[value])), UIControlStateNormal)
         }
 
-   actual var options: List<String> = listOf()
+   actual var options: List<T> = listOf()
         set(value) {
             field = value
             selectedIndex = 0
             val children = value.mapIndexed {index, value ->
-                UIAction.actionWithTitle(title = value, identifier = null, image= null, handler = {
-                    selectedIndex = index
-                    for (listener in selectionListeners) {
-                        listener(this@KChoice)
-                    }})
+                UIAction.actionWithTitle(
+                    title = stringify(value),
+                    identifier = null,
+                    image= null,
+                    handler = {
+                        selectedIndex = index
+                        notifyChangeListeners()
+                    })
             }
             button.menu = UIMenu.menuWithChildren(children)
             button.showsMenuAsPrimaryAction = true
         }
 
-    actual fun addSelectionListener(selectionListener: (KChoice) -> Unit) {
-        selectionListeners.add(selectionListener)
-    }
-
-    init {
-        this.options = options
-        if (selectionListener != null) {
-            addSelectionListener(selectionListener)
-        }
-    }
-
     override fun getView(): UIView {
         return button
     }
 
-    actual fun removeSelectionListener(selectionListener: (KChoice) -> Unit) {
-        selectionListeners.remove(selectionListener)
+    init {
+        this.options = options
     }
-
 }
+

@@ -1,6 +1,5 @@
 package org.kobjects.komponents.core
 
-import org.w3c.dom.Element
 import org.w3c.dom.HTMLButtonElement
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.svg.SVGElement
@@ -32,11 +31,6 @@ actual class KButton actual constructor(
             button.style.textAlign = value.toString().toLowerCase()
         }
 
-    init {
-        this.label = label
-        button.addEventListener("click", { clickListeners.forEach {it(this)} })
-        textAlignment = TextAlignment.CENTER
-    }
 
     override fun getElement(): HTMLElement {
         return button
@@ -67,6 +61,16 @@ actual class KButton actual constructor(
             button.appendChild(kontext.document.createTextNode(label))
         } else {
             button.style.lineHeight = ""
+        }
+    }
+
+
+    init {
+        this.label = label
+        button.addEventListener("click", { clickListeners.forEach {it(this)} })
+        textAlignment = TextAlignment.CENTER
+        if (listener != null) {
+            addClickListener(listener)
         }
     }
 }

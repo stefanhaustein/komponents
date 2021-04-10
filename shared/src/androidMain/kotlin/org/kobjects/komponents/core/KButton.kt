@@ -2,9 +2,7 @@ package org.kobjects.komponents.core
 
 import android.view.Gravity
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.widget.AppCompatButton
-import com.google.android.material.button.MaterialButton
 
 actual class KButton actual constructor(
     kontext: Kontext,

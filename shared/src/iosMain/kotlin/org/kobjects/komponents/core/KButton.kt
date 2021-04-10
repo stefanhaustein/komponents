@@ -1,8 +1,6 @@
 package org.kobjects.komponents.core
 
-import kotlinx.cinterop.ObjCAction
 import platform.UIKit.*
-import platform.objc.sel_registerName
 
 actual class KButton actual constructor(
     val kontext: Kontext,
@@ -10,8 +8,15 @@ actual class KButton actual constructor(
     listener: ((KButton) -> Unit)?
 ) : KView() {
 
-    private val uiButton = UIButton.buttonWithType(UIButtonTypeSystem)
-    private var listeners: MutableList<(KButton) -> Unit> = mutableListOf()
+    private val uiButton = UIButton.buttonWithType(
+        UIButtonTypeSystem,
+        primaryAction = UIAction.actionWithTitle(
+            label,
+            image = null,
+            identifier = null,
+            handler = {listeners.forEach {it(this)}}))
+    private var listeners: MutableList<(KButton) -> Unit> =
+        if (listener == null)  mutableListOf() else mutableListOf(listener)
 
     actual var label = ""
         set(value) {
@@ -29,24 +34,11 @@ actual class KButton actual constructor(
             field = value
         }
 
-    init {
-        this.label = label
-        uiButton.addTarget(
-            this,
-            platform.objc.sel_registerName("clicked"),
-            platform.UIKit.UIControlEventTouchUpInside
-        )
-    }
-
 
     override fun getView(): UIView {
        return uiButton
     }
 
-    @ObjCAction
-    fun clicked() {
-        listeners.forEach { it(this) }
-    }
 
     actual fun addClickListener(listener: (KButton) -> Unit) {
         listeners.add(listener)

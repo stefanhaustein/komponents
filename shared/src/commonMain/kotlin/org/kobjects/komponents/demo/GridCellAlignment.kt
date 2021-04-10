@@ -2,6 +2,7 @@ package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
 
+
 class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
 
     override val view: KView
@@ -93,6 +94,5 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
 
         view = outer
     }
-
-
 }
+
