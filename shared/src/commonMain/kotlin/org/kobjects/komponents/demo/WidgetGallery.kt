@@ -1,7 +1,6 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
-import org.kobjects.twemoji.TwemojiSvg
 
 class WidgetGallery(kontext: Kontext) : Demo(kontext) {
     override val view: KView
@@ -60,6 +59,9 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         }))
         grid.add(GridArea(KCheckBox(kontext) {
             textView.text = if (it.value) "CheckBox checked" else "CheckBox unchecked"
+        }))
+        grid.add(GridArea(KTextInput(kontext, "Text Input") {
+            textView.text = it.value
         }))
 
         grid.add(GridArea(textView))

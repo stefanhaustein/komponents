@@ -24,7 +24,7 @@ actual class KSlider actual constructor(
         slider.setAttribute("type", "range")
         this.value = value
         slider.addEventListener(
-            "change",
+            "input",
             { notifyChangeListeners() })
     }
 
