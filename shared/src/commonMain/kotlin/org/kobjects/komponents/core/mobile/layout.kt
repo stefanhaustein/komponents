@@ -96,6 +96,10 @@ fun applyGridLayout(
 
     // Measure auto columns / rows
 
+    // Collect cases where bothe, the width and height are auto. In these cases,
+    // re-measure the height after the widths were established.
+    val reMeasure = mutableListOf<ChildLayout>()
+
     for (child in children) {
         val positioned = child.positioned
 
@@ -113,7 +117,7 @@ fun applyGridLayout(
                 childWidth = positioned.width ?: 0.0
                 childWidthMode = MeasurementMode.EXACTLY
             } else {
-                measurementRequired = true;
+                measurementRequired = true
             }
         }
         if (positioned.rowSpan == 1 && getRowHeight(container, child.row) == Size.AUTO) {
@@ -122,13 +126,18 @@ fun applyGridLayout(
                 childHeight = positioned.height ?: 0.0
                 childHeightMode = MeasurementMode.EXACTLY
             } else {
-                measurementRequired = true;
+                measurementRequired = true
             }
         }
         if (measurementRequired) {
             child.layout(childWidthMode, childWidth, childHeightMode, childHeight, true)
             childWidth = child.measuredWidth()
             childHeight = child.measuredHeight()
+            if (childWidthMode == MeasurementMode.UNSPECIFIED
+                && childHeightMode == MeasurementMode.UNSPECIFIED) {
+                println("adding for re-measure")
+                reMeasure.add(child)
+            }
         }
         if (updateWidth) {
             widths[child.column] = maxOf(widths[child.column], childWidth)
@@ -152,20 +161,7 @@ fun applyGridLayout(
         consumedWidth += widths[i]
     }
 
-    var consumedHeight = container.paddingTop + maxOf(rowCount - 1, 0) * container.rowGap + container.paddingBottom
-    var totalVerticalFr = 0.0
-    for (i in 0 until rowCount) {
-        val rowHeight = getRowHeight(container, i)
-        when (rowHeight.unit) {
-            Size.Unit.PX -> heights[i] = rowHeight.value
-            Size.Unit.FR -> totalVerticalFr += rowHeight.value
-        }
-        consumedHeight += heights[i]
-    }
-
-   // System.out.println("### total Width: $totalWidth height: $totalHeight")
-
-    // Distribute extra size
+    // Distribute extra width
 
     var remainingWidth = 0.0
     if (widthMode == MeasurementMode.EXACTLY) {
@@ -185,7 +181,33 @@ fun applyGridLayout(
             }
         }
     }
-    
+
+    println("children to re-measure: $reMeasure")
+
+    for (child in reMeasure) {
+        child.layout(
+            MeasurementMode.EXACTLY,
+            widths[child.column],
+            MeasurementMode.UNSPECIFIED,
+            0.0,
+            true)
+        heights[child.row] = maxOf(heights[child.row], child.measuredHeight())
+    }
+
+    var consumedHeight = container.paddingTop + maxOf(rowCount - 1, 0) * container.rowGap + container.paddingBottom
+    var totalVerticalFr = 0.0
+    for (i in 0 until rowCount) {
+        val rowHeight = getRowHeight(container, i)
+        when (rowHeight.unit) {
+            Size.Unit.PX -> heights[i] = rowHeight.value
+            Size.Unit.FR -> totalVerticalFr += rowHeight.value
+        }
+        consumedHeight += heights[i]
+    }
+
+   // System.out.println("### total Width: $totalWidth height: $totalHeight")
+
+
     var remainingHeight = 0.0
     if (heightMode == MeasurementMode.EXACTLY) {
         val available = inputHeight - consumedHeight

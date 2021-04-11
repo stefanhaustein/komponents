@@ -34,9 +34,9 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         image.image = titleSvg
 
         val textView = KTextView(kontext, "(Nothing selected)")
+        grid.add(GridArea(textView))
 
         grid.add(GridArea(image, width = 100.0, height = 100.0, justify = Align.CENTER))
-
 
         val choice = KChoice<String>(kontext)
         choice.addChangeListener {
@@ -64,7 +64,7 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
             textView.text = it.value
         }))
 
-        grid.add(GridArea(textView))
+        grid.add(GridArea(KTextView(kontext, """Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum""")))
         view = grid;
     }
 }
