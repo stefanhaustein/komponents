@@ -4,6 +4,7 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<GridArea> {
 
     var columnGap: Double
     var rowGap: Double
+    var gap: Double?
 
     var autoColumns: Size
     var autoRows: Size
@@ -12,6 +13,7 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<GridArea> {
     var paddingTop: Double
     var paddingRight: Double
     var paddingBottom: Double
+    var padding: Double?
 
     var alignContent: Align
     var justifyContent: Align

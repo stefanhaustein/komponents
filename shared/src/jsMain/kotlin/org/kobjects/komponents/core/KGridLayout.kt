@@ -76,9 +76,26 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
             field = value
             div.style.setProperty("grid-template-rows", value.joinToString(" "))
         }
-
     actual val size: Int
         get() = children.size
+    actual var gap: Double?
+        get() = if (columnGap == rowGap) columnGap else null
+        set(value) {
+            if (value != null) {
+                columnGap = value
+                rowGap = value
+            }
+        }
+    actual var padding: Double?
+        get() = if (paddingLeft == paddingRight && paddingRight == paddingTop && paddingTop == paddingBottom) paddingLeft else null
+        set(value) {
+            if (value != null) {
+                paddingLeft = value
+                paddingRight = value
+                paddingTop = value
+                paddingBottom = value
+            }
+        }
 
     val children = mutableListOf<GridArea>()
 

@@ -1,5 +1,6 @@
 package org.kobjects.komponents.core
 
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 
@@ -19,6 +20,5 @@ actual class KTextView actual constructor(kontext: Kontext, text: String) : KVie
 
     init {
         textView.text = text
-
     }
 }

@@ -1,20 +1,12 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
+import org.kobjects.twemoji.TwemojiSvg
 
 class WidgetGallery(kontext: Kontext) : Demo(kontext) {
     override val view: KView
 
-    val titleSvg = KImage.createSvg(
-        kontext,
-        """
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
-                  <rect x="0" y="0" width="10" height="10" fill="#ff0000"/>
-                  <rect x="10" y="10" width="10" height="10" fill="#00ff00"/>
-                  <rect x="20" y="20" width="10" height="10" fill="#0000ff"/>
-                </svg>
-            """.trimIndent()
-    )
+    val titleSvg = KImage.createSvg(kontext, TwemojiSvg.SOCCER_BALL)
     val buttonSvg = KImage.createSvg(
         kontext,
         """
@@ -27,10 +19,14 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
 
     init {
         val grid = KGridLayout(kontext)
+
+        grid.padding = 4.0
+        grid.gap = 4.0
+
         grid.columnTemplate = listOf(Size.fr(1.0))
 
         val image = KImageView(kontext)
-        image.setBackgroundColor(0x88888888u)
+//        image.setBackgroundColor(0x88888888u)
         image.image = titleSvg
 
         val textView = KTextView(kontext, "(Nothing selected)")
