@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core
 
-expect class KGridLayout(kontext: Kontext) : KView, Iterable<GridArea> {
+expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
 
     var columnGap: Double
     var rowGap: Double
@@ -24,12 +24,11 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<GridArea> {
     var columnTemplate: List<Size>
     var rowTemplate: List<Size>
 
-    val size: Int
+    val cellCount: Int
 
-    fun add(positioned: GridArea)
+    fun add(positioned: Cell)
 
-    fun get(index: Int): GridArea
+    fun getCell(index: Int): Cell
 
-    fun notifyAreaChanged(area: GridArea)
-
+    fun notifyPositionChanged(position: Position)
 }

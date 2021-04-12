@@ -1,11 +1,9 @@
 package org.kobjects.komponents.core.mobile
 
-import org.kobjects.komponents.core.Align
-import org.kobjects.komponents.core.GridArea
-import org.kobjects.komponents.core.Size
+import org.kobjects.komponents.core.Cell
 
 interface ChildLayout {
-    val positioned: GridArea
+    val positioned: Cell
     var column: Int
     var row: Int
 

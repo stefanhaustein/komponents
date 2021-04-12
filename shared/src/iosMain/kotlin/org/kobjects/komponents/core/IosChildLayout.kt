@@ -4,10 +4,9 @@ import org.kobjects.komponents.core.mobile.ChildLayout
 import org.kobjects.komponents.core.mobile.MeasurementMode
 import platform.CoreGraphics.CGPointMake
 import platform.CoreGraphics.CGRectMake
-import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.*
 
-class IosChildLayout(override val positioned: GridArea) : ChildLayout {
+class IosChildLayout(override val positioned: Cell) : ChildLayout {
     override var column: Int = 0
     override var row: Int = 0
     var measuredWidth: Double = 0.0

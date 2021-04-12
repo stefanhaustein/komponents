@@ -1,7 +1,7 @@
 package org.kobjects.komponents.core
 
-class GridArea (
-    val view: KView,
+class Cell (
+    view: KView,
     column: Int? = null,
     row: Int? = null,
     columnSpan: Int = 1,
@@ -9,7 +9,7 @@ class GridArea (
     width: Double? = null,
     height: Double? = null,
     align: Align? = null,
-    justify: Align? = null) {
+    justify: Align? = null) : Position(view, width, height) {
 
     var column = column
         set(value) {
@@ -33,16 +33,7 @@ class GridArea (
             field = value
             notifyChanged()
         }
-    var width = width
-        set(value) {
-            field = value
-            notifyChanged()
-        }
-    var height = height
-        set(value) {
-            field = value
-            notifyChanged()
-        }
+
     var verticalAlign = align
         set(value) {
             field = value
@@ -53,11 +44,5 @@ class GridArea (
             field = value
             notifyChanged()
         }
-
-    var gridLayout: KGridLayout? = null
-
-    fun notifyChanged() {
-        gridLayout?.notifyAreaChanged(this)
-    }
 
 }

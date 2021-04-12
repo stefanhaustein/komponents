@@ -14,10 +14,10 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         action1: (T) -> Unit,
         action2: (T) -> Unit
     ) {
-        container.add(GridArea(KTextView(kontext, label), align = Align.CENTER))
+        container.add(Cell(KTextView(kontext, label), align = Align.CENTER))
 
         container.add(
-            GridArea(KChoice(
+            Cell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action1(values[it.selectedIndex])
@@ -25,7 +25,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         )
 
         container.add(
-            GridArea(KChoice(
+            Cell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action2(values[it.selectedIndex])
@@ -54,9 +54,9 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             listOf(Size.fr(1.0), Size.fr(1.0), Size.fr(1.0)),
             listOf(Size.auto(), Size.fr(2.0), Size.fr(3.0)))
 
-        outer.add(GridArea(KTextView(kontext)))
-        outer.add(GridArea(KTextView(kontext, "columns"), justify = Align.CENTER))
-        outer.add(GridArea(KTextView(kontext, "rows"), justify = Align.CENTER))
+        outer.add(Cell(KTextView(kontext)))
+        outer.add(Cell(KTextView(kontext, "columns"), justify = Align.CENTER))
+        outer.add(Cell(KTextView(kontext, "rows"), justify = Align.CENTER))
 
         addChoice(outer, "content pos.", arrayOf(Align.CENTER, Align.START, Align.END),
             { grid.justifyContent = it },
@@ -78,7 +78,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             var textView = KTextView(kontext, "$i")
             textView.setBackgroundColor(0xffeeeeeeU)
             grid.add(
-                GridArea(
+                Cell(
                 textView,
                 width = 80.0,
                 height = 80.0)
@@ -86,7 +86,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         }
 
         outer.add(
-            GridArea(grid,
+            Cell(grid,
             columnSpan = 3,
             align = Align.STRETCH,
             justify = Align.STRETCH)

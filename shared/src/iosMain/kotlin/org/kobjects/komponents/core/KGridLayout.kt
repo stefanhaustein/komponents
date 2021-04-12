@@ -1,16 +1,12 @@
 package org.kobjects.komponents.core
 
-import kotlinx.cinterop.useContents
 import org.kobjects.komponents.core.mobile.MeasurementMode
 import org.kobjects.komponents.core.mobile.applyGridLayout
-import platform.CoreGraphics.CGFLOAT_MAX
-import platform.CoreGraphics.CGSizeMake
 import platform.UIKit.UIView
 import platform.UIKit.addSubview
 import platform.UIKit.setNeedsLayout
-import platform.UIKit.sizeThatFits
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
     actual var columnGap = 0.0
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowGap = 0.0
@@ -39,7 +35,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowTemplate: List<Size> = listOf()
         set(value) { field = value; uiGridView.setNeedsLayout() }
-    actual val size: Int
+    actual val cellCount: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -61,14 +57,14 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         }
 
 
-    actual fun get(index: Int) = children[index].positioned
+    actual fun getCell(index: Int) = children[index].positioned
 
     private val uiGridView = IosGridView(this)
 
     val children = mutableListOf<IosChildLayout>()
 
 
-    actual fun add(positioned: GridArea) {
+    actual fun add(positioned: Cell) {
         positioned.gridLayout = this
         children.add(IosChildLayout(positioned))
         uiGridView.addSubview(positioned.view.getView())
@@ -78,7 +74,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         return uiGridView
     }
 
-    actual fun notifyAreaChanged(area: GridArea) {
+    actual fun notifyPositionChanged(position: Position) {
         uiGridView.setNeedsLayout()
     }
 
@@ -99,7 +95,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
             measureOnly)
     }
 
-    override fun iterator(): Iterator<GridArea> = children.map{ it.positioned }.iterator()
+    override fun iterator(): Iterator<Cell> = children.map{ it.positioned }.iterator()
 
 
 }

@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import org.kobjects.komponents.core.mobile.ChildLayout
 import org.kobjects.komponents.core.mobile.MeasurementMode
 import org.kobjects.komponents.core.mobile.applyGridLayout
-import kotlin.math.ceil
 
 
 class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(context) {
@@ -48,7 +47,7 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
         }
     }
 
-    inner class LayoutParams(override val positioned: GridArea) : ViewGroup.LayoutParams(0, 0), ChildLayout {
+    inner class LayoutParams(override val positioned: Cell) : ViewGroup.LayoutParams(0, 0), ChildLayout {
         var x = 0.0
         var y = 0.0
         override var column = 0

@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import android.view.View
 import org.kobjects.komponents.core.mobile.ChildLayout
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
 
     actual var columnGap = 0.0
         set(value) { field = value; layout.requestLayout() }
@@ -29,7 +29,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         set(value) { field = value; layout.requestLayout() }
     actual var rowTemplate = listOf<Size>()
         set(value) { field = value; layout.requestLayout() }
-    actual val size: Int
+    actual val cellCount: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -59,7 +59,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
        return layout
     }
 
-    actual fun add(positioned: GridArea) {
+    actual fun add(positioned: Cell) {
         positioned.gridLayout = this
         val childLayout = layout.LayoutParams(positioned);
         children.add(childLayout)
@@ -70,15 +70,15 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     actual var autoRows: Size = Size.AUTO
 
-    actual fun notifyAreaChanged(area: GridArea) {
+    actual fun notifyPositionChanged(position: Position) {
         layout.requestLayout()
     }
 
-    actual fun get(index: Int): GridArea {
+    actual fun getCell(index: Int): Cell {
         return children[index].positioned
     }
 
-    override fun iterator(): Iterator<GridArea> {
+    override fun iterator(): Iterator<Cell> {
         return children.map{it.positioned}.iterator()
     }
 

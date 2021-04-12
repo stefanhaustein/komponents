@@ -3,7 +3,7 @@ package org.kobjects.komponents.core
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
-actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterable<GridArea> {
+actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
 
     actual var columnGap = 0.0
         set(value) {
@@ -76,7 +76,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
             field = value
             div.style.setProperty("grid-template-rows", value.joinToString(" "))
         }
-    actual val size: Int
+    actual val cellCount: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -97,7 +97,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
             }
         }
 
-    val children = mutableListOf<GridArea>()
+    val children = mutableListOf<Cell>()
 
     private val div = kontext.document.createElement("div") as HTMLDivElement
 
@@ -111,49 +111,49 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
        return div
     }
 
-    actual fun add(positioned: GridArea) {
+    actual fun add(positioned: Cell) {
         positioned.gridLayout = this
         children.add(positioned)
         div.appendChild(positioned.view.getElement())
-        notifyAreaChanged(positioned)
+        notifyPositionChanged(positioned)
     }
 
-    actual fun notifyAreaChanged(area: GridArea) {
-        val style = area.view.getElement().style
-        val column = area.column
-        val row = area.row
-        val width = area.width
-        val height = area.height
+    actual fun notifyPositionChanged(position: Position) {
+        val style = position.view.getElement().style
+        val column = position.column
+        val row = position.row
+        val width = position.width
+        val height = position.height
         style.setProperty(
             "grid-column-start",
             if (column != null) "${column + 1}" else "")
         style.setProperty(
             "grid-column-end",
-            "span ${area.columnSpan}")
+            "span ${position.columnSpan}")
         style.setProperty(
             "grid-row-start",
             if (row != null) "${row + 1}" else "")
         style.setProperty(
             "grid-row-end",
-            "span ${area.rowSpan}" )
+            "span ${position.rowSpan}" )
         style.width = if (width != null) "${width}px" else ""
         style.height = if (height != null) "${width}px" else ""
         style.setProperty(
             "align-self",
-            area.verticalAlign?.name?.toLowerCase() ?: ""
+            position.verticalAlign?.name?.toLowerCase() ?: ""
         )
         style.setProperty(
             "justify-self",
-            area.horizontalAlign?.name?.toLowerCase() ?: ""
+            position.horizontalAlign?.name?.toLowerCase() ?: ""
         )
 
         // ${(area.horizontalAlign.name.toLowerCase()}"
     }
 
 
-    actual fun get(index: Int): GridArea = children[index]
+    actual fun getCell(index: Int): Cell = children[index]
 
-    override fun iterator(): Iterator<GridArea> {
+    override fun iterator(): Iterator<Cell> {
         return children.iterator()
     }
 

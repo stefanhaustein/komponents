@@ -27,7 +27,7 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {
-                checkerboard.add(GridArea(
+                checkerboard.add(Cell(
                     KTextView(kontext).also {
                         it.setBackgroundColor(
                             if ((x + y) and 1 == 0) 0xffccccccu else 0xff777777u) },
@@ -44,7 +44,7 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
                 if ((y < 3 || y > 4) && (x + y) and 1 == 1) {
                     val imageView = KImageView(kontext, if (y < 3) black else white)
                     // imageView.setBackgroundColor(0xffff8888u)
-                    val gridArea = GridArea(
+                    val gridArea = Cell(
                         imageView,
                         column = x,
                         row = y)
@@ -74,7 +74,7 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
         }
 
 
-        grid.add(GridArea(
+        grid.add(Cell(
             checkerboard,
             column = 0,
             row = 0,
