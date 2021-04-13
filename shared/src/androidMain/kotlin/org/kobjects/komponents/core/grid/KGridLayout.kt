@@ -1,7 +1,9 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
 import android.view.View
-import org.kobjects.komponents.core.mobile.ChildLayout
+import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Kontext
+import org.kobjects.komponents.core.grid.mobile.ResolvedPosition
 
 actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
 
@@ -52,14 +54,14 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     private val layout = GridLayout(kontext.context, this)
 
-    val children = mutableListOf<ChildLayout>()
+    val children = mutableListOf<ResolvedPosition>()
 
 
     override fun getView(): View {
        return layout
     }
 
-    actual fun add(positioned: Cell) {
+    actual fun addCell(positioned: Cell) {
         positioned.gridLayout = this
         val childLayout = layout.LayoutParams(positioned);
         children.add(childLayout)

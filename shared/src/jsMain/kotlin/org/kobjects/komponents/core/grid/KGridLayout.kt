@@ -1,5 +1,7 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
+import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Kontext
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
@@ -111,7 +113,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
        return div
     }
 
-    actual fun add(positioned: Cell) {
+    actual fun addCell(positioned: Cell) {
         positioned.gridLayout = this
         children.add(positioned)
         div.appendChild(positioned.view.getElement())
@@ -119,6 +121,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
     }
 
     actual fun notifyPositionChanged(position: Position) {
+        val cell = position as Cell
         val style = position.view.getElement().style
         val column = position.column
         val row = position.row

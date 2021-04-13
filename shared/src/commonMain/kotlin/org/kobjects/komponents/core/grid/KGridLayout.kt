@@ -1,4 +1,7 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
+
+import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Kontext
 
 expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
 
@@ -26,7 +29,20 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
 
     val cellCount: Int
 
-    fun add(positioned: Cell)
+    /*
+    fun addCell(
+        view: KView,
+        column: Int? = null,
+        row: Int? = null,
+        columnSpan: Int = 1,
+        rowSpan: Int = 1,
+        width: Double? = null,
+        height: Double? = null,
+        align: Align? = null,
+        justify: Align? = null): Cell
+    */
+
+    fun addCell(positioned: Cell)
 
     fun getCell(index: Int): Cell
 

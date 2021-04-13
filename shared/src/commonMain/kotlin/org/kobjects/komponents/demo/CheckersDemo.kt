@@ -1,6 +1,10 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
+import org.kobjects.komponents.core.grid.Align
+import org.kobjects.komponents.core.grid.Cell
+import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.Size
 import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.DragState
 import org.kobjects.twemoji.TwemojiSvg
@@ -27,12 +31,13 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {
-                checkerboard.add(Cell(
+                checkerboard.addCell(Cell(
                     KTextView(kontext).also {
                         it.setBackgroundColor(
                             if ((x + y) and 1 == 0) 0xffccccccu else 0xff777777u) },
                     column = x,
-                    row = y))
+                    row = y)
+                )
             }
         }
 
@@ -68,13 +73,13 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
                             imageView.transformation.y =
                                 if (y < 3) resist(it.distanceY) else it.distanceY
                         }})
-                    checkerboard.add(gridArea)
+                    checkerboard.addCell(gridArea)
                 }
             }
         }
 
 
-        grid.add(Cell(
+        grid.addCell(Cell(
             checkerboard,
             column = 0,
             row = 0,

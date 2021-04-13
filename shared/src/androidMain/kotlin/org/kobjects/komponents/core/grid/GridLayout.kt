@@ -1,10 +1,12 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
 import android.content.Context
 import android.view.ViewGroup
-import org.kobjects.komponents.core.mobile.ChildLayout
-import org.kobjects.komponents.core.mobile.MeasurementMode
-import org.kobjects.komponents.core.mobile.applyGridLayout
+import org.kobjects.komponents.core.grid.mobile.ResolvedPosition
+import org.kobjects.komponents.core.grid.mobile.MeasurementMode
+import org.kobjects.komponents.core.grid.mobile.applyGridLayout
+import org.kobjects.komponents.core.ptToPx
+import org.kobjects.komponents.core.pxToPt
 
 
 class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(context) {
@@ -47,11 +49,11 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
         }
     }
 
-    inner class LayoutParams(override val positioned: Cell) : ViewGroup.LayoutParams(0, 0), ChildLayout {
+    inner class LayoutParams(override val positioned: Cell) : ViewGroup.LayoutParams(0, 0), ResolvedPosition {
         var x = 0.0
         var y = 0.0
-        override var column = 0
-        override var row = 0
+        override var resolvedColumn = 0
+        override var resolvedRow = 0
 
         override fun layout(
             widthMode: MeasurementMode,

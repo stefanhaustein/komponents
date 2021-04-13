@@ -1,9 +1,9 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
 import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.useContents
-import org.kobjects.komponents.core.mobile.MeasurementMode
-import org.kobjects.komponents.core.mobile.applyGridLayout
+import org.kobjects.komponents.core.grid.mobile.MeasurementMode
+import org.kobjects.komponents.core.grid.mobile.applyGridLayout
 import platform.CoreGraphics.CGRectMake
 import platform.UIKit.UIView
 

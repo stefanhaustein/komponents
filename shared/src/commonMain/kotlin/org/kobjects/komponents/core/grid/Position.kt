@@ -1,4 +1,6 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
+
+import org.kobjects.komponents.core.KView
 
 abstract class Position(
     val view: KView,

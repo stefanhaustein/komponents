@@ -1,8 +1,7 @@
 package org.kobjects.komponents.core
 
 import kotlinx.cinterop.useContents
-import org.kobjects.komponents.core.mobile.MeasurementMode
-import org.kobjects.komponents.core.recognizer.DragRecognizer
+import org.kobjects.komponents.core.grid.mobile.MeasurementMode
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
 import platform.CoreGraphics.*
 import platform.Foundation.NSLog

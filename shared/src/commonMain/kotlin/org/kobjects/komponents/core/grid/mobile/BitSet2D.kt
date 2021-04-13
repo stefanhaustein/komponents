@@ -1,4 +1,4 @@
-package org.kobjects.komponents.core.mobile
+package org.kobjects.komponents.core.grid.mobile
 
 class BitSet2D {
     private val data = mutableListOf<MutableList<Boolean>>()

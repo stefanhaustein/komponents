@@ -1,12 +1,11 @@
-package org.kobjects.komponents.core.mobile
+package org.kobjects.komponents.core.grid.mobile
 
-import org.kobjects.komponents.core.Cell
+import org.kobjects.komponents.core.grid.Cell
 
-interface ChildLayout {
+interface ResolvedPosition {
     val positioned: Cell
-    var column: Int
-    var row: Int
-
+    var resolvedColumn: Int
+    var resolvedRow: Int
 
     fun layout(
         widthMode: MeasurementMode,

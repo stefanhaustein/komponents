@@ -1,7 +1,9 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
-import org.kobjects.komponents.core.mobile.MeasurementMode
-import org.kobjects.komponents.core.mobile.applyGridLayout
+import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Kontext
+import org.kobjects.komponents.core.grid.mobile.MeasurementMode
+import org.kobjects.komponents.core.grid.mobile.applyGridLayout
 import platform.UIKit.UIView
 import platform.UIKit.addSubview
 import platform.UIKit.setNeedsLayout
@@ -61,12 +63,12 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     private val uiGridView = IosGridView(this)
 
-    val children = mutableListOf<IosChildLayout>()
+    val children = mutableListOf<IosResolvedPosition>()
 
 
-    actual fun add(positioned: Cell) {
+    actual fun addCell(positioned: Cell) {
         positioned.gridLayout = this
-        children.add(IosChildLayout(positioned))
+        children.add(IosResolvedPosition(positioned))
         uiGridView.addSubview(positioned.view.getView())
     }
 

@@ -1,14 +1,14 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
-import org.kobjects.komponents.core.mobile.ChildLayout
-import org.kobjects.komponents.core.mobile.MeasurementMode
+import org.kobjects.komponents.core.grid.mobile.ResolvedPosition
+import org.kobjects.komponents.core.grid.mobile.MeasurementMode
 import platform.CoreGraphics.CGPointMake
 import platform.CoreGraphics.CGRectMake
 import platform.UIKit.*
 
-class IosChildLayout(override val positioned: Cell) : ChildLayout {
-    override var column: Int = 0
-    override var row: Int = 0
+class IosResolvedPosition(override val positioned: Cell) : ResolvedPosition {
+    override var resolvedColumn: Int = 0
+    override var resolvedRow: Int = 0
     var measuredWidth: Double = 0.0
     var measuredHeight: Double = 0.0
 

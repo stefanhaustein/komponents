@@ -1,4 +1,4 @@
-package org.kobjects.komponents.core
+package org.kobjects.komponents.core.grid
 
 data class Size(val unit: Unit, val value: Double) {
 

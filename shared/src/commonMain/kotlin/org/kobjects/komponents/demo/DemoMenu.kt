@@ -1,6 +1,10 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
+import org.kobjects.komponents.core.grid.Align
+import org.kobjects.komponents.core.grid.Cell
+import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.Size
 
 class DemoMenu(
     val kontext: Kontext,
@@ -21,7 +25,7 @@ class DemoMenu(
             button.addClickListener {
                 select(demo, renderDemo(demo))
             }
-            layout.add(Cell(button))
+            layout.addCell(Cell(button))
         }
 
 

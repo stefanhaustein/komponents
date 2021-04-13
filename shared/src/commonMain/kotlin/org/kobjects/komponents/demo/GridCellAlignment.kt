@@ -1,6 +1,10 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
+import org.kobjects.komponents.core.grid.Align
+import org.kobjects.komponents.core.grid.Cell
+import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.Size
 
 
 class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
@@ -14,9 +18,9 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         action1: (T) -> Unit,
         action2: (T) -> Unit
     ) {
-        container.add(Cell(KTextView(kontext, label), align = Align.CENTER))
+        container.addCell(Cell(KTextView(kontext, label), align = Align.CENTER))
 
-        container.add(
+        container.addCell(
             Cell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
@@ -24,7 +28,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         })
         )
 
-        container.add(
+        container.addCell(
             Cell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
@@ -54,9 +58,9 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             listOf(Size.fr(1.0), Size.fr(1.0), Size.fr(1.0)),
             listOf(Size.auto(), Size.fr(2.0), Size.fr(3.0)))
 
-        outer.add(Cell(KTextView(kontext)))
-        outer.add(Cell(KTextView(kontext, "columns"), justify = Align.CENTER))
-        outer.add(Cell(KTextView(kontext, "rows"), justify = Align.CENTER))
+        outer.addCell(Cell(KTextView(kontext)))
+        outer.addCell(Cell(KTextView(kontext, "columns"), justify = Align.CENTER))
+        outer.addCell(Cell(KTextView(kontext, "rows"), justify = Align.CENTER))
 
         addChoice(outer, "content pos.", arrayOf(Align.CENTER, Align.START, Align.END),
             { grid.justifyContent = it },
@@ -77,7 +81,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         for (i in 1..9) {
             var textView = KTextView(kontext, "$i")
             textView.setBackgroundColor(0xffeeeeeeU)
-            grid.add(
+            grid.addCell(
                 Cell(
                 textView,
                 width = 80.0,
@@ -85,7 +89,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             )
         }
 
-        outer.add(
+        outer.addCell(
             Cell(grid,
             columnSpan = 3,
             align = Align.STRETCH,
