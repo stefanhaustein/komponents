@@ -37,7 +37,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowTemplate: List<Size> = listOf()
         set(value) { field = value; uiGridView.setNeedsLayout() }
-    actual val cellCount: Int
+    actual val size: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -65,6 +65,20 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     val children = mutableListOf<IosResolvedPosition>()
 
+    actual fun addCell(
+        view: KView,
+        column: Int?,
+        row: Int?,
+        columnSpan: Int,
+        rowSpan: Int,
+        width: Double?,
+        height: Double?,
+        align: Align?,
+        justify: Align?): Cell {
+        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
+        addCell(cell)
+        return cell
+    }
 
     actual fun addCell(positioned: Cell) {
         positioned.gridLayout = this

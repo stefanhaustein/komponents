@@ -78,7 +78,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
             field = value
             div.style.setProperty("grid-template-rows", value.joinToString(" "))
         }
-    actual val cellCount: Int
+    actual val size: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -111,6 +111,21 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
 
     override fun getElement(): HTMLElement {
        return div
+    }
+
+    actual fun addCell(
+        view: KView,
+        column: Int?,
+        row: Int?,
+        columnSpan: Int,
+        rowSpan: Int,
+        width: Double?,
+        height: Double?,
+        align: Align?,
+        justify: Align?): Cell {
+        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
+        addCell(cell)
+        return cell
     }
 
     actual fun addCell(positioned: Cell) {

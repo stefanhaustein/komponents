@@ -27,9 +27,8 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
     var columnTemplate: List<Size>
     var rowTemplate: List<Size>
 
-    val cellCount: Int
+    val size: Int
 
-    /*
     fun addCell(
         view: KView,
         column: Int? = null,
@@ -40,7 +39,7 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
         height: Double? = null,
         align: Align? = null,
         justify: Align? = null): Cell
-    */
+
 
     fun addCell(positioned: Cell)
 

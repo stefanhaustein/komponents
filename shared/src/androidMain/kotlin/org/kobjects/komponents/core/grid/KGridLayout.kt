@@ -31,7 +31,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         set(value) { field = value; layout.requestLayout() }
     actual var rowTemplate = listOf<Size>()
         set(value) { field = value; layout.requestLayout() }
-    actual val cellCount: Int
+    actual val size: Int
         get() = children.size
     actual var gap: Double?
         get() = if (columnGap == rowGap) columnGap else null
@@ -59,6 +59,21 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     override fun getView(): View {
        return layout
+    }
+
+    actual fun addCell(
+        view: KView,
+        column: Int?,
+        row: Int?,
+        columnSpan: Int,
+        rowSpan: Int,
+        width: Double?,
+        height: Double?,
+        align: Align?,
+        justify: Align?): Cell {
+        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
+        addCell(cell)
+        return cell
     }
 
     actual fun addCell(positioned: Cell) {
