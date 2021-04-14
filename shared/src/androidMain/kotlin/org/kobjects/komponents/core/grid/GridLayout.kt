@@ -42,42 +42,15 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
             val child = getChildAt(i)
             val layoutParams = child.layoutParams as LayoutParams
 
-            val xPos = context.ptToPx(layoutParams.x)
-            val yPos = context.ptToPx(layoutParams.y)
+            val xPos = context.ptToPx(layoutParams.position.x)
+            val yPos = context.ptToPx(layoutParams.position.y)
 
             child.layout(xPos, yPos, xPos + child.measuredWidth, yPos + child.measuredHeight)
         }
     }
 
-    inner class LayoutParams(override val positioned: Cell) : ViewGroup.LayoutParams(0, 0), ResolvedPosition {
-        var x = 0.0
-        var y = 0.0
-        override var resolvedColumn = 0
-        override var resolvedRow = 0
+    inner class LayoutParams(val position: Position) : ViewGroup.LayoutParams(0, 0) {
 
-        override fun layout(
-            widthMode: MeasurementMode,
-            width: Double,
-            heightMode: MeasurementMode,
-            height: Double,
-            measureOnly: Boolean
-        ) {
-            val childView = positioned.view.getView()
-            childView.measure(modeAndSizeToAndroid(widthMode, width), modeAndSizeToAndroid(heightMode, height))
-        }
-
-        override fun measuredHeight(): Double {
-            return context.pxToPt(positioned.view.getView().measuredHeight)
-        }
-
-        override fun measuredWidth(): Double {
-            return context.pxToPt(positioned.view.getView().measuredWidth)
-        }
-
-        override fun setPosition(x: Double, y: Double) {
-            this.x = x
-            this.y = y
-        }
     }
 
 }

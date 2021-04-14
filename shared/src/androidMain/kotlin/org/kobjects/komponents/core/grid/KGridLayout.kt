@@ -52,9 +52,9 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
             }
         }
 
-    private val layout = GridLayout(kontext.context, this)
+    val layout = GridLayout(kontext.context, this)
 
-    val children = mutableListOf<ResolvedPosition>()
+    val children = mutableListOf<Cell>()
 
 
     override fun getView(): View {
@@ -72,9 +72,8 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         align: Align?,
         justify: Align?): Cell {
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
-        val childLayout = layout.LayoutParams(cell);
-        children.add(childLayout)
-        layout.addView(cell.view.getView(), childLayout)
+        children.add(cell)
+        layout.addView(cell.view.getView(), layout.LayoutParams(cell))
         return cell
     }
 
@@ -87,11 +86,11 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
     }
 
     actual fun getCell(index: Int): Cell {
-        return children[index].positioned
+        return children[index]
     }
 
     override fun iterator(): Iterator<Cell> {
-        return children.map{it.positioned}.iterator()
+        return children.iterator()
     }
 
 }

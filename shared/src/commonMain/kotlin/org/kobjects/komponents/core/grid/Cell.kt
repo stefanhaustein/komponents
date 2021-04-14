@@ -12,7 +12,7 @@ class Cell (
     width: Double? = null,
     height: Double? = null,
     align: Align? = null,
-    justify: Align? = null) : Position(gridLayout, view, width, height) {
+    justify: Align? = null) : Position(gridLayout, view) {
 
     var column = column
         set(value) {
@@ -32,6 +32,18 @@ class Cell (
             notifyChanged()
         }
     var rowSpan = rowSpan
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var width = width
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var height = height
         set(value) {
             field = value
             notifyChanged()

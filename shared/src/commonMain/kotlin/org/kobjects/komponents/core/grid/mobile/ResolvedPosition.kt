@@ -3,7 +3,6 @@ package org.kobjects.komponents.core.grid.mobile
 import org.kobjects.komponents.core.grid.Cell
 
 interface ResolvedPosition {
-    val positioned: Cell
     var resolvedColumn: Int
     var resolvedRow: Int
 

@@ -1,6 +1,7 @@
 package org.kobjects.komponents.core.grid.mobile
 
 import org.kobjects.komponents.core.grid.Align
+import org.kobjects.komponents.core.grid.Cell
 import org.kobjects.komponents.core.grid.KGridLayout
 import org.kobjects.komponents.core.grid.Size
 
@@ -26,7 +27,7 @@ private fun getRowHeight(grid: KGridLayout, row: Int) =
 
 fun applyGridLayout(
     container: KGridLayout,
-    children: List<ResolvedPosition>,
+    children: List<Cell>,
     widthMode: MeasurementMode,
     inputWidth: Double,
     heightMode: MeasurementMode,
@@ -40,18 +41,18 @@ fun applyGridLayout(
     // Determine size
 
     var filled = BitSet2D()
-    var unpositioned = mutableListOf<ResolvedPosition>()
+    var unpositioned = mutableListOf<Cell>()
 
     for (child in children) {
-        val positioned = child.positioned
+        child as ResolvedPosition
 
-        val positionedColumn = positioned.column
-        val positionedRow = positioned.row
-        if (positionedColumn != null && positionedRow != null) {
-            child.resolvedColumn = positionedColumn
-            child.resolvedRow = positionedRow
-            columnCount = maxOf(columnCount, child.resolvedColumn + positioned.columnSpan)
-            rowCount = maxOf(rowCount, child.resolvedRow + positioned.rowSpan)
+        val childColumn = child.column
+        val childRow = child.row
+        if (childColumn != null && childRow != null) {
+            child.resolvedColumn = childColumn
+            child.resolvedRow = childRow
+            columnCount = maxOf(columnCount, child.resolvedColumn + child.columnSpan)
+            rowCount = maxOf(rowCount, child.resolvedRow + child.rowSpan)
             fill(filled, child)
         } else {
             unpositioned.add(child)
@@ -62,11 +63,11 @@ fun applyGridLayout(
     var col = 0
 
     for (child in unpositioned) {
-        var positioned = child.positioned
+        child as ResolvedPosition
         while(true) {
             var positionSuitable = true
-            outer@ for (r in row until row + positioned.rowSpan) {
-                for (c in col until col + positioned.columnSpan) {
+            outer@ for (r in row until row + child.rowSpan) {
+                for (c in col until col + child.columnSpan) {
                     if (filled.get(r, c)) {
                         positionSuitable = false
                         break@outer
@@ -76,7 +77,7 @@ fun applyGridLayout(
             if (positionSuitable) {
                 break
             }
-            if (col + positioned.columnSpan < columnCount) {
+            if (col + child.columnSpan < columnCount) {
                 col++
             } else {
                 row++
@@ -86,8 +87,8 @@ fun applyGridLayout(
         // Found a suitable child pos at row/col
         child.resolvedColumn = col
         child.resolvedRow = row
-        columnCount = maxOf(columnCount, child.resolvedColumn + positioned.columnSpan)
-        rowCount = maxOf(rowCount, child.resolvedRow + positioned.rowSpan)
+        columnCount = maxOf(columnCount, child.resolvedColumn + child.columnSpan)
+        rowCount = maxOf(rowCount, child.resolvedRow + child.rowSpan)
         fill(filled, child)
     }
 
@@ -101,7 +102,7 @@ fun applyGridLayout(
     val reMeasure = mutableListOf<ResolvedPosition>()
 
     for (child in children) {
-        val positioned = child.positioned
+        child as ResolvedPosition
 
         var childWidthMode = MeasurementMode.UNSPECIFIED;
         var childHeightMode = MeasurementMode.UNSPECIFIED;
@@ -111,19 +112,19 @@ fun applyGridLayout(
         var updateWidth = false
         var updateHeight = false
 
-        if (positioned.columnSpan == 1 && getColumnWidth(container, child.resolvedColumn) == Size.AUTO) {
+        if (child.columnSpan == 1 && getColumnWidth(container, child.resolvedColumn) == Size.AUTO) {
             updateWidth = true
-            if (positioned.width != null) {
-                childWidth = positioned.width ?: 0.0
+            if (child.width != null) {
+                childWidth = child.width ?: 0.0
                 childWidthMode = MeasurementMode.EXACTLY
             } else {
                 measurementRequired = true
             }
         }
-        if (positioned.rowSpan == 1 && getRowHeight(container, child.resolvedRow) == Size.AUTO) {
+        if (child.rowSpan == 1 && getRowHeight(container, child.resolvedRow) == Size.AUTO) {
             updateHeight = true
-            if (positioned.height != null) {
-                childHeight = positioned.height ?: 0.0
+            if (child.height != null) {
+                childHeight = child.height ?: 0.0
                 childHeightMode = MeasurementMode.EXACTLY
             } else {
                 measurementRequired = true
@@ -252,27 +253,28 @@ fun applyGridLayout(
     }
 
     for (child in children) {
-        val positioned = child.positioned
-        val alignChild = positioned.verticalAlign ?: container.alignItems
-        val justifyChild = positioned.horizontalAlign ?: container.justifyItems
+        child as ResolvedPosition
 
-        val childWidthMode = if (positioned.width != null || justifyChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
-        val childHeightMode = if (positioned.height != null || alignChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
+        val alignChild = child.verticalAlign ?: container.alignItems
+        val justifyChild = child.horizontalAlign ?: container.justifyItems
 
-        var childWidth = if (positioned.width != null) (positioned.width ?: 0.0) else sum(widths, child.resolvedColumn, positioned.columnSpan)
-        var childHeight = if (positioned.height != null) (positioned.height ?: 0.0) else sum(heights, child.resolvedRow, positioned.rowSpan)
+        val childWidthMode = if (child.width != null || justifyChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
+        val childHeightMode = if (child.height != null || alignChild == Align.STRETCH) MeasurementMode.EXACTLY else MeasurementMode.AT_MOST
+
+        var childWidth = if (child.width != null) (child.width ?: 0.0) else sum(widths, child.resolvedColumn, child.columnSpan)
+        var childHeight = if (child.height != null) (child.height ?: 0.0) else sum(heights, child.resolvedRow, child.rowSpan)
 
         child.layout(childWidthMode, childWidth, childHeightMode, childHeight, false)
         childWidth = child.measuredWidth()
         childHeight = child.measuredHeight()
 
         var xPos = xPositions[child.resolvedColumn]
-        when (positioned.horizontalAlign ?: container.justifyItems) {
+        when (child.horizontalAlign ?: container.justifyItems) {
             Align.CENTER -> xPos += (widths[child.resolvedColumn] - childWidth) / 2
             Align.END -> xPos += widths[child.resolvedColumn] - childWidth
         }
         var yPos = yPositions[child.resolvedRow]
-        when (positioned.verticalAlign ?: container.alignItems) {
+        when (child.verticalAlign ?: container.alignItems) {
             Align.CENTER -> yPos += (heights[child.resolvedRow] - childHeight) / 2
             Align.END -> yPos += heights[child.resolvedRow] - childHeight
         }
@@ -290,9 +292,10 @@ fun applyGridLayout(
     return Pair(consumedWidth + remainingWidth, consumedHeight + remainingHeight)
 }
 
-fun fill(filled: BitSet2D, resolvedPosition: ResolvedPosition) {
-    for (r in 0 until resolvedPosition.positioned.rowSpan) {
-        for (c in 0 until resolvedPosition.positioned.columnSpan) {
+fun fill(filled: BitSet2D, resolvedPosition: Cell) {
+    resolvedPosition as ResolvedPosition
+    for (r in 0 until resolvedPosition.rowSpan) {
+        for (c in 0 until resolvedPosition.columnSpan) {
             filled.set(resolvedPosition.resolvedRow + r, resolvedPosition.resolvedColumn + c, true)
         }
     }

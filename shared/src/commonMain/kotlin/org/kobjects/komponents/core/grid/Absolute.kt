@@ -11,7 +11,7 @@ class Absolute(
     right: Double? = null,
     width: Double? = null,
     height: Double? = null,
-) : Position(gridLayout, view, width, height) {
+) : Position(gridLayout, view) {
     var top: Double? = top
         set(value) {
             field = value
@@ -28,6 +28,18 @@ class Absolute(
             notifyChanged()
         }
     var right: Double? = right
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var width = width
+        set(value) {
+            field = value
+            notifyChanged()
+        }
+
+    var height = height
         set(value) {
             field = value
             notifyChanged()

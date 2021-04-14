@@ -59,11 +59,11 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         }
 
 
-    actual fun getCell(index: Int) = children[index].positioned
+    actual fun getCell(index: Int) = children[index]
 
     private val uiGridView = IosGridView(this)
 
-    val children = mutableListOf<IosResolvedPosition>()
+    val children = mutableListOf<Cell>()
 
     actual fun addCell(
         view: KView,
@@ -76,8 +76,8 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         align: Align?,
         justify: Align?): Cell {
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
-        children.add(IosResolvedPosition(positioned))
-        uiGridView.addSubview(positioned.view.getView())
+        children.add(cell)
+        uiGridView.addSubview(cell.view.getView())
         return cell
     }
 
@@ -106,7 +106,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
             measureOnly)
     }
 
-    override fun iterator(): Iterator<Cell> = children.map{ it.positioned }.iterator()
+    override fun iterator(): Iterator<Cell> = children.iterator()
 
 
 }
