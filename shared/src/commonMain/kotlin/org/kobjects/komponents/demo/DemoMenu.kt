@@ -25,7 +25,7 @@ class DemoMenu(
             button.addClickListener {
                 select(demo, renderDemo(demo))
             }
-            layout.addCell(Cell(button))
+            layout.addCell(button)
         }
 
 

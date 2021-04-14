@@ -34,9 +34,9 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         image.image = titleSvg
 
         val textView = KTextView(kontext, "(Nothing selected)")
-        grid.addCell(Cell(textView))
+        grid.addCell(textView)
 
-        grid.addCell(Cell(image, width = 100.0, height = 100.0, justify = Align.CENTER))
+        grid.addCell(image, width = 100.0, height = 100.0, justify = Align.CENTER)
 
         val choice = KChoice<String>(kontext)
         choice.addChangeListener {
@@ -44,27 +44,27 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
         }
         choice.options = listOf("Choice 1", "Choice 2", "Choice 3")
 
-        grid.addCell(Cell(choice))
-        grid.addCell(Cell(KButton(kontext, "Button") {textView.text = "Button pressed"}))
+        grid.addCell(choice)
+        grid.addCell(KButton(kontext, "Button") {textView.text = "Button pressed"})
 
         val buttonWithImage = KButton(kontext, "  With Image") {
             textView.text = "Image button pressed"
         }
         buttonWithImage.image = buttonSvg
         buttonWithImage.textAlignment = TextAlignment.LEFT
-        grid.addCell(Cell(buttonWithImage))
+        grid.addCell(buttonWithImage)
 
-        grid.addCell(Cell(KSlider(kontext) {
+        grid.addCell(KSlider(kontext) {
             textView.text = "Slider position: ${it.value}"
-        }))
-        grid.addCell(Cell(KCheckBox(kontext) {
+        })
+        grid.addCell(KCheckBox(kontext) {
             textView.text = if (it.value) "CheckBox checked" else "CheckBox unchecked"
-        }))
-        grid.addCell(Cell(KTextInput(kontext, "Text Input") {
+        })
+        grid.addCell(KTextInput(kontext, "Text Input") {
             textView.text = it.value
-        }))
+        })
 
-        grid.addCell(Cell(KTextView(kontext, """Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum""")))
+        grid.addCell(KTextView(kontext, """Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"""))
         view = grid;
     }
 }

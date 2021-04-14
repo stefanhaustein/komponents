@@ -40,9 +40,6 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
         align: Align? = null,
         justify: Align? = null): Cell
 
-
-    fun addCell(positioned: Cell)
-
     fun getCell(index: Int): Cell
 
     fun notifyPositionChanged(position: Position)

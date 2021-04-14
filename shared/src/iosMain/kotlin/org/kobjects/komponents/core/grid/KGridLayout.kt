@@ -80,7 +80,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         return cell
     }
 
-    actual fun addCell(positioned: Cell) {
+    fun addCell(positioned: Cell) {
         positioned.gridLayout = this
         children.add(IosResolvedPosition(positioned))
         uiGridView.addSubview(positioned.view.getView())

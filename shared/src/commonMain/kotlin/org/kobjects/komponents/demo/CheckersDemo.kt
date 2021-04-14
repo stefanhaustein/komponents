@@ -31,13 +31,12 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {
-                checkerboard.addCell(Cell(
+                checkerboard.addCell(
                     KTextView(kontext).also {
                         it.setBackgroundColor(
                             if ((x + y) and 1 == 0) 0xffccccccu else 0xff777777u) },
                     column = x,
                     row = y)
-                )
             }
         }
 
@@ -49,7 +48,7 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
                 if ((y < 3 || y > 4) && (x + y) and 1 == 1) {
                     val imageView = KImageView(kontext, if (y < 3) black else white)
                     // imageView.setBackgroundColor(0xffff8888u)
-                    val gridArea = Cell(
+                    val gridArea = checkerboard.addCell(
                         imageView,
                         column = x,
                         row = y)
@@ -73,18 +72,17 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
                             imageView.transformation.y =
                                 if (y < 3) resist(it.distanceY) else it.distanceY
                         }})
-                    checkerboard.addCell(gridArea)
                 }
             }
         }
 
 
-        grid.addCell(Cell(
+        grid.addCell(
             checkerboard,
             column = 0,
             row = 0,
             width = 8 * 40.0,   // Why -- shouldn't the template be sufficient?
-            height = 8 * 40.0))
+            height = 8 * 40.0)
 
         view = grid
 

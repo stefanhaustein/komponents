@@ -128,7 +128,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
         return cell
     }
 
-    actual fun addCell(positioned: Cell) {
+    fun addCell(positioned: Cell) {
         positioned.gridLayout = this
         children.add(positioned)
         div.appendChild(positioned.view.getElement())

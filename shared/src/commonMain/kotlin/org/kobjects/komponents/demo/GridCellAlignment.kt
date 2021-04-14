@@ -58,9 +58,9 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             listOf(Size.fr(1.0), Size.fr(1.0), Size.fr(1.0)),
             listOf(Size.auto(), Size.fr(2.0), Size.fr(3.0)))
 
-        outer.addCell(Cell(KTextView(kontext)))
-        outer.addCell(Cell(KTextView(kontext, "columns"), justify = Align.CENTER))
-        outer.addCell(Cell(KTextView(kontext, "rows"), justify = Align.CENTER))
+        outer.addCell(KTextView(kontext))
+        outer.addCell(KTextView(kontext, "columns"), justify = Align.CENTER)
+        outer.addCell(KTextView(kontext, "rows"), justify = Align.CENTER)
 
         addChoice(outer, "content pos.", arrayOf(Align.CENTER, Align.START, Align.END),
             { grid.justifyContent = it },
@@ -82,19 +82,16 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             var textView = KTextView(kontext, "$i")
             textView.setBackgroundColor(0xffeeeeeeU)
             grid.addCell(
-                Cell(
                 textView,
                 width = 80.0,
                 height = 80.0)
-            )
         }
 
         outer.addCell(
-            Cell(grid,
+            grid,
             columnSpan = 3,
             align = Align.STRETCH,
             justify = Align.STRETCH)
-        )
 
         view = outer
     }
