@@ -3,6 +3,7 @@ package org.kobjects.komponents.core.grid
 import org.kobjects.komponents.core.KView
 
 abstract class Position(
+    val gridLayout: KGridLayout,
     val view: KView,
     width: Double? = null,
     height: Double? = null
@@ -19,12 +20,7 @@ abstract class Position(
         }
 
 
-
-    var gridLayout: KGridLayout? = null
-
-
-
     fun notifyChanged() {
-        gridLayout?.notifyPositionChanged(this)
+        gridLayout.notifyPositionChanged(this)
     }
 }

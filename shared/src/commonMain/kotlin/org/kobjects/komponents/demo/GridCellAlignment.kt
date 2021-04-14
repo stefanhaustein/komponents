@@ -18,23 +18,19 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         action1: (T) -> Unit,
         action2: (T) -> Unit
     ) {
-        container.addCell(Cell(KTextView(kontext, label), align = Align.CENTER))
+        container.addCell(KTextView(kontext, label), align = Align.CENTER)
 
-        container.addCell(
-            Cell(KChoice(
+        container.addCell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action1(values[it.selectedIndex])
         })
-        )
 
-        container.addCell(
-            Cell(KChoice(
+        container.addCell(KChoice(
             kontext,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action2(values[it.selectedIndex])
         })
-        )
 
         action1(values[0])
         action2(values[0])

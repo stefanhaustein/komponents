@@ -75,15 +75,10 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         height: Double?,
         align: Align?,
         justify: Align?): Cell {
-        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
-        addCell(cell)
-        return cell
-    }
-
-    fun addCell(positioned: Cell) {
-        positioned.gridLayout = this
+        val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(IosResolvedPosition(positioned))
         uiGridView.addSubview(positioned.view.getView())
+        return cell
     }
 
     override fun getView(): UIView {

@@ -3,6 +3,7 @@ package org.kobjects.komponents.core.grid
 import org.kobjects.komponents.core.KView
 
 class Cell (
+    gridLayout: KGridLayout,
     view: KView,
     column: Int? = null,
     row: Int? = null,
@@ -11,7 +12,7 @@ class Cell (
     width: Double? = null,
     height: Double? = null,
     align: Align? = null,
-    justify: Align? = null) : Position(view, width, height) {
+    justify: Align? = null) : Position(gridLayout, view, width, height) {
 
     var column = column
         set(value) {

@@ -71,16 +71,11 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         height: Double?,
         align: Align?,
         justify: Align?): Cell {
-        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
-        addCell(cell)
-        return cell
-    }
-
-    fun addCell(positioned: Cell) {
-        positioned.gridLayout = this
-        val childLayout = layout.LayoutParams(positioned);
+        val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
+        val childLayout = layout.LayoutParams(cell);
         children.add(childLayout)
-        layout.addView(positioned.view.getView(), childLayout)
+        layout.addView(cell.view.getView(), childLayout)
+        return cell
     }
 
     actual var autoColumns: Size = Size.AUTO

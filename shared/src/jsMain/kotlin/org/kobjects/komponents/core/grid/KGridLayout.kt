@@ -123,16 +123,14 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
         height: Double?,
         align: Align?,
         justify: Align?): Cell {
-        val cell = Cell(view, column, row, columnSpan, rowSpan, width, height, align, justify)
-        addCell(cell)
+        val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
+        children.add(cell)
+        div.appendChild(cell.view.getElement())
+        notifyPositionChanged(cell)
         return cell
     }
 
     fun addCell(positioned: Cell) {
-        positioned.gridLayout = this
-        children.add(positioned)
-        div.appendChild(positioned.view.getElement())
-        notifyPositionChanged(positioned)
     }
 
     actual fun notifyPositionChanged(position: Position) {

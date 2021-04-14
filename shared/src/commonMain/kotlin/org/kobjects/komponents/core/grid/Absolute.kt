@@ -3,6 +3,7 @@ package org.kobjects.komponents.core.grid
 import org.kobjects.komponents.core.KView
 
 class Absolute(
+    gridLayout: KGridLayout,
     view: KView,
     top: Double? = null,
     left: Double? = null,
@@ -10,7 +11,7 @@ class Absolute(
     right: Double? = null,
     width: Double? = null,
     height: Double? = null,
-) : Position(view, width, height) {
+) : Position(gridLayout, view, width, height) {
     var top: Double? = top
         set(value) {
             field = value
