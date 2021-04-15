@@ -3,7 +3,7 @@ package org.kobjects.komponents.core.grid
 import org.kobjects.komponents.core.KView
 import org.kobjects.komponents.core.Kontext
 
-expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
+expect class KGridLayout(kontext: Kontext) : KView, Iterable<Position> {
 
     var columnGap: Double
     var rowGap: Double
@@ -40,7 +40,5 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Cell> {
         align: Align? = null,
         justify: Align? = null): Cell
 
-    fun getCell(index: Int): Cell
-
-    fun notifyPositionChanged(position: Position)
+    fun get(index: Int): Position
 }

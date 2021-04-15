@@ -68,8 +68,8 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             { grid.columnTemplate = it },
             { grid.rowTemplate = it })
         addChoice(outer, "box size", arrayOf("80", "implicit"),
-            { grid.forEach{el -> el.width = if (it == "implicit") null else 80.0 } },
-            { grid.forEach{el -> el.height = if (it == "implicit") null else 80.0 } })
+            { grid.forEach{el -> (el as Cell).width = if (it == "implicit") null else 80.0 } },
+            { grid.forEach{el -> (el as Cell).height = if (it == "implicit") null else 80.0 } })
 
         grid.rowGap = 1.0
         grid.columnGap = 1.0

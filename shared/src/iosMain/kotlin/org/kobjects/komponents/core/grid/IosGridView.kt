@@ -14,7 +14,7 @@ class IosGridView(val container: KGridLayout) : UIView(CGRectMake(0.0, 0.0, 100.
         frame.useContents {
             applyGridLayout(
                 container,
-                container.children,
+                container.children.filterIsInstance<Cell>(),
                 MeasurementMode.EXACTLY,
                 this.size.width,
                 MeasurementMode.EXACTLY,

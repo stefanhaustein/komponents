@@ -25,7 +25,7 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
 
             val result = applyGridLayout(
                 container,
-                container.children,
+                container.children.filterIsInstance<Cell>(),
                 MeasurementMode.EXACTLY,
                 context.pxToPt(MeasureSpec.getSize(widthMeasureSpec)),
                 MeasurementMode.EXACTLY,
@@ -49,7 +49,9 @@ class GridLayout(context: Context, val container: KGridLayout) : ViewGroup(conte
         }
     }
 
-    inner class LayoutParams(val position: Position) : ViewGroup.LayoutParams(0, 0) {
+    inner class LayoutParams(
+        val position: Position
+    ) : ViewGroup.LayoutParams(0, 0) {
 
     }
 

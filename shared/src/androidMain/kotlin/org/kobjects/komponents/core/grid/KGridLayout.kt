@@ -5,7 +5,7 @@ import org.kobjects.komponents.core.KView
 import org.kobjects.komponents.core.Kontext
 import org.kobjects.komponents.core.grid.mobile.ResolvedPosition
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Position> {
 
     actual var columnGap = 0.0
         set(value) { field = value; layout.requestLayout() }
@@ -54,8 +54,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     val layout = GridLayout(kontext.context, this)
 
-    val children = mutableListOf<Cell>()
-
+    val children = mutableListOf<Position>()
 
     override fun getView(): View {
        return layout
@@ -81,16 +80,15 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
 
     actual var autoRows: Size = Size.AUTO
 
-    actual fun notifyPositionChanged(position: Position) {
+    fun notifyPositionChanged() {
         layout.requestLayout()
     }
 
-    actual fun getCell(index: Int): Cell {
+    actual fun get(index: Int): Position {
         return children[index]
     }
 
-    override fun iterator(): Iterator<Cell> {
+    override fun iterator(): Iterator<Position> {
         return children.iterator()
     }
-
 }

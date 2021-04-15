@@ -15,7 +15,7 @@ actual open class Position actual constructor(
     var y = 0.0
 
     actual fun notifyChanged() {
-        gridLayout.notifyPositionChanged(this)
+        gridLayout.notifyPositionChanged()
     }
 
     override fun layout(

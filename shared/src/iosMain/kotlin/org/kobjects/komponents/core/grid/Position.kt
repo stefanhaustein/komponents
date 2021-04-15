@@ -47,6 +47,6 @@ actual open class Position actual constructor(
     }
 
     actual fun notifyChanged() {
-        gridLayout.notifyPositionChanged(this)
+        gridLayout.notifyPositionChanged()
     }
 }

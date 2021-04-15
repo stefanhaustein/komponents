@@ -8,7 +8,7 @@ import platform.UIKit.UIView
 import platform.UIKit.addSubview
 import platform.UIKit.setNeedsLayout
 
-actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
+actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterable<Position> {
     actual var columnGap = 0.0
         set(value) { field = value; uiGridView.setNeedsLayout() }
     actual var rowGap = 0.0
@@ -59,11 +59,11 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         }
 
 
-    actual fun getCell(index: Int) = children[index]
+    actual fun get(index: Int) = children[index]
 
     private val uiGridView = IosGridView(this)
 
-    val children = mutableListOf<Cell>()
+    val children = mutableListOf<Position>()
 
     actual fun addCell(
         view: KView,
@@ -85,7 +85,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         return uiGridView
     }
 
-    actual fun notifyPositionChanged(position: Position) {
+    fun notifyPositionChanged() {
         uiGridView.setNeedsLayout()
     }
 
@@ -98,7 +98,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
     ) : Pair<Double,Double> {
         return applyGridLayout(
             this,
-            children,
+            children.filterIsInstance<Cell>(),
             widthMode,
             availableWidth,
             heightMode,
@@ -106,7 +106,7 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
             measureOnly)
     }
 
-    override fun iterator(): Iterator<Cell> = children.iterator()
+    override fun iterator(): Iterator<Position> = children.iterator()
 
 
 }

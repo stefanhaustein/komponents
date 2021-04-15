@@ -5,7 +5,7 @@ import org.kobjects.komponents.core.Kontext
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 
-actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterable<Cell> {
+actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterable<Position> {
 
     actual var columnGap = 0.0
         set(value) {
@@ -126,48 +126,14 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(cell)
         div.appendChild(cell.view.getElement())
-        notifyPositionChanged(cell)
+        cell.notifyChanged()
         return cell
     }
 
     fun addCell(positioned: Cell) {
     }
 
-    actual fun notifyPositionChanged(position: Position) {
-        val cell = position as Cell
-        val style = position.view.getElement().style
-        val column = position.column
-        val row = position.row
-        val width = position.width
-        val height = position.height
-        style.setProperty(
-            "grid-column-start",
-            if (column != null) "${column + 1}" else "")
-        style.setProperty(
-            "grid-column-end",
-            "span ${position.columnSpan}")
-        style.setProperty(
-            "grid-row-start",
-            if (row != null) "${row + 1}" else "")
-        style.setProperty(
-            "grid-row-end",
-            "span ${position.rowSpan}" )
-        style.width = if (width != null) "${width}px" else ""
-        style.height = if (height != null) "${width}px" else ""
-        style.setProperty(
-            "align-self",
-            position.verticalAlign?.name?.toLowerCase() ?: ""
-        )
-        style.setProperty(
-            "justify-self",
-            position.horizontalAlign?.name?.toLowerCase() ?: ""
-        )
-
-        // ${(area.horizontalAlign.name.toLowerCase()}"
-    }
-
-
-    actual fun getCell(index: Int): Cell = children[index]
+    actual fun get(index: Int): Position = children[index]
 
     override fun iterator(): Iterator<Cell> {
         return children.iterator()
