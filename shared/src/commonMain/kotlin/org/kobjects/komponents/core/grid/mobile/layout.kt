@@ -1,9 +1,6 @@
 package org.kobjects.komponents.core.grid.mobile
 
-import org.kobjects.komponents.core.grid.Align
-import org.kobjects.komponents.core.grid.Cell
-import org.kobjects.komponents.core.grid.KGridLayout
-import org.kobjects.komponents.core.grid.Size
+import org.kobjects.komponents.core.grid.*
 
 enum class MeasurementMode {
     UNSPECIFIED, AT_MOST, EXACTLY
@@ -26,6 +23,44 @@ private fun getRowHeight(grid: KGridLayout, row: Int) =
 
 
 fun applyGridLayout(
+    container: KGridLayout,
+    children: List<Position>,
+    widthMode: MeasurementMode,
+    inputWidth: Double,
+    heightMode: MeasurementMode,
+    inputHeight: Double,
+    measureOnly: Boolean
+): Pair<Double, Double> {
+    val result = layoutCells(
+        container,
+        children.filterIsInstance<Cell>(),
+        widthMode,
+        inputWidth,
+        heightMode,
+        inputHeight,
+        measureOnly)
+
+    if (!measureOnly) {
+        layoutAbsolute(
+            container,
+            children.filterIsInstance<Absolute>(),
+            result.first,
+            result.second)
+    }
+    return result
+}
+
+fun layoutAbsolute(
+    container: KGridLayout,
+    children: List<Absolute>,
+    width: Double,
+    height: Double) {
+
+    // TBD
+}
+
+
+fun layoutCells(
     container: KGridLayout,
     children: List<Cell>,
     widthMode: MeasurementMode,
