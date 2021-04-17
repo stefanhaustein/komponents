@@ -41,22 +41,57 @@ fun applyGridLayout(
         measureOnly)
 
     if (!measureOnly) {
-        layoutAbsolute(
-            container,
-            children.filterIsInstance<Absolute>(),
-            result.first,
-            result.second)
+        for (child in children.filterIsInstance<Absolute>()) {
+            layoutAbsolute(
+                child,
+                result.first,
+                result.second
+            )
+        }
     }
     return result
 }
 
 fun layoutAbsolute(
-    container: KGridLayout,
-    children: List<Absolute>,
-    width: Double,
-    height: Double) {
+    child: Absolute,
+    containerWidth: Double,
+    containerHeight: Double) {
 
-    // TBD
+    val top = child.top
+    val left = child.left
+    val bottom = child.bottom
+    val right = child.right
+    val width = child.width
+    val height = child.height
+
+    val widthMode: MeasurementMode
+    val widthValue: Double
+    if (width != null) {
+        widthMode = MeasurementMode.EXACTLY
+        widthValue = width
+    } else if (left != null && right != null) {
+        widthMode = MeasurementMode.EXACTLY
+        widthValue = containerWidth - left - right
+    } else {
+        widthMode = MeasurementMode.UNSPECIFIED
+        widthValue = 0.0
+    }
+    val heightMode: MeasurementMode
+    val heightValue: Double
+    if (height != null) {
+        heightMode = MeasurementMode.EXACTLY
+        heightValue = height
+    } else if (top != null && bottom != null) {
+        heightMode = MeasurementMode.EXACTLY
+        heightValue = containerHeight - top - bottom
+    } else {
+        heightMode = MeasurementMode.UNSPECIFIED
+        heightValue = 0.0
+    }
+    (child as ResolvedPosition).layout(widthMode, widthValue, heightMode, heightValue, false)
+    child.setPosition(
+        left ?: if (right != null) containerWidth - right - child.measuredWidth() else 0.0,
+        top ?: if (bottom != null) containerHeight - bottom - child.measuredHeight() else 0.0)
 }
 
 

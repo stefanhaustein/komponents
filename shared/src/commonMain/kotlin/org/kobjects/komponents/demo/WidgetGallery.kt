@@ -10,7 +10,18 @@ import org.kobjects.twemoji.TwemojiSvg
 class WidgetGallery(kontext: Kontext) : Demo(kontext) {
     override val view: KView
 
-    val titleSvg = KImage.createSvg(kontext, TwemojiSvg.SOCCER_BALL)
+    enum class BALL(val label: String, val svg: String) {
+        BASEBALL("Baseball", TwemojiSvg.BASEBALL),
+        BASKETBALL("Basketball", TwemojiSvg.BASKETBALL),
+        VOLLEYBALL("Volleyball", TwemojiSvg.VOLLEYBALL),
+        SOCCER("Soccer", TwemojiSvg.SOCCER_BALL),
+        SOFTBALL("Softball", TwemojiSvg.SOFTBALL),
+        TENNIS("Tennis", TwemojiSvg.TENNIS),
+        POOL("Pool", TwemojiSvg.POOL_8_BALL)
+    }
+
+
+    val titleSvg = KImage.createSvg(kontext, TwemojiSvg.BASEBALL)
     val buttonSvg = KImage.createSvg(
         kontext,
         """
@@ -38,11 +49,10 @@ class WidgetGallery(kontext: Kontext) : Demo(kontext) {
 
         grid.addCell(image, width = 100.0, height = 100.0, justify = Align.CENTER)
 
-        val choice = KChoice<String>(kontext)
-        choice.addChangeListener {
-            textView.text = it.value + " selected"
+        val choice = KChoice(kontext, BALL.values().toList(), stringify = {it.label}) {
+            textView.text = "${it.value.label} selected"
+            image.image = KImage.createSvg(kontext, it.value.svg)
         }
-        choice.options = listOf("Choice 1", "Choice 2", "Choice 3")
 
         grid.addCell(choice)
         grid.addCell(KButton(kontext, "Button") {textView.text = "Button pressed"})
