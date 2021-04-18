@@ -6,9 +6,9 @@ class Absolute(
     gridLayout: KGridLayout,
     view: KView,
     top: Double? = null,
-    left: Double? = null,
-    bottom: Double? = null,
     right: Double? = null,
+    bottom: Double? = null,
+    left: Double? = null,
     width: Double? = null,
     height: Double? = null,
 ) : Position(gridLayout, view) {

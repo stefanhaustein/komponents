@@ -15,6 +15,15 @@ actual abstract class KView {
       TransformationImpl()
    }
 
+   actual val clientX: Double
+      get() = getView().context.pxToPt(getView().x)
+   actual val clientY: Double
+      get() = getView().context.pxToPt(getView().y)
+   actual val clientWidth: Double
+      get() = getView().context.pxToPt(getView().width)
+   actual val clientHeight: Double
+      get() = getView().context.pxToPt(getView().height)
+
    val gestureRecognizers = mutableListOf<GestureRecognizer>()
 
    abstract fun getView(): View
@@ -89,8 +98,11 @@ actual abstract class KView {
          gestureRecognizers
             .filterIsInstance<DragRecognizer>()
             .forEach { recognizer ->
-               recognizer.state = if (scrolling)
-                  DragState.START else DragState.UPDATE
+               recognizer.state = when (recognizer.state) {
+                  DragState.START,
+                  DragState.UPDATE -> DragState.UPDATE
+                  else -> DragState.START
+               }
                scrolling = true
 
                if (e1 != null && e2 != null) {
@@ -133,4 +145,5 @@ actual abstract class KView {
          }
       }
    }
+
 }

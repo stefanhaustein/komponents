@@ -99,7 +99,7 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
             }
         }
 
-    val children = mutableListOf<Cell>()
+    val children = mutableListOf<Position>()
 
     private val div = kontext.document.createElement("div") as HTMLDivElement
 
@@ -130,12 +130,27 @@ actual class KGridLayout  actual constructor(kontext: Kontext) : KView(), Iterab
         return cell
     }
 
-    fun addCell(positioned: Cell) {
+    actual fun addAbsolute(
+        view: KView,
+        top: Double?,
+        right: Double?,
+        bottom: Double?,
+        left: Double?,
+        width: Double?,
+        height: Double?
+    ): Absolute {
+        val absolute = Absolute(this, view, top, right, bottom, left, width, height)
+        children.add(absolute)
+        div.appendChild(absolute.view.getElement())
+        absolute.notifyChanged()
+        return absolute
     }
+
+
 
     actual fun get(index: Int): Position = children[index]
 
-    override fun iterator(): Iterator<Cell> {
+    override fun iterator(): Iterator<Position> {
         return children.iterator()
     }
 

@@ -40,5 +40,14 @@ expect class KGridLayout(kontext: Kontext) : KView, Iterable<Position> {
         align: Align? = null,
         justify: Align? = null): Cell
 
+    fun addAbsolute(
+        view: KView,
+        top: Double? = null,
+        right: Double? = null,
+        bottom: Double? = null,
+        left: Double? = null,
+        width: Double? = null,
+        height: Double? = null): Absolute
+
     fun get(index: Int): Position
 }

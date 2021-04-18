@@ -81,6 +81,24 @@ actual class KGridLayout actual constructor(kontext: Kontext) : KView(), Iterabl
         return cell
     }
 
+
+    actual fun addAbsolute(
+        view: KView,
+        top: Double?,
+        right: Double?,
+        bottom: Double?,
+        left: Double?,
+        width: Double?,
+        height: Double?
+    ): Absolute {
+        val absolute = Absolute(this, view, top, right, bottom, left, width, height)
+        children.add(absolute)
+        uiGridView.addSubview(absolute.view.getView())
+        return absolute
+    }
+
+
+
     override fun getView(): UIView {
         return uiGridView
     }

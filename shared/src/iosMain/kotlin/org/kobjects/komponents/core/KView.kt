@@ -11,6 +11,28 @@ import kotlin.math.PI
 abstract actual class KView {
     abstract fun getView(): UIView
 
+    actual val transformation: Transformation by lazy {
+        TransformationImpl()
+    }
+
+    actual val clientX: Double
+        get() = getView().bounds.useContents {
+            this.origin.x - this.size.width / 2
+        }
+    actual val clientY: Double
+        get() = getView().bounds.useContents {
+            this.origin.y - this.size.height / 2
+        }
+
+    actual val clientWidth: Double
+        get() = getView().bounds.useContents {
+            this.size.width
+        }
+    actual val clientHeight: Double
+        get() = getView().bounds.useContents {
+            this.size.height
+        }
+
     var recognizers = mutableListOf<GestureRecognizer>()
 
     actual fun setBackgroundColor(color: UInt) {
@@ -61,9 +83,6 @@ abstract actual class KView {
         return Pair(measuredWidth, measuredHeight)
     }
 
-    actual val transformation: Transformation by lazy {
-        TransformationImpl()
-    }
 
     inner class TransformationImpl : Transformation {
         override var rotation: Double = 0.0
@@ -95,4 +114,5 @@ abstract actual class KView {
         recognizers.add(gestureRecognizer)
         gestureRecognizer.attach(this)
     }
+
 }
