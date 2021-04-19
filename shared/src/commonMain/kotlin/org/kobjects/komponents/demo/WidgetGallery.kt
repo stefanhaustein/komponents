@@ -1,6 +1,7 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
+import org.kobjects.komponents.core.grid.Absolute
 import org.kobjects.komponents.core.grid.Align
 import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
@@ -33,6 +34,8 @@ class WidgetGallery(context: Context) : Demo(context) {
             """.trimIndent()
     )
     var dragging = SvgWidget(context)
+    var bouncing = mutableListOf<SvgWidget>()
+
 
     init {
         val grid = GridLayout(context)
@@ -54,7 +57,25 @@ class WidgetGallery(context: Context) : Demo(context) {
                     dragging.transformation.x = it.distanceX
                     dragging.transformation.y = it.distanceY
                 }
-                else -> {
+                DragState.END -> {
+                    val copy = SvgWidget(context, dragging.image)
+                    grid.addAbsolute(
+                        copy,
+                        left = 0.0,
+                        top = 0.0,
+                        width = 100.0,
+                        height = 100.0)
+                    bouncing.add(copy)
+
+                    copy.transformation.x = dragging.clientX + dragging.transformation.x
+                    copy.transformation.y = dragging.clientY + dragging.transformation.y
+
+                    dragging.transformation.x = 0.0
+                    dragging.transformation.y = 0.0
+
+
+
+                } else -> {
                     dragging.transformation.x = 0.0
                     dragging.transformation.y = 0.0
                 }

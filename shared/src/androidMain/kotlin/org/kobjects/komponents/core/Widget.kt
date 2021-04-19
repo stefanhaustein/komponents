@@ -16,9 +16,9 @@ actual abstract class Widget {
    }
 
    actual val clientX: Double
-      get() = getView().context.pxToPt(getView().x)
+      get() = getView().context.pxToPt(getView().x) - transformation.x
    actual val clientY: Double
-      get() = getView().context.pxToPt(getView().y)
+      get() = getView().context.pxToPt(getView().y) - transformation.y
    actual val clientWidth: Double
       get() = getView().context.pxToPt(getView().width)
    actual val clientHeight: Double

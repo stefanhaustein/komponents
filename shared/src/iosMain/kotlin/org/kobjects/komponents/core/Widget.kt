@@ -16,12 +16,12 @@ abstract actual class Widget {
     }
 
     actual val clientX: Double
-        get() = getView().bounds.useContents {
-            this.origin.x - this.size.width / 2
+        get() = getView().center.useContents {
+            this.x - clientWidth / 2
         }
     actual val clientY: Double
-        get() = getView().bounds.useContents {
-            this.origin.y - this.size.height / 2
+        get() = getView().center.useContents {
+            this.y - clientHeight / 2
         }
 
     actual val clientWidth: Double
