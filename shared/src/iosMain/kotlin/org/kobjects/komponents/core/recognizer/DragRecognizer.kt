@@ -2,7 +2,7 @@ package org.kobjects.komponents.core.recognizer
 
 import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.useContents
-import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Widget
 import platform.Foundation.NSLog
 import platform.UIKit.*
 
@@ -12,7 +12,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
     actual var distanceX = 0.0
     actual var distanceY = 0.0
 
-    lateinit var view: KView
+    lateinit var view: Widget
     lateinit var panGestureRecognizer: UIPanGestureRecognizer
 
     @ObjCAction
@@ -34,7 +34,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
     }
 
 
-    override fun attach(view: KView) {
+    override fun attach(view: Widget) {
         this.view = view
         this.panGestureRecognizer = UIPanGestureRecognizer(
             target = this,

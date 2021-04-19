@@ -1,58 +1,82 @@
 package org.kobjects.komponents.core.grid
 
-import android.view.View
 import org.kobjects.komponents.core.Widget
 import org.kobjects.komponents.core.Context
+import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.HTMLElement
 
-actual class GridLayout actual constructor(context: Context) : Widget(), Iterable<Position> {
+actual class GridLayout  actual constructor(context: Context) : Widget(), Iterable<Position> {
 
     actual var columnGap = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.columnGap = "${value}px"
         }
     actual var rowGap = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.setProperty("row-gap", "${value}px")
         }
     actual var paddingLeft = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.paddingLeft = "${value}px"
         }
     actual var paddingTop = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.paddingTop = "${value}px"
         }
     actual var paddingBottom = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.paddingBottom = "${value}px"
         }
     actual var paddingRight = 0.0
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.paddingRight = "${value}px"
         }
     actual var justifyContent = Align.START
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.justifyContent = value.toString().toLowerCase()
         }
     actual var alignContent = Align.START
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.alignContent = value.toString().toLowerCase()
         }
-    actual var justifyItems = Align.STRETCH
+
+    actual var autoColumns = Size.AUTO
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.setProperty("auto-columns", value.toString())}
+
+    actual var autoRows = Size.AUTO
+        set(value) {
+            field = value
+            div.style.setProperty("auto-rows", value.toString())
         }
     actual var alignItems = Align.STRETCH
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.setProperty("align-items", value.toString())
+        }
+    actual var justifyItems = Align.STRETCH
+        set(value) {
+            field = value
+            div.style.setProperty("justify-items", value.toString())
         }
     actual var columnTemplate = listOf<Size>()
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.setProperty("grid-template-columns", value.joinToString(" "))
         }
     actual var rowTemplate = listOf<Size>()
         set(value) {
-            field = value; layout.requestLayout()
+            field = value
+            div.style.setProperty("grid-template-rows", value.joinToString(" "))
         }
     actual val size: Int
         get() = children.size
@@ -75,12 +99,18 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
             }
         }
 
-    val layout = AndroidGridLayout(context.context, this)
-
     val children = mutableListOf<Position>()
 
-    override fun getView(): View {
-        return layout
+    private val div = context.document.createElement("div") as HTMLDivElement
+
+    init {
+        div.style.display = "grid"
+        justifyContent = Align.START // Html default seems to be stretch...
+        alignContent = Align.START
+    }
+
+    override fun getElement(): HTMLElement {
+       return div
     }
 
     actual fun addCell(
@@ -92,11 +122,11 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         width: Double?,
         height: Double?,
         align: Align?,
-        justify: Align?
-    ): Cell {
+        justify: Align?): Cell {
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(cell)
-        layout.addView(cell.view.getView(), layout.LayoutParams(cell))
+        div.appendChild(cell.view.getElement())
+        cell.notifyChanged()
         return cell
     }
 
@@ -111,25 +141,17 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
     ): Absolute {
         val absolute = Absolute(this, view, top, right, bottom, left, width, height)
         children.add(absolute)
-        layout.addView(view.getView(), layout.LayoutParams(absolute))
+        div.appendChild(absolute.view.getElement())
+        absolute.notifyChanged()
         return absolute
     }
 
 
 
-    actual var autoColumns: Size = Size.AUTO
-
-    actual var autoRows: Size = Size.AUTO
-
-    fun notifyPositionChanged() {
-        layout.requestLayout()
-    }
-
-    actual fun get(index: Int): Position {
-        return children[index]
-    }
+    actual fun get(index: Int): Position = children[index]
 
     override fun iterator(): Iterator<Position> {
         return children.iterator()
     }
+
 }

@@ -14,16 +14,16 @@ fun sum(doubles: DoubleArray, start: Int, count: Int): Double {
     return sum
 }
 
-private fun getColumnWidth(grid: KGridLayout, column: Int) =
+private fun getColumnWidth(grid: GridLayout, column: Int) =
     grid.columnTemplate.getOrElse(column) { grid.autoColumns }
 
 
-private fun getRowHeight(grid: KGridLayout, row: Int) =
+private fun getRowHeight(grid: GridLayout, row: Int) =
     grid.rowTemplate.getOrElse(row) { grid.autoRows }
 
 
 fun applyGridLayout(
-    container: KGridLayout,
+    container: GridLayout,
     children: List<Position>,
     widthMode: MeasurementMode,
     inputWidth: Double,
@@ -96,7 +96,7 @@ fun layoutAbsolute(
 
 
 fun layoutCells(
-    container: KGridLayout,
+    container: GridLayout,
     children: List<Cell>,
     widthMode: MeasurementMode,
     inputWidth: Double,

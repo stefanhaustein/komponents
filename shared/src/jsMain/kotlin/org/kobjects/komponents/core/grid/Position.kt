@@ -1,10 +1,10 @@
 package org.kobjects.komponents.core.grid
 
-import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Widget
 
 actual open class Position actual constructor(
-    actual val gridLayout: KGridLayout,
-    actual val view: KView
+    actual val gridLayout: GridLayout,
+    actual val view: Widget
 ) {
     actual fun notifyChanged() {
         when (this) {

@@ -1,6 +1,6 @@
 package org.kobjects.komponents.core.recognizer
 
-import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Widget
 import org.w3c.dom.pointerevents.PointerEvent
 
 actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit) : GestureRecognizer() {
@@ -12,9 +12,9 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
     var startX = 0
     var startY = 0
 
-    lateinit var view: KView
+    lateinit var view: Widget
 
-    override fun attach(view: KView) {
+    override fun attach(view: Widget) {
         this.view = view
 
         val element = view.getElement()

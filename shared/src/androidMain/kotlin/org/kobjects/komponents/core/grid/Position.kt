@@ -1,13 +1,13 @@
 package org.kobjects.komponents.core.grid
 
-import org.kobjects.komponents.core.KView
+import org.kobjects.komponents.core.Widget
 import org.kobjects.komponents.core.grid.mobile.MeasurementMode
 import org.kobjects.komponents.core.grid.mobile.ResolvedPosition
 import org.kobjects.komponents.core.pxToPt
 
 actual open class Position actual constructor(
-    actual val gridLayout: KGridLayout,
-    actual val view: KView
+    actual val gridLayout: GridLayout,
+    actual val view: Widget
 ) : ResolvedPosition {
     override var resolvedColumn = 0
     override var resolvedRow = 0

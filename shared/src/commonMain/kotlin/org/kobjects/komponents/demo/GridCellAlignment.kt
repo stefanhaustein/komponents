@@ -3,31 +3,31 @@ package org.kobjects.komponents.demo
 import org.kobjects.komponents.core.*
 import org.kobjects.komponents.core.grid.Align
 import org.kobjects.komponents.core.grid.Cell
-import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 
 
-class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
+class GridCellAlignment(context: Context) : Demo(context) {
 
-    override val view: KView
+    override val view: Widget
 
     private fun <T> addChoice(
-        container: KGridLayout,
+        container: GridLayout,
         label: String,
         values: Array<T>,
         action1: (T) -> Unit,
         action2: (T) -> Unit
     ) {
-        container.addCell(KTextView(kontext, label), align = Align.CENTER)
+        container.addCell(Label(context, label), align = Align.CENTER)
 
-        container.addCell(KChoice(
-            kontext,
+        container.addCell(DropdownList(
+            context,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action1(values[it.selectedIndex])
         })
 
-        container.addCell(KChoice(
-            kontext,
+        container.addCell(DropdownList(
+            context,
             values.map{if (it is List<*>) it.joinToString(" ") else it.toString().toLowerCase()}) {
             action2(values[it.selectedIndex])
         })
@@ -37,7 +37,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
     }
 
     init {
-        val outer = KGridLayout(kontext)
+        val outer = GridLayout(context)
 
         outer.columnTemplate = listOf(Size.auto(), Size.fr(1.0), Size.fr(1.0))
         outer.rowTemplate = listOf(
@@ -46,7 +46,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             Size.fr(1.0))
         outer.alignContent = Align.STRETCH
 
-        val grid = KGridLayout(kontext)
+        val grid = GridLayout(context)
 
         val templates = arrayOf(
             listOf(Size.px(80.0), Size.px(80.0), Size.px(80.0)),
@@ -54,9 +54,9 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
             listOf(Size.fr(1.0), Size.fr(1.0), Size.fr(1.0)),
             listOf(Size.auto(), Size.fr(2.0), Size.fr(3.0)))
 
-        outer.addCell(KTextView(kontext))
-        outer.addCell(KTextView(kontext, "columns"), justify = Align.CENTER)
-        outer.addCell(KTextView(kontext, "rows"), justify = Align.CENTER)
+        outer.addCell(Label(context))
+        outer.addCell(Label(context, "columns"), justify = Align.CENTER)
+        outer.addCell(Label(context, "rows"), justify = Align.CENTER)
 
         addChoice(outer, "content pos.", arrayOf(Align.CENTER, Align.START, Align.END),
             { grid.justifyContent = it },
@@ -75,7 +75,7 @@ class GridCellAlignment(kontext: Kontext) : Demo(kontext) {
         grid.columnGap = 1.0
 
         for (i in 1..9) {
-            var textView = KTextView(kontext, "$i")
+            var textView = Label(context, "$i")
             textView.setBackgroundColor(0xffeeeeeeU)
             grid.addCell(
                 textView,

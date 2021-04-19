@@ -2,8 +2,7 @@ package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
 import org.kobjects.komponents.core.grid.Align
-import org.kobjects.komponents.core.grid.Cell
-import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.DragState
@@ -11,13 +10,13 @@ import org.kobjects.twemoji.TwemojiSvg
 import kotlin.math.pow
 import kotlin.math.round
 
-class CheckersDemo(kontext: Kontext) : Demo(kontext) {
+class CheckersDemo(context: Context) : Demo(context) {
 
-    override val view: KView
+    override val view: Widget
  //   override val animation: (() -> Unit)?
 
     init {
-        val grid = KGridLayout(kontext)
+        val grid = GridLayout(context)
         grid.alignContent = Align.CENTER
         grid.justifyContent = Align.CENTER
         grid.alignItems = Align.CENTER
@@ -25,14 +24,14 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
         grid.columnTemplate = listOf(Size.auto())
         grid.rowTemplate = listOf(Size.auto())
 
-        val checkerboard = KGridLayout(kontext)
+        val checkerboard = GridLayout(context)
         checkerboard.columnTemplate = List(8) { Size.px(40.0) }
         checkerboard.rowTemplate = List(8) { Size.px(40.0) }
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {
                 checkerboard.addCell(
-                    KTextView(kontext).also {
+                    Label(context).also {
                         it.setBackgroundColor(
                             if ((x + y) and 1 == 0) 0xffccccccu else 0xff777777u) },
                     column = x,
@@ -40,13 +39,13 @@ class CheckersDemo(kontext: Kontext) : Demo(kontext) {
             }
         }
 
-        val black = KImage.createSvg(kontext, TwemojiSvg.BLACK_CIRCLE)
-        val white = KImage.createSvg(kontext, TwemojiSvg.WHITE_CIRCLE)
+        val black = Svg.createSvg(context, TwemojiSvg.BLACK_CIRCLE)
+        val white = Svg.createSvg(context, TwemojiSvg.WHITE_CIRCLE)
 
         for (y in 0 until 8) {
             for (x in 0 until 8) {
                 if ((y < 3 || y > 4) && (x + y) and 1 == 1) {
-                    val imageView = KImageView(kontext, if (y < 3) black else white)
+                    val imageView = SvgWidget(context, if (y < 3) black else white)
                     // imageView.setBackgroundColor(0xffff8888u)
                     val gridArea = checkerboard.addCell(
                         imageView,

@@ -2,26 +2,25 @@ package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
 import org.kobjects.komponents.core.grid.Align
-import org.kobjects.komponents.core.grid.Cell
-import org.kobjects.komponents.core.grid.KGridLayout
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 
 class DemoMenu(
-    val kontext: Kontext,
-    val select: (DemoEnum, KView) -> Unit) {
-    val view: KView
+    val context: Context,
+    val select: (DemoEnum, Widget) -> Unit) {
+    val view: Widget
 
     var currentAnimation: (() -> Unit)? = null
     var animationRunning = false
 
     init {
-        val layout = KGridLayout(kontext)
+        val layout = GridLayout(context)
 
 
 
 
         for (demo in DemoEnum.values()) {
-            val button = KButton(kontext, demo.title)
+            val button = Button(context, demo.title)
             button.addClickListener {
                 select(demo, renderDemo(demo))
             }
@@ -43,12 +42,12 @@ class DemoMenu(
         view = layout
     }
 
-    fun renderDemo(selector: DemoEnum): KView {
-        val nextDemo = selector.render(kontext)
+    fun renderDemo(selector: DemoEnum): Widget {
+        val nextDemo = selector.render(context)
         currentAnimation = nextDemo.animation
         if (currentAnimation != null && !animationRunning) {
             animationRunning = true
-            kontext.requestAnimationFrame { animate() }
+            context.requestAnimationFrame { animate() }
         }
         return nextDemo.view
     }
@@ -59,7 +58,7 @@ class DemoMenu(
             animationRunning = false
         } else {
             animation()
-            kontext.requestAnimationFrame{ animate() }
+            context.requestAnimationFrame{ animate() }
         }
     }
 

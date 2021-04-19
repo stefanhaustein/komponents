@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val context = Kontext(this)
+        val context = Context(this)
 
         menu = DemoMenu(context) { selector, kView ->
             setTitle(selector.title)
