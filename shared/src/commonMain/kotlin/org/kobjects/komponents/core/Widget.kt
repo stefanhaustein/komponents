@@ -6,10 +6,10 @@ expect abstract class Widget() {
 
     val transformation: Transformation
 
-    val clientX: Double
-    val clientY: Double
-    val clientWidth: Double
-    val clientHeight: Double
+    val offsetLeft: Double
+    val offsetTop: Double
+    val offsetWidth: Double
+    val offsetHeight: Double
 
     fun setBackgroundColor(color: UInt)
 

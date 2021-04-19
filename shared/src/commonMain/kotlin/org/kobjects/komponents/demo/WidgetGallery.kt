@@ -1,12 +1,12 @@
 package org.kobjects.komponents.demo
 
 import org.kobjects.komponents.core.*
-import org.kobjects.komponents.core.grid.Absolute
 import org.kobjects.komponents.core.grid.Align
 import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.DragState
+import org.kobjects.komponents.core.recognizer.TapRecognizer
 import org.kobjects.twemoji.TwemojiSvg
 
 class WidgetGallery(context: Context) : Demo(context) {
@@ -34,11 +34,24 @@ class WidgetGallery(context: Context) : Demo(context) {
             """.trimIndent()
     )
     var dragging = SvgWidget(context)
-    var bouncing = mutableListOf<SvgWidget>()
+    var bouncing = mutableListOf<BouncingState>()
+
+    val grid = GridLayout(context)
+
+    override val animation = {
+        for (ball in bouncing) {
+            ball.widget.transformation.y += ball.dy
+            if (ball.widget.transformation.y > grid.offsetHeight - 100.0) {
+                ball.dy = -ball.dy
+                ball.widget.transformation.y = grid.offsetHeight - 100.0
+            } else {
+                ball.dy += 0.1
+            }
+        }
+    }
 
 
     init {
-        val grid = GridLayout(context)
 
         grid.padding = 4.0
         grid.gap = 4.0
@@ -65,15 +78,17 @@ class WidgetGallery(context: Context) : Demo(context) {
                         top = 0.0,
                         width = 100.0,
                         height = 100.0)
-                    bouncing.add(copy)
 
-                    copy.transformation.x = dragging.clientX + dragging.transformation.x
-                    copy.transformation.y = dragging.clientY + dragging.transformation.y
+                    copy.addGestureRecognizer(TapRecognizer{
+                        copy.setBackgroundColor(0xffff8888u)
+                    })
+                    bouncing.add(BouncingState(copy))
+
+                    copy.transformation.x = dragging.offsetLeft + dragging.transformation.x
+                    copy.transformation.y = dragging.offsetTop + dragging.transformation.y
 
                     dragging.transformation.x = 0.0
                     dragging.transformation.y = 0.0
-
-
 
                 } else -> {
                     dragging.transformation.x = 0.0
@@ -117,5 +132,11 @@ class WidgetGallery(context: Context) : Demo(context) {
         grid.addCell(image, row = 1, column = 0, width = 100.0, height = 100.0, justify = Align.CENTER)
         grid.addCell(dragging, row = 1, column = 0, width = 100.0, height = 100.0, justify = Align.CENTER)
 
+    }
+
+    class BouncingState(
+        val widget: SvgWidget,
+    ) {
+        var dy = 0.0
     }
 }

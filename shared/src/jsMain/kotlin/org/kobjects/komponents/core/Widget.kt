@@ -10,14 +10,14 @@ actual abstract class Widget {
       TransformationImpl()
    }
 
-   actual val clientX: Double
-      get() = getElement().clientTop.toDouble()
-   actual val clientY: Double
-      get() = getElement().clientLeft.toDouble()
-   actual val clientWidth: Double
-      get() = getElement().clientWidth.toDouble()
-   actual val clientHeight: Double
-      get() = getElement().clientHeight.toDouble()
+   actual val offsetLeft: Double
+      get() = getElement().offsetLeft.toDouble()
+   actual val offsetTop: Double
+      get() = getElement().offsetTop.toDouble()
+   actual val offsetWidth: Double
+      get() = getElement().offsetWidth.toDouble()
+   actual val offsetHeight: Double
+      get() = getElement().offsetHeight.toDouble()
 
    actual fun setBackgroundColor(color: UInt) {
       val alpha = (color shr 24).toDouble() / 255.0

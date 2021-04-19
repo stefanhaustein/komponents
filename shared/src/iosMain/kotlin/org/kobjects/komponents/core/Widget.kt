@@ -15,20 +15,20 @@ abstract actual class Widget {
         TransformationImpl()
     }
 
-    actual val clientX: Double
+    actual val offsetLeft: Double
         get() = getView().center.useContents {
-            this.x - clientWidth / 2
+            this.x - offsetWidth / 2
         }
-    actual val clientY: Double
+    actual val offsetTop: Double
         get() = getView().center.useContents {
-            this.y - clientHeight / 2
+            this.y - offsetHeight / 2
         }
 
-    actual val clientWidth: Double
+    actual val offsetWidth: Double
         get() = getView().bounds.useContents {
             this.size.width
         }
-    actual val clientHeight: Double
+    actual val offsetHeight: Double
         get() = getView().bounds.useContents {
             this.size.height
         }
@@ -113,6 +113,7 @@ abstract actual class Widget {
     actual fun addGestureRecognizer(gestureRecognizer: GestureRecognizer) {
         recognizers.add(gestureRecognizer)
         gestureRecognizer.attach(this)
+        getView().userInteractionEnabled = true
     }
 
 }

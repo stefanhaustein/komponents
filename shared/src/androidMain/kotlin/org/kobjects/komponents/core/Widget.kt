@@ -7,6 +7,7 @@ import androidx.core.view.GestureDetectorCompat
 import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.DragState
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
+import org.kobjects.komponents.core.recognizer.TapRecognizer
 
 
 actual abstract class Widget {
@@ -15,13 +16,13 @@ actual abstract class Widget {
       TransformationImpl()
    }
 
-   actual val clientX: Double
+   actual val offsetLeft: Double
       get() = getView().context.pxToPt(getView().x) - transformation.x
-   actual val clientY: Double
+   actual val offsetTop: Double
       get() = getView().context.pxToPt(getView().y) - transformation.y
-   actual val clientWidth: Double
+   actual val offsetWidth: Double
       get() = getView().context.pxToPt(getView().width)
-   actual val clientHeight: Double
+   actual val offsetHeight: Double
       get() = getView().context.pxToPt(getView().height)
 
    val gestureRecognizers = mutableListOf<GestureRecognizer>()
@@ -82,8 +83,14 @@ actual abstract class Widget {
       }
 
       override fun onSingleTapUp(e: MotionEvent?): Boolean {
-         System.out.println("onSingleTapUp: $e")
-         return false
+         var consumed = false
+         gestureRecognizers
+            .filterIsInstance<TapRecognizer>()
+            .forEach {
+               it.recognized(it)
+               consumed = true
+            }
+         return consumed
       }
 
       override fun onScroll(

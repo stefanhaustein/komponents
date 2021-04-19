@@ -6,10 +6,12 @@ actual open class Position actual constructor(
     actual val gridLayout: GridLayout,
     actual val view: Widget
 ) {
+    fun px(value: Double?) = if (value == null) "" else "${value}px"
+
     actual fun notifyChanged() {
+        val style = view.getElement().style
         when (this) {
             is Cell -> {
-                val style = view.getElement().style
                 val column = this.column
                 val row = this.row
                 style.setProperty(
@@ -35,8 +37,15 @@ actual open class Position actual constructor(
                     horizontalAlign?.name?.toLowerCase() ?: ""
                 )
             }
+            is Absolute -> {
+                style.position = "absolute"
+                style.top = px(this.top)
+                style.right = px(this.right)
+                style.bottom = px(this.bottom)
+                style.left = px(this.left)
+                style.width = px(this.width)
+                style.height = px(this.height)
+            }
         }
-
-
     }
 }

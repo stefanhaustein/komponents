@@ -21,7 +21,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
         state = when (panGestureRecognizer.state) {
             UIGestureRecognizerStateBegan -> DragState.START
             UIGestureRecognizerStateChanged -> DragState.UPDATE
-            UIGestureRecognizerStateFailed,
+            UIGestureRecognizerStateFailed -> DragState.CANCEL
             UIGestureRecognizerStateEnded -> DragState.END
             else -> DragState.UPDATE
         }

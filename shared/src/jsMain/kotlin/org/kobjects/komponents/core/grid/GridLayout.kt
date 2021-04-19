@@ -105,6 +105,7 @@ actual class GridLayout  actual constructor(context: Context) : Widget(), Iterab
 
     init {
         div.style.display = "grid"
+        div.style.position = "relative"
         justifyContent = Align.START // Html default seems to be stretch...
         alignContent = Align.START
     }

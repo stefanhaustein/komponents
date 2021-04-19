@@ -2,7 +2,7 @@ package org.kobjects.komponents.core.recognizer
 
 
 enum class DragState {
-    START, UPDATE, END
+    START, UPDATE, END, CANCEL
 }
 
 expect class DragRecognizer(update: (DragRecognizer) -> Unit) : GestureRecognizer {
