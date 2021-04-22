@@ -25,6 +25,10 @@ actual abstract class Widget {
    actual val offsetHeight: Double
       get() = getView().context.pxToPt(getView().height)
 
+   actual var opacity: Double
+      get() = getView().alpha.toDouble()
+      set(value) { getView().alpha = value.toFloat() }
+
    val gestureRecognizers = mutableListOf<GestureRecognizer>()
 
    abstract fun getView(): View

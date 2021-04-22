@@ -12,5 +12,20 @@ actual class Context(
         }
     }
 
+    actual fun alert(
+        title: String,
+        okAction: Action,
+        cancelAction: Action?
+    ) {
+        if (cancelAction == null) {
+            window.alert(title)
+            okAction.handler(okAction)
+        } else if (window.confirm(title)) {
+            okAction.handler(okAction)
+        } else {
+            cancelAction.handler(cancelAction)
+        }
+    }
+
 
 }

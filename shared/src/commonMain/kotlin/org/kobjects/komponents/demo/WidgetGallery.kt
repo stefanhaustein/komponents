@@ -39,7 +39,8 @@ class WidgetGallery(context: Context) : Demo(context) {
     val grid = GridLayout(context)
 
     override val animation = {
-        for (ball in bouncing) {
+        for (i in bouncing.indices.reversed()) {
+            val ball = bouncing[i]
             ball.widget.transformation.y += ball.dy
             if (ball.widget.transformation.y > grid.offsetHeight - 100.0) {
                 ball.dy = -ball.dy
@@ -47,6 +48,15 @@ class WidgetGallery(context: Context) : Demo(context) {
             } else {
                 ball.dy += 0.1
             }
+            if (ball.tapped) {
+                if (ball.widget.opacity > 0.03) {
+                    ball.widget.opacity -= 0.03
+                } else {
+                    bouncing.removeAt(i)
+                    grid.remove(ball.widget)
+                }
+            }
+
         }
     }
 
@@ -72,6 +82,7 @@ class WidgetGallery(context: Context) : Demo(context) {
                 }
                 DragState.END -> {
                     val copy = SvgWidget(context, dragging.image)
+                    copy.transformation.rotation = dragging.transformation.rotation
                     grid.addAbsolute(
                         copy,
                         left = 0.0,
@@ -79,10 +90,11 @@ class WidgetGallery(context: Context) : Demo(context) {
                         width = 100.0,
                         height = 100.0)
 
+                    val state = BouncingState(copy)
                     copy.addGestureRecognizer(TapRecognizer{
-                        copy.setBackgroundColor(0xffff8888u)
+                        state.tapped = true
                     })
-                    bouncing.add(BouncingState(copy))
+                    bouncing.add(state)
 
                     copy.transformation.x = dragging.offsetLeft + dragging.transformation.x
                     copy.transformation.y = dragging.offsetTop + dragging.transformation.y
@@ -109,8 +121,16 @@ class WidgetGallery(context: Context) : Demo(context) {
         grid.addCell(choice)
         grid.addCell(Button(context, "Button") {textView.text = "Button pressed"})
 
-        val buttonWithImage = Button(context, "  With Image") {
+        val buttonWithImage = Button(context, "  Clear all") {
             textView.text = "Image button pressed"
+            if (bouncing.isEmpty()) {
+                context.alert("No balls active.", Action("Ok") {})
+            } else {
+                context.alert(
+                    "Clear all Balls?",
+                    Action("Ok") { bouncing.forEach { it.tapped = true } },
+                    Action("Cancel") {})
+            }
         }
         buttonWithImage.image = buttonSvg
         buttonWithImage.textAlignment = TextAlignment.LEFT
@@ -118,6 +138,8 @@ class WidgetGallery(context: Context) : Demo(context) {
 
         grid.addCell(Slider(context) {
             textView.text = "Slider position: ${it.value}"
+            dragging.transformation.rotation = it.value * 3.6
+            image.transformation.rotation = dragging.transformation.rotation
         })
         grid.addCell(CheckBox(context) {
             textView.text = if (it.value) "CheckBox checked" else "CheckBox unchecked"
@@ -137,6 +159,7 @@ class WidgetGallery(context: Context) : Demo(context) {
     class BouncingState(
         val widget: SvgWidget,
     ) {
+        var tapped = false
         var dy = 0.0
     }
 }

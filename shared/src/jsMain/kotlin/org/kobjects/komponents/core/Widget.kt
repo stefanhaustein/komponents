@@ -19,6 +19,12 @@ actual abstract class Widget {
    actual val offsetHeight: Double
       get() = getElement().offsetHeight.toDouble()
 
+   actual var opacity: Double = 1.0
+      set(value) {
+         field = value
+         getElement().style.opacity = value.toString()
+      }
+
    actual fun setBackgroundColor(color: UInt) {
       val alpha = (color shr 24).toDouble() / 255.0
       val red = (color shr 16) and 255u

@@ -1,14 +1,15 @@
 package org.kobjects.komponents.core
 
 import platform.QuartzCore.CALayer
-import platform.UIKit.UIView
 import kotlinx.cinterop.ObjCAction
 import platform.Foundation.NSRunLoop
 import platform.Foundation.NSRunLoopCommonModes
 import platform.Foundation.NSRunLoopMode
 import platform.QuartzCore.CADisplayLink
+import platform.UIKit.*
 
 actual class Context(
+    val controller: UIViewController,
     val svgHelper: SvgHelper
 ){
     var displayLink: CADisplayLink? = null
@@ -32,5 +33,23 @@ actual class Context(
                 forMode = NSRunLoopCommonModes)
         }
         animationCallbacks.add(callback)
+    }
+
+    actual fun alert(
+        title: String,
+        okAction: Action,
+        cancelAction: Action?
+    ) {
+        var alert = UIAlertController.alertControllerWithTitle(
+            title = title, message = null, preferredStyle = UIAlertControllerStyleAlert)
+        alert.addAction(UIAlertAction.actionWithTitle(
+            title = okAction.title,
+            style = UIAlertActionStyleDefault) {okAction.handler(okAction)})
+        if (cancelAction != null) {
+            alert.addAction(UIAlertAction.actionWithTitle(
+                title = cancelAction.title,
+                style = UIAlertActionStyleCancel) {cancelAction.handler(cancelAction)})
+        }
+        controller.presentViewController(alert, animated = true, completion = null)
     }
 }

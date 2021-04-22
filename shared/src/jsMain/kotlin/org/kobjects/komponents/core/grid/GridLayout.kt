@@ -147,7 +147,15 @@ actual class GridLayout  actual constructor(context: Context) : Widget(), Iterab
         return absolute
     }
 
-
+    actual fun remove(widget: Widget) {
+        for (child in children) {
+            if (child.view == widget) {
+                children.remove(child)
+                div.removeChild(child.view.getElement())
+                break
+            }
+        }
+    }
 
     actual fun get(index: Int): Position = children[index]
 

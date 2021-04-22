@@ -33,6 +33,12 @@ abstract actual class Widget {
             this.size.height
         }
 
+    actual var opacity: Double
+        get() = getView().alpha
+        set(value) {
+            getView().alpha = value
+        }
+
     var recognizers = mutableListOf<GestureRecognizer>()
 
     actual fun setBackgroundColor(color: UInt) {
@@ -102,9 +108,9 @@ abstract actual class Widget {
             }
 
         fun update() {
-            val transform = CGAffineTransformMakeTranslation(x, y)
+            var transform = CGAffineTransformMakeTranslation(x, y)
             if (rotation != 0.0) {
-                CGAffineTransformRotate(transform, rotation * PI / 180)
+               transform = CGAffineTransformRotate(transform, rotation * PI / 180)
             }
             getView().transform = transform
         }

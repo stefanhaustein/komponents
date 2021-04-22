@@ -25,7 +25,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             UIGestureRecognizerStateEnded -> DragState.END
             else -> DragState.UPDATE
         }
-        panGestureRecognizer.translationInView(view.getView()).useContents {
+        panGestureRecognizer.translationInView(view.getView().superview).useContents {
             distanceX = x
             distanceY = y
             NSLog("translationInView: %f %f", x, y)

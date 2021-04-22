@@ -6,6 +6,7 @@ import org.kobjects.komponents.core.grid.mobile.MeasurementMode
 import org.kobjects.komponents.core.grid.mobile.applyGridLayout
 import platform.UIKit.UIView
 import platform.UIKit.addSubview
+import platform.UIKit.removeFromSuperview
 import platform.UIKit.setNeedsLayout
 
 actual class GridLayout actual constructor(context: Context) : Widget(), Iterable<Position> {
@@ -97,7 +98,10 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         return absolute
     }
 
-
+    actual fun remove(widget: Widget) {
+        children.remove(widget)
+        widget.getView().removeFromSuperview()
+    }
 
     override fun getView(): UIView {
         return uiGridView

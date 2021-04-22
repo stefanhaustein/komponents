@@ -132,4 +132,14 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
     override fun iterator(): Iterator<Position> {
         return children.iterator()
     }
+
+    actual fun remove(widget: Widget) {
+        for (child in children) {
+            if (child.view == widget) {
+                children.remove(child)
+                layout.removeView(child.view.getView())
+                break
+            }
+        }
+    }
 }

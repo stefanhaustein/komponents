@@ -48,7 +48,7 @@ class ViewController: UIViewController {
         navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor, multiplier: 1).isActive = true
         self.view.backgroundColor = UIColor.white
 
-        let context = Context(svgHelper: SvgHelperImpl())
+        let context = Context(controller: self, svgHelper: SvgHelperImpl())
 
         demo = DemoMenu(context: context, select: { selector, kView in
             let navItem = UINavigationItem(title: selector.title)

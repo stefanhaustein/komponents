@@ -50,4 +50,6 @@ expect class GridLayout(context: Context) : Widget, Iterable<Position> {
         height: Double? = null): Absolute
 
     fun get(index: Int): Position
+
+    fun remove(widget: Widget)
 }
