@@ -8,9 +8,6 @@ import platform.UIKit.*
 
 actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit) : GestureRecognizer() {
     actual val update = update
-    actual var state = DragState.END
-    actual var distanceX = 0.0
-    actual var distanceY = 0.0
 
     lateinit var view: Widget
     lateinit var panGestureRecognizer: UIPanGestureRecognizer
@@ -19,16 +16,11 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
     fun handlePanGesture() {
         NSLog("handlePanGesture: %@", panGestureRecognizer)
         state = when (panGestureRecognizer.state) {
-            UIGestureRecognizerStateBegan -> DragState.START
-            UIGestureRecognizerStateChanged -> DragState.UPDATE
-            UIGestureRecognizerStateFailed -> DragState.CANCEL
-            UIGestureRecognizerStateEnded -> DragState.END
-            else -> DragState.UPDATE
-        }
-        panGestureRecognizer.translationInView(view.getView().superview).useContents {
-            distanceX = x
-            distanceY = y
-            NSLog("translationInView: %f %f", x, y)
+            UIGestureRecognizerStateBegan -> GestureState.START
+            UIGestureRecognizerStateChanged -> GestureState.UPDATE
+            UIGestureRecognizerStateFailed -> GestureState.CANCEL
+            UIGestureRecognizerStateEnded -> GestureState.END
+            else -> GestureState.UPDATE
         }
         update(this)
     }
@@ -40,6 +32,12 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             target = this,
             action = platform.objc.sel_registerName("handlePanGesture"))
         view.getView().addGestureRecognizer(panGestureRecognizer)
+    }
+
+    actual fun translation(widget: Widget): Pair<Double, Double> {
+        return panGestureRecognizer.translationInView(widget.getView()).useContents {
+            Pair(x, y)
+        }
     }
 
 }

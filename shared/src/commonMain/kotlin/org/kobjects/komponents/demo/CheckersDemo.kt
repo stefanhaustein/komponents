@@ -5,7 +5,7 @@ import org.kobjects.komponents.core.grid.Align
 import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 import org.kobjects.komponents.core.recognizer.DragRecognizer
-import org.kobjects.komponents.core.recognizer.DragState
+import org.kobjects.komponents.core.recognizer.GestureState
 import org.kobjects.twemoji.TwemojiSvg
 import kotlin.math.pow
 import kotlin.math.round
@@ -52,12 +52,14 @@ class CheckersDemo(context: Context) : Demo(context) {
                         column = x,
                         row = y)
                     imageView.addGestureRecognizer(DragRecognizer {
-                        if (it.state == DragState.END) {
+                        val distance = it.translation(imageView)
+
+                        if (it.state == GestureState.END) {
                             imageView.transformation.x = 0.0
                             imageView.transformation.y = 0.0
                             if (y > 4) {
-                                val newRow = round(gridArea.row!! + it.distanceY / 40.0).toInt()
-                                val newCol = round(gridArea.column!! + it.distanceX / 40.0).toInt()
+                                val newRow = round(gridArea.row!! + distance.second / 40.0).toInt()
+                                val newCol = round(gridArea.column!! + distance.first / 40.0).toInt()
                                 if (((newCol + newRow) and 1) == 1
                                     && newCol >= 0 && newRow > 2
                                     && newCol < 8 && newRow < 8) {
@@ -67,9 +69,9 @@ class CheckersDemo(context: Context) : Demo(context) {
                             }
                         } else {
                             imageView.transformation.x =
-                                if (y < 3) resist(it.distanceX) else it.distanceX
+                                if (y < 3) resist(distance.first) else distance.first
                             imageView.transformation.y =
-                                if (y < 3) resist(it.distanceY) else it.distanceY
+                                if (y < 3) resist(distance.second) else distance.second
                         }})
                 }
             }

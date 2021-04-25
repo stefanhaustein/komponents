@@ -76,6 +76,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         height: Double?,
         align: Align?,
         justify: Align?): Cell {
+        view.parentImpl = this
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(cell)
         uiGridView.addSubview(cell.view.getView())
@@ -92,6 +93,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         width: Double?,
         height: Double?
     ): Absolute {
+        view.parentImpl = this
         val absolute = Absolute(this, view, top, right, bottom, left, width, height)
         children.add(absolute)
         uiGridView.addSubview(absolute.view.getView())
@@ -99,6 +101,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
     }
 
     actual fun remove(widget: Widget) {
+        widget.parentImpl = null
         children.remove(widget)
         widget.getView().removeFromSuperview()
     }

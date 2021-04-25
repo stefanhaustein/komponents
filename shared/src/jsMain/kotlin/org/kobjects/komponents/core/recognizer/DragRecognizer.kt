@@ -5,12 +5,12 @@ import org.w3c.dom.pointerevents.PointerEvent
 
 actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit) : GestureRecognizer() {
     actual val update = update
-    actual var state = DragState.END
-    actual var distanceX = 0.0
-    actual var distanceY = 0.0
 
-    var startX = 0
-    var startY = 0
+    var startX = 0.0
+    var startY = 0.0
+
+    var currentX = 0.0
+    var currentY = 0.0
 
     lateinit var view: Widget
 
@@ -23,12 +23,12 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             console.log("pointerdown")
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = DragState.START
-                distanceX = 0.0
-                distanceY = 0.0
+                state = GestureState.START
                 element.setPointerCapture(pointerEvent.pointerId)
-                startX = pointerEvent.screenX
-                startY = pointerEvent.screenY
+                startX = pointerEvent.clientX.toDouble()
+                startY = pointerEvent.clientY.toDouble()
+                currentX = startX
+                currentY = startY
                 update(this@DragRecognizer)
             }
         });
@@ -36,7 +36,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             console.log("pointerup", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = DragState.END
+                state = GestureState.END
                 element.releasePointerCapture(pointerEvent.pointerId)
                 update(this)
             }
@@ -45,19 +45,25 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             console.log("pointermove", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = DragState.END
+                state = GestureState.END
                 update(this)
             }
         });
         element.addEventListener("pointermove", {
             console.log("pointermove", it)
             val pointerEvent = it as PointerEvent
-            if (pointerEvent.isPrimary && (state == DragState.START || state == DragState.UPDATE)) {
-                state = DragState.UPDATE
-                distanceX = (pointerEvent.screenX - startX).toDouble()
-                distanceY = (pointerEvent.screenY - startY).toDouble()
+            if (pointerEvent.isPrimary && (state == GestureState.START || state == GestureState.UPDATE)) {
+                state = GestureState.UPDATE
+                currentX = pointerEvent.clientX.toDouble()
+                currentY = pointerEvent.clientY.toDouble()
                 update(this)
             }
         });
     }
+
+    actual fun translation(widget: Widget): Pair<Double, Double> {
+            var start = widget.fromClientCoordinates(startX, startY)
+            var current = widget.fromClientCoordinates(currentX, currentY)
+            return Pair(current.first - start.first, current.second - start.second)
+        }
 }

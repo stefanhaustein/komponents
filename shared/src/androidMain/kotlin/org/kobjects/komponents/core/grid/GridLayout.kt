@@ -94,6 +94,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         align: Align?,
         justify: Align?
     ): Cell {
+        view.parentImpl = this
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(cell)
         layout.addView(cell.view.getView(), layout.LayoutParams(cell))
@@ -109,6 +110,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
         width: Double?,
         height: Double?
     ): Absolute {
+        view.parentImpl = this
         val absolute = Absolute(this, view, top, right, bottom, left, width, height)
         children.add(absolute)
         layout.addView(view.getView(), layout.LayoutParams(absolute))
@@ -138,6 +140,7 @@ actual class GridLayout actual constructor(context: Context) : Widget(), Iterabl
             if (child.view == widget) {
                 children.remove(child)
                 layout.removeView(child.view.getView())
+                child.view.parentImpl = null
                 break
             }
         }

@@ -1,6 +1,7 @@
 package org.kobjects.komponents.core
 
 import kotlinx.cinterop.useContents
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.mobile.MeasurementMode
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
 import platform.CoreGraphics.*
@@ -40,6 +41,7 @@ abstract actual class Widget {
         }
 
     var recognizers = mutableListOf<GestureRecognizer>()
+    var parentImpl: GridLayout? = null
 
     actual fun setBackgroundColor(color: UInt) {
         getView().backgroundColor = UIColor(
@@ -107,6 +109,16 @@ abstract actual class Widget {
                 update()
             }
 
+        override fun transform(x: Double, y: Double): Pair<Double, Double> {
+            CGPointApplyAffineTransform(CGPointMake(x, y), getView().transform).useContents {
+                return Pair(this.x, this.y)
+            }
+        }
+
+        override fun unTransform(x: Double, y: Double): Pair<Double, Double> {
+            TODO("Not yet implemented")
+        }
+
         fun update() {
             var transform = CGAffineTransformMakeTranslation(x, y)
             if (rotation != 0.0) {
@@ -120,6 +132,10 @@ abstract actual class Widget {
         recognizers.add(gestureRecognizer)
         gestureRecognizer.attach(this)
         getView().userInteractionEnabled = true
+    }
+
+    actual fun getParent(): GridLayout? {
+        return parentImpl
     }
 
 }

@@ -5,7 +5,7 @@ import org.kobjects.komponents.core.grid.Align
 import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.grid.Size
 import org.kobjects.komponents.core.recognizer.DragRecognizer
-import org.kobjects.komponents.core.recognizer.DragState
+import org.kobjects.komponents.core.recognizer.GestureState
 import org.kobjects.komponents.core.recognizer.TapRecognizer
 import org.kobjects.twemoji.TwemojiSvg
 
@@ -75,12 +75,13 @@ class WidgetGallery(context: Context) : Demo(context) {
         dragging.addGestureRecognizer(DragRecognizer{
             println("$it")
             when (it.state) {
-                DragState.UPDATE,
-                DragState.START -> {
-                    dragging.transformation.x = it.distanceX
-                    dragging.transformation.y = it.distanceY
+                GestureState.UPDATE,
+                GestureState.START -> {
+                    val distance = it.translation(grid)
+                    dragging.transformation.x = distance.first
+                    dragging.transformation.y = distance.second
                 }
-                DragState.END -> {
+                GestureState.END -> {
                     val copy = SvgWidget(context, dragging.image)
                     copy.transformation.rotation = dragging.transformation.rotation
                     grid.addAbsolute(

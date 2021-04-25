@@ -1,12 +1,14 @@
 package org.kobjects.komponents.core
 
+import android.graphics.Matrix
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.GestureDetectorCompat
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.recognizer.DragRecognizer
-import org.kobjects.komponents.core.recognizer.DragState
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
+import org.kobjects.komponents.core.recognizer.GestureState
 import org.kobjects.komponents.core.recognizer.TapRecognizer
 
 
@@ -31,6 +33,8 @@ actual abstract class Widget {
 
    val gestureRecognizers = mutableListOf<GestureRecognizer>()
 
+   var parentImpl: GridLayout? = null
+
    abstract fun getView(): View
 
    private fun getContext() = getView().context
@@ -40,23 +44,70 @@ actual abstract class Widget {
    }
 
    inner class TransformationImpl : Transformation {
+
+      var matrixImpl: Matrix? = null
+      var inverseMatrixImpl: Matrix? = null
+
       override var rotation: Double
          get() = getView().rotation.toDouble()
          set(value) {
+            invalidateMatrixes()
             getView().rotation = value.toFloat()
          }
 
       override var x: Double
          get() = getContext().pxToPt(getView().translationX)
          set(value) {
+            invalidateMatrixes()
             getView().translationX = getContext().ptToPxFloat(value)
          }
 
       override var y: Double
          get() = getContext().pxToPt(getView().translationY)
          set(value) {
+            invalidateMatrixes()
             getView().translationY = getContext().ptToPxFloat(value)
          }
+
+
+      override fun transform(x: Double, y: Double): Pair<Double, Double> {
+         val points = floatArrayOf(x.toFloat(), y.toFloat())
+         getMatrix().mapPoints(points)
+         return Pair(points[0].toDouble(), points[1].toDouble())
+      }
+
+      override fun unTransform(x: Double, y: Double): Pair<Double, Double> {
+         val points = floatArrayOf(x.toFloat(), y.toFloat())
+         getInverseMatrix().mapPoints(points)
+         return Pair(points[0].toDouble(), points[1].toDouble())
+      }
+
+      fun getMatrix(): Matrix {
+         var value = matrixImpl
+         if (value == null) {
+            value = Matrix()
+            value.preTranslate(x.toFloat(), y.toFloat())
+            value.preRotate(rotation.toFloat())
+            matrixImpl = value
+         }
+         return value
+      }
+
+      fun getInverseMatrix(): Matrix {
+         var value = inverseMatrixImpl
+         if (value == null) {
+            value = Matrix()
+            getMatrix().invert(value)
+            inverseMatrixImpl = value
+         }
+         return value
+      }
+
+      fun invalidateMatrixes() {
+         matrixImpl = null
+         inverseMatrixImpl = null;
+      }
+
    }
 
    actual fun addGestureRecognizer(gestureRecognizer: GestureRecognizer) {
@@ -110,19 +161,16 @@ actual abstract class Widget {
             .filterIsInstance<DragRecognizer>()
             .forEach { recognizer ->
                recognizer.state = when (recognizer.state) {
-                  DragState.START,
-                  DragState.UPDATE -> DragState.UPDATE
-                  else -> DragState.START
+                  GestureState.START,
+                  GestureState.UPDATE -> GestureState.UPDATE
+                  else -> GestureState.START
                }
                scrolling = true
 
-               if (e1 != null && e2 != null) {
-                  recognizer.distanceX = getContext().pxToPt(e2.rawX - e1.rawX)
-                  recognizer.distanceY = getContext().pxToPt(e2.rawY - e1.rawY)
-               } else {
-                  recognizer.distanceX = 0.0
-                  recognizer.distanceY = 0.0
-               }
+               recognizer.rawStartX = e1?.rawX ?: 0f
+               recognizer.rawStartY = e1?.rawY ?: 0f
+               recognizer.rawCurrentX = e2?.rawX ?: 0f
+               recognizer.rawCurrentY = e2?.rawY ?: 0f
                recognizer.update(recognizer)
                consumed = true
             }
@@ -150,11 +198,29 @@ actual abstract class Widget {
             gestureRecognizers
                .filterIsInstance<DragRecognizer>()
                .forEach { recognizer ->
-                  recognizer.state = DragState.END
+                  recognizer.state = GestureState.END
                   recognizer.update(recognizer)
                }
          }
       }
+   }
+
+   actual fun getParent(): GridLayout? {
+      return parentImpl
+   }
+
+   fun fromRawCoordinates(rawX: Float, rawY: Float): Pair<Double, Double> {
+      val parent = getParent()
+      if (parent == null) {
+         val origin = intArrayOf(0, 0)
+         getView().getLocationOnScreen(origin);
+         return Pair(
+            getView().context.pxToPt(rawX - origin[0].toFloat()),
+            getView().context.pxToPt(rawY - origin[1].toFloat())
+         )
+      }
+      val parentPosition = parent.fromRawCoordinates(rawX, rawY)
+      return fromParentCoordinates(parentPosition.first, parentPosition.second)
    }
 
 }

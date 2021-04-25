@@ -124,6 +124,7 @@ actual class GridLayout  actual constructor(context: Context) : Widget(), Iterab
         height: Double?,
         align: Align?,
         justify: Align?): Cell {
+        view.parentImpl = this
         val cell = Cell(this, view, column, row, columnSpan, rowSpan, width, height, align, justify)
         children.add(cell)
         div.appendChild(cell.view.getElement())
@@ -140,6 +141,7 @@ actual class GridLayout  actual constructor(context: Context) : Widget(), Iterab
         width: Double?,
         height: Double?
     ): Absolute {
+        view.parentImpl = this
         val absolute = Absolute(this, view, top, right, bottom, left, width, height)
         children.add(absolute)
         div.appendChild(absolute.view.getElement())
@@ -150,6 +152,7 @@ actual class GridLayout  actual constructor(context: Context) : Widget(), Iterab
     actual fun remove(widget: Widget) {
         for (child in children) {
             if (child.view == widget) {
+                widget.parentImpl = null
                 children.remove(child)
                 div.removeChild(child.view.getElement())
                 break

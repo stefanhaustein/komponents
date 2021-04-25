@@ -1,13 +1,14 @@
 package org.kobjects.komponents.core.recognizer
 
+import org.kobjects.komponents.core.Widget
+
 actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit) : GestureRecognizer() {
     actual val update = update
-    actual var state = DragState.END
-    actual var distanceX = 0.0
-    actual var distanceY = 0.0
 
-    override fun toString(): String {
-        return "$state $distanceX $distanceY"
+    actual fun translation(widget: Widget): Pair<Double, Double> {
+       var start = startPosition(widget)
+        var current = currentPosition(widget)
+        return Pair(current.first - start.first, current.second - start.second)
     }
 
 }

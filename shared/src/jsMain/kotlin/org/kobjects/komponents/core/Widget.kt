@@ -1,6 +1,9 @@
 package org.kobjects.komponents.core
 
+import org.kobjects.komponents.core.grid.GridLayout
 import org.kobjects.komponents.core.recognizer.GestureRecognizer
+import org.w3c.dom.DOMMatrix
+import org.w3c.dom.DOMPointInit
 import org.w3c.dom.HTMLElement
 
 
@@ -25,6 +28,8 @@ actual abstract class Widget {
          getElement().style.opacity = value.toString()
       }
 
+   var parentImpl: GridLayout? = null
+
    actual fun setBackgroundColor(color: UInt) {
       val alpha = (color shr 24).toDouble() / 255.0
       val red = (color shr 16) and 255u
@@ -35,7 +40,6 @@ actual abstract class Widget {
 
    abstract fun getElement(): HTMLElement
 
-   // TODO: Implement
    inner class TransformationImpl : Transformation {
       override var rotation: Double = 0.0
          set(value) {
@@ -53,13 +57,62 @@ actual abstract class Widget {
             update()
          }
 
+      var matrixImpl: DOMMatrix? = null
+      var inverseMatrixImpl: DOMMatrix? = null
+
+      override fun transform(x: Double, y: Double): Pair<Double, Double> {
+         val transformed = getMatrix().transformPoint(DOMPointInit(x, y))
+         return Pair(transformed.x, transformed.y)
+      }
+
+      override fun unTransform(x: Double, y: Double): Pair<Double, Double> {
+         val transformed = getInverseMatrix().transformPoint(DOMPointInit(x, y))
+         return Pair(transformed.x, transformed.y)
+      }
+
       fun update() {
+         matrixImpl = null
+         inverseMatrixImpl = null
          getElement().style.transform = "translate(${x}px,${y}px) rotate(${rotation}deg)"
+      }
+
+      fun getMatrix(): DOMMatrix {
+         var matrix = matrixImpl
+         if (matrix == null) {
+            matrix = DOMMatrix()
+            matrix.translateSelf(x, y)
+            matrix.rotateSelf(rotation)
+            matrixImpl = matrix
+         }
+         return matrix
+      }
+
+      fun getInverseMatrix(): DOMMatrix {
+         var matrix = inverseMatrixImpl
+         if (matrix == null) {
+            matrix = getMatrix().inverse()
+            inverseMatrixImpl = matrix
+         }
+         return matrix
       }
    }
 
    actual fun addGestureRecognizer(gestureRecognizer: GestureRecognizer) {
       gestureRecognizer.attach(this)
+   }
+
+   actual fun getParent(): GridLayout? {
+      return parentImpl
+   }
+
+   fun fromClientCoordinates(clientX: Double, clientY: Double): Pair<Double, Double> {
+      val parent = getParent()
+      if (parent == null) {
+         val rect = getElement().getBoundingClientRect()
+         return Pair(clientX - rect.left, clientY - rect.top)
+      }
+      val parentPosition = parent.fromClientCoordinates(clientX, clientY)
+      return fromParentCoordinates(parentPosition.first, parentPosition.second)
    }
 
 }
