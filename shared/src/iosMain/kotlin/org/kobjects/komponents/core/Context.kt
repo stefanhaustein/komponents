@@ -5,6 +5,7 @@ import kotlinx.cinterop.ObjCAction
 import platform.Foundation.NSRunLoop
 import platform.Foundation.NSRunLoopCommonModes
 import platform.Foundation.NSRunLoopMode
+import platform.QuartzCore.CACurrentMediaTime
 import platform.QuartzCore.CADisplayLink
 import platform.UIKit.*
 
@@ -19,10 +20,11 @@ actual class Context(
     fun step() {
         val currentCallbacks = animationCallbacks
         animationCallbacks = mutableListOf()
-        currentCallbacks.forEach { it() }
+        val t0 = CACurrentMediaTime()
+        currentCallbacks.forEach { it(t0) }
     }
 
-    actual fun requestAnimationFrame(callback: () -> Unit) {
+    actual fun requestAnimationFrame(callback: (Double) -> Unit) {
         if (displayLink == null) {
             displayLink = CADisplayLink.displayLinkWithTarget(
                 this,

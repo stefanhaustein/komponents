@@ -6,9 +6,9 @@ import org.w3c.dom.Document
 actual class Context(
     val document: Document
 ) {
-    actual fun requestAnimationFrame(callback: () -> Unit) {
+    actual fun requestAnimationFrame(callback: (Double) -> Unit) {
         window.requestAnimationFrame {
-            callback()
+            callback(it)
         }
     }
 

@@ -27,9 +27,9 @@ actual class Context(
     val context: Context
 ) {
 
-    actual fun requestAnimationFrame(callback: () -> Unit) {
+    actual fun requestAnimationFrame(callback: (Double) -> Unit) {
         Choreographer.getInstance().postFrameCallback {
-            callback()
+            callback(it / 1000000.0)
         }
     }
 

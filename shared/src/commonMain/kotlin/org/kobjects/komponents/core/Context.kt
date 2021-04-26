@@ -7,5 +7,5 @@ expect class Context {
         okAction: Action,
         cancelAction: Action? = null)
 
-    fun requestAnimationFrame(callback: () -> Unit)
+    fun requestAnimationFrame(callback: (Double) -> Unit)
 }
