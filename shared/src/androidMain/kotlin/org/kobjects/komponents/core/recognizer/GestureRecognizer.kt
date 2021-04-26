@@ -9,8 +9,5 @@ actual abstract class GestureRecognizer {
     var rawCurrentX: Float = 0f
     var rawCurrentY: Float = 0f
 
-    actual fun position(widget: Widget): Pair<Double, Double> {
-        return widget.fromRawCoordinates(rawCurrentX, rawCurrentY)
-    }
 
 }

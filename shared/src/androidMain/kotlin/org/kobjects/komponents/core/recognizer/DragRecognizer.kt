@@ -6,8 +6,8 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
     actual val update = update
 
     actual fun translation(widget: Widget): Pair<Double, Double> {
-       var start = startPosition(widget)
-        var current = currentPosition(widget)
+       var start = widget.fromRawCoordinates(rawStartX, rawStartY)
+        var current = widget.fromRawCoordinates(rawCurrentX, rawCurrentY)
         return Pair(current.first - start.first, current.second - start.second)
     }
 
