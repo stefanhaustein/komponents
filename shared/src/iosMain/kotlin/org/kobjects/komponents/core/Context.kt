@@ -14,7 +14,7 @@ actual class Context(
     val svgHelper: SvgHelper
 ){
     var displayLink: CADisplayLink? = null
-    var animationCallbacks = mutableListOf<() -> Unit>()
+    var animationCallbacks = mutableListOf<(Double) -> Unit>()
 
     @ObjCAction
     fun step() {
@@ -53,5 +53,9 @@ actual class Context(
                 style = UIAlertActionStyleCancel) {cancelAction.handler(cancelAction)})
         }
         controller.presentViewController(alert, animated = true, completion = null)
+    }
+
+    actual fun getTimestamp(): Double {
+        return CACurrentMediaTime()
     }
 }

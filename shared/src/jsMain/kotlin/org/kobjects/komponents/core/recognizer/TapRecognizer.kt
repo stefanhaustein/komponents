@@ -14,9 +14,9 @@ actual class TapRecognizer actual constructor(recognized: (TapRecognizer) -> Uni
         val element = view.getElement()
 
         element.addEventListener("pointerup", {
-            console.log("pointerup", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
+                updateCommon(it, GestureState.END)
                 recognized(this)
             }
         })

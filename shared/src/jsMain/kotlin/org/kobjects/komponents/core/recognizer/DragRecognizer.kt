@@ -20,10 +20,9 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
         val element = view.getElement()
 
         element.addEventListener("pointerdown", {
-            console.log("pointerdown")
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = GestureState.START
+                updateCommon(it, GestureState.START)
                 element.setPointerCapture(pointerEvent.pointerId)
                 startX = pointerEvent.clientX.toDouble()
                 startY = pointerEvent.clientY.toDouble()
@@ -33,27 +32,24 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
             }
         });
         element.addEventListener("pointerup", {
-            console.log("pointerup", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = GestureState.END
+                updateCommon(it, GestureState.END)
                 element.releasePointerCapture(pointerEvent.pointerId)
                 update(this)
             }
         });
         element.addEventListener("pointercanel", {
-            console.log("pointermove", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary) {
-                state = GestureState.END
+                updateCommon(it, GestureState.END)
                 update(this)
             }
         });
         element.addEventListener("pointermove", {
-            console.log("pointermove", it)
             val pointerEvent = it as PointerEvent
             if (pointerEvent.isPrimary && (state == GestureState.START || state == GestureState.UPDATE)) {
-                state = GestureState.UPDATE
+                updateCommon(it, GestureState.UPDATE)
                 currentX = pointerEvent.clientX.toDouble()
                 currentY = pointerEvent.clientY.toDouble()
                 update(this)

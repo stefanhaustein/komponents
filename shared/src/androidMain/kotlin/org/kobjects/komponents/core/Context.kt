@@ -29,7 +29,7 @@ actual class Context(
 
     actual fun requestAnimationFrame(callback: (Double) -> Unit) {
         Choreographer.getInstance().postFrameCallback {
-            callback(it / 1000000.0)
+            callback(it / 1000_000_000.0)
         }
     }
 
@@ -49,6 +49,10 @@ actual class Context(
             okAction.handler(okAction)
         }
         alert.show()
+    }
+
+    actual fun getTimestamp(): Double {
+       return System.currentTimeMillis() / 1000.0
     }
 
 

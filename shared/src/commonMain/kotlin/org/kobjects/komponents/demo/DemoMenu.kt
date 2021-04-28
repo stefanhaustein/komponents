@@ -10,7 +10,7 @@ class DemoMenu(
     val select: (DemoEnum, Widget) -> Unit) {
     val view: Widget
 
-    var currentAnimation: (() -> Unit)? = null
+    var currentAnimation: ((Double) -> Unit)? = null
     var animationRunning = false
 
     init {
@@ -47,18 +47,18 @@ class DemoMenu(
         currentAnimation = nextDemo.animation
         if (currentAnimation != null && !animationRunning) {
             animationRunning = true
-            context.requestAnimationFrame { animate() }
+            context.requestAnimationFrame { animate(it) }
         }
         return nextDemo.view
     }
 
-    fun animate() {
+    fun animate(timeStamp: Double) {
         val animation = currentAnimation
         if (animation == null) {
             animationRunning = false
         } else {
-            animation()
-            context.requestAnimationFrame{ animate() }
+            animation(timeStamp)
+            context.requestAnimationFrame{ animate(it) }
         }
     }
 

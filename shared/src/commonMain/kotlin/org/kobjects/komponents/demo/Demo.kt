@@ -7,5 +7,5 @@ import org.kobjects.komponents.core.Context
 abstract class Demo(
     val context: Context) {
     abstract val view: Widget
-    open val animation: (() -> Unit)? = null
+    open val animation: ((Double) -> Unit)? = null
 }

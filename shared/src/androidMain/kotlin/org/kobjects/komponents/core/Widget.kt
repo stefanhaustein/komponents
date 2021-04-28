@@ -166,7 +166,9 @@ actual abstract class Widget {
                   else -> GestureState.START
                }
                scrolling = true
-
+               recognizer.timestamp = (e2?.eventTime ?: 0) / 1000.0
+               recognizer.velocityX = 0f
+               recognizer.velocityY = 0f
                recognizer.rawStartX = e1?.rawX ?: 0f
                recognizer.rawStartY = e1?.rawY ?: 0f
                recognizer.rawCurrentX = e2?.rawX ?: 0f
@@ -189,7 +191,23 @@ actual abstract class Widget {
          velocityY: Float
       ): Boolean {
          System.out.println("onFling: $e1 $e2")
-         return false
+         var consumed = false
+         gestureRecognizers
+            .filterIsInstance<DragRecognizer>()
+            .forEach { recognizer ->
+               recognizer.state = GestureState.END
+               scrolling = false
+
+               recognizer.velocityX = velocityX
+               recognizer.velocityY = velocityY
+
+               System.out.println("fling " + velocityX  +", " + velocityY)
+
+               recognizer.update(recognizer)
+               consumed = true
+            }
+
+         return consumed
       }
 
       fun onEnd() {

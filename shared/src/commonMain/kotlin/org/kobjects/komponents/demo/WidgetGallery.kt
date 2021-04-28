@@ -11,6 +11,7 @@ import org.kobjects.twemoji.TwemojiSvg
 
 class WidgetGallery(context: Context) : Demo(context) {
     override val view: Widget
+    var t0 = 0.0
 
     enum class BALL(val label: String, val svg: String) {
         BASEBALL("Baseball", TwemojiSvg.BASEBALL),
@@ -36,18 +37,34 @@ class WidgetGallery(context: Context) : Demo(context) {
     var dragging = SvgWidget(context)
     var bouncing = mutableListOf<BouncingState>()
 
+    var velocityX = 0.0
+    var velocityY = 0.0
+    var lastTimeStamp = 0.0
+
     val grid = GridLayout(context)
 
-    override val animation = {
+    override val animation: ((Double) -> Unit) = {
+        val dt = minOf(0.1, it - t0)
+        t0 = it
+
         for (i in bouncing.indices.reversed()) {
             val ball = bouncing[i]
-            ball.widget.transformation.y += ball.dy
-            if (ball.widget.transformation.y > grid.offsetHeight - 100.0) {
+            ball.widget.transformation.x += ball.dx * dt
+
+            if (ball.widget.transformation.x < 0 && ball.dx < 0
+                || ball.widget.transformation.x + 100.0 > grid.offsetWidth && ball.dx > 0) {
+                ball.dx = -ball.dx
+            }
+
+            ball.widget.transformation.y += ball.dy * dt
+
+            if (ball.widget.transformation.y > grid.offsetHeight - 100.0 && ball.dy > 0) {
                 ball.dy = -ball.dy
                 ball.widget.transformation.y = grid.offsetHeight - 100.0
             } else {
-                ball.dy += 0.1
+                ball.dy += dt * 1000
             }
+
             if (ball.tapped) {
                 if (ball.widget.opacity > 0.03) {
                     ball.widget.opacity -= 0.03
@@ -78,8 +95,13 @@ class WidgetGallery(context: Context) : Demo(context) {
                 GestureState.UPDATE,
                 GestureState.START -> {
                     val distance = it.translation(grid)
+                    val dt = it.timestamp - lastTimeStamp
+                    velocityX = (distance.first - dragging.transformation.x) / dt
+                    velocityY = (distance.second - dragging.transformation.y) / dt
+                    println("velocity: "+ velocityX + "/" + velocityY)
                     dragging.transformation.x = distance.first
                     dragging.transformation.y = distance.second
+                    lastTimeStamp = it.timestamp
                 }
                 GestureState.END -> {
                     val copy = SvgWidget(context, dragging.image)
@@ -91,7 +113,7 @@ class WidgetGallery(context: Context) : Demo(context) {
                         width = 100.0,
                         height = 100.0)
 
-                    val state = BouncingState(copy)
+                    val state = BouncingState(copy, velocityX, velocityY)
                     copy.addGestureRecognizer(TapRecognizer{
                         state.tapped = true
                     })
@@ -159,8 +181,9 @@ class WidgetGallery(context: Context) : Demo(context) {
 
     class BouncingState(
         val widget: SvgWidget,
+        var dx: Double,
+        var dy: Double
     ) {
         var tapped = false
-        var dy = 0.0
     }
 }

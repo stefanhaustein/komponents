@@ -2,6 +2,7 @@ package org.kobjects.komponents.core
 
 import kotlinx.browser.window
 import org.w3c.dom.Document
+import kotlin.js.Date
 
 actual class Context(
     val document: Document
@@ -25,6 +26,10 @@ actual class Context(
         } else {
             cancelAction.handler(cancelAction)
         }
+    }
+
+    actual fun getTimestamp(): Double {
+        return Date.now() / 1000.0
     }
 
 

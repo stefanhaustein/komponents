@@ -13,11 +13,11 @@ actual class TapRecognizer actual constructor(recognized: (TapRecognizer) -> Uni
 
     @ObjCAction
     fun handleTapGesture() {
+        updateCommon(tapGestureRecognizer)
         if (tapGestureRecognizer.state == UIGestureRecognizerStateEnded) {
             recognized(this)
         }
     }
-
 
     override fun attach(view: Widget) {
         this.view = view

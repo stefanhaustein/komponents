@@ -4,6 +4,7 @@ import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.useContents
 import org.kobjects.komponents.core.Widget
 import platform.Foundation.NSLog
+import platform.QuartzCore.CACurrentMediaTime
 import platform.UIKit.*
 
 actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit) : GestureRecognizer() {
@@ -14,14 +15,7 @@ actual class DragRecognizer actual constructor(update: (DragRecognizer) -> Unit)
 
     @ObjCAction
     fun handlePanGesture() {
-        NSLog("handlePanGesture: %@", panGestureRecognizer)
-        state = when (panGestureRecognizer.state) {
-            UIGestureRecognizerStateBegan -> GestureState.START
-            UIGestureRecognizerStateChanged -> GestureState.UPDATE
-            UIGestureRecognizerStateFailed -> GestureState.CANCEL
-            UIGestureRecognizerStateEnded -> GestureState.END
-            else -> GestureState.UPDATE
-        }
+        updateCommon(panGestureRecognizer)
         update(this)
     }
 
