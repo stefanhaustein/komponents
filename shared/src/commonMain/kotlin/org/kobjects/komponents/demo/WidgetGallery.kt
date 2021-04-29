@@ -8,6 +8,7 @@ import org.kobjects.komponents.core.recognizer.DragRecognizer
 import org.kobjects.komponents.core.recognizer.GestureState
 import org.kobjects.komponents.core.recognizer.TapRecognizer
 import org.kobjects.twemoji.TwemojiSvg
+import kotlin.math.PI
 
 class WidgetGallery(context: Context) : Demo(context) {
     override val view: Widget
@@ -51,18 +52,24 @@ class WidgetGallery(context: Context) : Demo(context) {
             val ball = bouncing[i]
             ball.widget.transformation.x += ball.dx * dt
 
+            val circumference = 100.0 * PI
+            val rotation = (ball.dx * dt) / circumference * 360
+
+            ball.widget.transformation.rotation += rotation
+
             if (ball.widget.transformation.x < 0 && ball.dx < 0
                 || ball.widget.transformation.x + 100.0 > grid.offsetWidth && ball.dx > 0) {
-                ball.dx = -ball.dx
+                ball.dx = -ball.dx * 0.9
             }
 
             ball.widget.transformation.y += ball.dy * dt
 
             if (ball.widget.transformation.y > grid.offsetHeight - 100.0 && ball.dy > 0) {
-                ball.dy = -ball.dy
+                ball.dy = -ball.dy * 0.9
+                ball.dx = ball.dx * 0.9
                 ball.widget.transformation.y = grid.offsetHeight - 100.0
             } else {
-                ball.dy += dt * 1000
+                ball.dy += 1000 * dt
             }
 
             if (ball.tapped) {

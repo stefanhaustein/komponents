@@ -9,7 +9,7 @@ actual class Context(
 ) {
     actual fun requestAnimationFrame(callback: (Double) -> Unit) {
         window.requestAnimationFrame {
-            callback(it)
+            callback(it / 1000)
         }
     }
 
