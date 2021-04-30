@@ -14,14 +14,14 @@ class WidgetGallery(context: Context) : Demo(context) {
     override val view: Widget
     var t0 = 0.0
 
-    enum class BALL(val label: String, val svg: String) {
-        BASEBALL("Baseball", TwemojiSvg.BASEBALL),
-        BASKETBALL("Basketball", TwemojiSvg.BASKETBALL),
-        VOLLEYBALL("Volleyball", TwemojiSvg.VOLLEYBALL),
-        SOCCER("Soccer", TwemojiSvg.SOCCER_BALL),
-        SOFTBALL("Softball", TwemojiSvg.SOFTBALL),
-        TENNIS("Tennis", TwemojiSvg.TENNIS),
-        POOL("Pool", TwemojiSvg.POOL_8_BALL)
+    enum class BALL(val label: String, val svg: String, val size: Double) {
+        BASEBALL("Baseball", TwemojiSvg.BASEBALL, 7.4),
+        BASKETBALL("Basketball", TwemojiSvg.BASKETBALL, 24.0),
+        VOLLEYBALL("Volleyball", TwemojiSvg.VOLLEYBALL, 21.0),
+        SOCCER("Soccer", TwemojiSvg.SOCCER_BALL, 22.0),
+        SOFTBALL("Softball", TwemojiSvg.SOFTBALL, 11.5),
+        TENNIS("Tennis", TwemojiSvg.TENNIS, 6.7),
+        POOL("Pool", TwemojiSvg.POOL_8_BALL, 5.7)
     }
 
 
@@ -44,6 +44,8 @@ class WidgetGallery(context: Context) : Demo(context) {
 
     val grid = GridLayout(context)
 
+    val image = SvgWidget(context)
+
     override val animation: ((Double) -> Unit) = {
         val dt = minOf(0.1, it - t0)
         t0 = it
@@ -51,23 +53,26 @@ class WidgetGallery(context: Context) : Demo(context) {
         for (i in bouncing.indices.reversed()) {
             val ball = bouncing[i]
             ball.widget.transformation.x += ball.dx * dt
+            val scale = ball.widget.transformation.scaleX
 
-            val circumference = 100.0 * PI
+            val circumference = 100.0 * PI * scale
             val rotation = (ball.dx * dt) / circumference * 360
 
             ball.widget.transformation.rotation += rotation
 
-            if (ball.widget.transformation.x < 0 && ball.dx < 0
-                || ball.widget.transformation.x + 100.0 > grid.offsetWidth && ball.dx > 0) {
+            val offset = 50 - 50 * scale
+
+            if (ball.widget.transformation.x < -offset && ball.dx < 0
+                || ball.widget.transformation.x + 100.0 - offset > grid.offsetWidth && ball.dx > 0) {
                 ball.dx = -ball.dx * 0.9
             }
 
             ball.widget.transformation.y += ball.dy * dt
 
-            if (ball.widget.transformation.y > grid.offsetHeight - 100.0 && ball.dy > 0) {
+            if (ball.widget.transformation.y > grid.offsetHeight - 100.0 + offset && ball.dy > 0) {
                 ball.dy = -ball.dy * 0.9
                 ball.dx = ball.dx * 0.9
-                ball.widget.transformation.y = grid.offsetHeight - 100.0
+                ball.widget.transformation.y = grid.offsetHeight - 100.0 + offset
             } else {
                 ball.dy += 1000 * dt
             }
@@ -85,17 +90,44 @@ class WidgetGallery(context: Context) : Demo(context) {
     }
 
 
-    init {
+    fun setBall(ball: BALL) {
+        image.image = Svg.createSvg(context, ball.svg)
+        image.transformation.scale = ball.size / 25.0
+        dragging.image = image.image
+        dragging.transformation.scale = ball.size / 25.0
+    }
 
+    fun launchBall() {
+        val copy = SvgWidget(context, dragging.image)
+        copy.transformation.rotation = dragging.transformation.rotation
+        copy.transformation.scaleX = dragging.transformation.scaleX
+        copy.transformation.scaleY = dragging.transformation.scaleY
+        grid.addAbsolute(
+            copy,
+            left = 0.0,
+            top = 0.0,
+            width = 100.0,
+            height = 100.0)
+
+        val state = BouncingState(copy, velocityX, velocityY)
+        copy.addGestureRecognizer(TapRecognizer{
+            state.tapped = true
+        })
+        bouncing.add(state)
+
+        copy.transformation.x = dragging.offsetLeft + dragging.transformation.x
+        copy.transformation.y = dragging.offsetTop + dragging.transformation.y
+    }
+
+    init {
         grid.padding = 4.0
         grid.gap = 4.0
 
         grid.columnTemplate = listOf(Size.fr(1.0))
 
-        val image = SvgWidget(context)
 //        image.setBackgroundColor(0x88888888u)
-        image.image = titleSvg
-        dragging.image = titleSvg
+        setBall(BALL.BASKETBALL)
+
         dragging.addGestureRecognizer(DragRecognizer{
             println("$it")
             when (it.state) {
@@ -111,23 +143,7 @@ class WidgetGallery(context: Context) : Demo(context) {
                     lastTimeStamp = it.timestamp
                 }
                 GestureState.END -> {
-                    val copy = SvgWidget(context, dragging.image)
-                    copy.transformation.rotation = dragging.transformation.rotation
-                    grid.addAbsolute(
-                        copy,
-                        left = 0.0,
-                        top = 0.0,
-                        width = 100.0,
-                        height = 100.0)
-
-                    val state = BouncingState(copy, velocityX, velocityY)
-                    copy.addGestureRecognizer(TapRecognizer{
-                        state.tapped = true
-                    })
-                    bouncing.add(state)
-
-                    copy.transformation.x = dragging.offsetLeft + dragging.transformation.x
-                    copy.transformation.y = dragging.offsetTop + dragging.transformation.y
+                    launchBall()
 
                     dragging.transformation.x = 0.0
                     dragging.transformation.y = 0.0
@@ -144,12 +160,15 @@ class WidgetGallery(context: Context) : Demo(context) {
 
         val choice = DropdownList(context, BALL.values().toList(), stringify = {it.label}) {
             textView.text = "${it.value.label} selected"
-            image.image = Svg.createSvg(context, it.value.svg)
-            dragging.image = image.image
+            setBall(it.value)
         }
+        choice.selectedIndex = 1
 
         grid.addCell(choice)
-        grid.addCell(Button(context, "Button") {textView.text = "Button pressed"})
+        grid.addCell(Button(context, "Drop") {
+            textView.text = "Button pressed"
+            launchBall()
+        })
 
         val buttonWithImage = Button(context, "  Clear all") {
             textView.text = "Image button pressed"

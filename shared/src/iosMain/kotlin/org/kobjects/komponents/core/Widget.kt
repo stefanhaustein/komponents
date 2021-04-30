@@ -92,6 +92,7 @@ abstract actual class Widget {
     }
 
 
+
     inner class TransformationImpl : Transformation {
         override var rotation: Double = 0.0
             set(value) {
@@ -108,6 +109,23 @@ abstract actual class Widget {
                 field = value
                 update()
             }
+        override var scaleX: Double = 1.0
+            set(value) {
+                field = value
+                update()
+            }
+        override var scaleY: Double = 1.0
+            set(value) {
+                field = value
+                update()
+            }
+        override var scale: Double?
+            get() = if (scaleX == scaleY) scaleX else null
+            set(value) {
+                scaleX = value ?: 1.0
+                scaleY = value ?: 1.0
+            }
+
 
         override fun transform(x: Double, y: Double): Pair<Double, Double> {
             CGPointApplyAffineTransform(CGPointMake(x, y), getView().transform).useContents {
@@ -123,6 +141,9 @@ abstract actual class Widget {
             var transform = CGAffineTransformMakeTranslation(x, y)
             if (rotation != 0.0) {
                transform = CGAffineTransformRotate(transform, rotation * PI / 180)
+            }
+            if (scaleX != 1.0 || scaleY != 1.0) {
+                transform = CGAffineTransformScale(transform, scaleX, scaleY)
             }
             getView().transform = transform
         }

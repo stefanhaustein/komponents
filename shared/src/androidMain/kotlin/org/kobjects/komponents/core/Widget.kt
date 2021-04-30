@@ -69,6 +69,27 @@ actual abstract class Widget {
             getView().translationY = getContext().ptToPxFloat(value)
          }
 
+      override var scaleX: Double
+         get() = getView().scaleX.toDouble()
+         set(value) {
+            invalidateMatrixes()
+            getView().scaleX = value.toFloat()
+         }
+
+      override var scaleY: Double
+         get() = getView().scaleY.toDouble()
+         set(value) {
+            invalidateMatrixes()
+            getView().scaleY = value.toFloat()
+         }
+
+      override var scale: Double?
+         get() = if (getView().scaleX == getView().scaleY) getView().scaleX.toDouble() else null
+         set(value) {
+            invalidateMatrixes()
+            getView().scaleX = value?.toFloat() ?: 0f
+            getView().scaleY = value?.toFloat() ?: 0f
+         }
 
       override fun transform(x: Double, y: Double): Pair<Double, Double> {
          val points = floatArrayOf(x.toFloat(), y.toFloat())

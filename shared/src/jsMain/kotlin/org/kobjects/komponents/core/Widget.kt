@@ -56,6 +56,22 @@ actual abstract class Widget {
             field = value
             update()
          }
+      override var scaleX: Double = 1.0
+         set(value) {
+            field = value
+            update()
+         }
+      override var scaleY: Double = 1.0
+         set(value) {
+            field = value
+            update()
+         }
+      override var scale: Double?
+         get() = if (scaleX == scaleY) scaleX else null
+         set(value) {
+            scaleX = value ?: 1.0
+            scaleY = value ?: 1.0
+         }
 
       var matrixImpl: DOMMatrix? = null
       var inverseMatrixImpl: DOMMatrix? = null
@@ -73,7 +89,7 @@ actual abstract class Widget {
       fun update() {
          matrixImpl = null
          inverseMatrixImpl = null
-         getElement().style.transform = "translate(${x}px,${y}px) rotate(${rotation}deg)"
+         getElement().style.transform = "translate(${x}px,${y}px) rotate(${rotation}deg) scale($scaleX,$scaleY)"
       }
 
       fun getMatrix(): DOMMatrix {
@@ -82,6 +98,7 @@ actual abstract class Widget {
             matrix = DOMMatrix()
             matrix.translateSelf(x, y)
             matrix.rotateSelf(rotation)
+            matrix.scaleSelf(scaleX, scaleY)
             matrixImpl = matrix
          }
          return matrix
