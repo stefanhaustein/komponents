@@ -95,6 +95,7 @@ class WidgetGallery(context: Context) : Demo(context) {
         image.transformation.scale = ball.size / 25.0
         dragging.image = image.image
         dragging.transformation.scale = ball.size / 25.0
+        dragging.zIndex = 10
     }
 
     fun launchBall() {
@@ -117,6 +118,7 @@ class WidgetGallery(context: Context) : Demo(context) {
 
         copy.transformation.x = dragging.offsetLeft + dragging.transformation.x
         copy.transformation.y = dragging.offsetTop + dragging.transformation.y
+        copy.zIndex = dragging.zIndex
     }
 
     init {

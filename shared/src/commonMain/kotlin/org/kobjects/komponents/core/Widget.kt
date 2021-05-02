@@ -45,8 +45,9 @@ expect abstract class Widget() {
     val offsetTop: Double
     val offsetWidth: Double
     val offsetHeight: Double
-
+    var hidden: Boolean
     var opacity: Double
+    var zIndex: Int
 
     fun setBackgroundColor(color: UInt)
 

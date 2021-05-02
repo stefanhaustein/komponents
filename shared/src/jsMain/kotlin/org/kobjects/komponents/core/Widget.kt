@@ -28,6 +28,18 @@ actual abstract class Widget {
          getElement().style.opacity = value.toString()
       }
 
+   actual var hidden: Boolean = false
+      set(value) {
+         field = value
+         getElement().style.visibility = if (value) "" else "hidden"
+      }
+
+   actual var zIndex: Int = 0
+      set(value) {
+         field = value
+         getElement().style.zIndex = if (value == 0) "auto" else value.toString()
+      }
+
    var parentImpl: GridLayout? = null
 
    actual fun setBackgroundColor(color: UInt) {

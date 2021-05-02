@@ -40,6 +40,18 @@ abstract actual class Widget {
             getView().alpha = value
         }
 
+    actual var hidden: Boolean
+        get() = getView().hidden
+        set(value) {
+            getView().hidden = value
+        }
+
+    actual var zIndex: Int
+        get() = getView().layer.zPosition.toInt()
+        set(value) {
+            getView().layer.zPosition = value.toDouble()
+        }
+
     var recognizers = mutableListOf<GestureRecognizer>()
     var parentImpl: GridLayout? = null
 

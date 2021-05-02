@@ -31,6 +31,18 @@ actual abstract class Widget {
       get() = getView().alpha.toDouble()
       set(value) { getView().alpha = value.toFloat() }
 
+   actual var hidden: Boolean
+      get() = getView().visibility == View.VISIBLE
+      set(value) {
+         getView().visibility = if (value) View.VISIBLE else View.INVISIBLE
+      }
+
+   actual var zIndex: Int
+      get() = getView().translationZ.toInt()
+      set(value) {
+         getView().translationZ = value.toFloat()
+      }
+
    val gestureRecognizers = mutableListOf<GestureRecognizer>()
 
    var parentImpl: GridLayout? = null
