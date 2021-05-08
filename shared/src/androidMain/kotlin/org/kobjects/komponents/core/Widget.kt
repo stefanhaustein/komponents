@@ -32,9 +32,9 @@ actual abstract class Widget {
       set(value) { getView().alpha = value.toFloat() }
 
    actual var hidden: Boolean
-      get() = getView().visibility == View.VISIBLE
+      get() = getView().visibility != View.VISIBLE
       set(value) {
-         getView().visibility = if (value) View.VISIBLE else View.INVISIBLE
+         getView().visibility = if (value) View.INVISIBLE else View.VISIBLE
       }
 
    actual var zIndex: Int
