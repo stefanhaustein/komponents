@@ -10,6 +10,9 @@ import org.kobjects.komponents.core.pxToPt
 
 class AndroidGridLayout(context: Context, val container: GridLayout) : ViewGroup(context) {
 
+    init {
+        clipChildren = false
+    }
 
     fun modeAndSizeToAndroid(mode: MeasurementMode, size: Double): Int {
         return context.ptToPx(size) or
